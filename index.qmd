@@ -1,7 +1,7 @@
 ---
-title: "Systematic Review of the MRI Knee Path- Using Deep Learning Models - Spring 2026 "
+title: " MRI Knee Path- Using Deep Learning Models - Spring 2026 "
 subtitle: "This is a Report Template Quarto"
-author: "Student Name (Advisor: Dr. Cohen)"
+author: "Bala Raju Pidatala (Advisor: Dr. Cohen)"
 date: '`r Sys.Date()`'
 format:
   html:
@@ -22,31 +22,11 @@ Slides: [slides.html](slides.html){target="_blank"} ( Go to `slides.qmd`
 to edit)
 
 ::: callout-important
-**Remember:** Your goal is to make your audience understand and care
-about your findings. By crafting a compelling story, you can effectively
-communicate the value of your data science project.
-
-Carefully read this template since it has instructions and tips to
-writing!
-
-Nice report!
+**Remember:** Instead of removing everything keeping the details 
+and removing the unnecessary content!
 :::
 
 ## Introduction
-
-The introduction should:
-
--   Develop a storyline that captures attention and maintains interest.
-
--   Your audience is your peers
-
--   Clearly state the problem or question you're addressing.
-
-<!-- -->
-
--   Introduce why it is relevant needs.
-
--   Provide an overview of your approach.
 
 Example of writing including citing references:
 
