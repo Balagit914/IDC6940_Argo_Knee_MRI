@@ -18,6 +18,8 @@ editor:
     wrap: 72
 ---
 
+
+
 Slides: [slides.html](slides.html){target="_blank"} ( Go to `slides.qmd`
 to edit)
 
@@ -69,6 +71,8 @@ $$
 
 A study was conducted to determine how...
 
+
+
 ```{r, warning=FALSE, echo=T, message=FALSE}
 # loading packages 
 library(tidyverse)
@@ -102,6 +106,8 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 
 ```
 
+
+
 ### Modeling and Results
 
 -   Explain your data preprocessing and cleaning steps.
@@ -112,9 +118,13 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 
 -   **Tell a story about what the data reveals.**
 
+
+
 ```{r}
 
 ```
+
+
 
 ### Conclusion
 
@@ -123,3 +133,4 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 -   Discuss the implications of your results.
 
 ## References
+
