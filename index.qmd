@@ -27,25 +27,12 @@ and removing the unnecessary content!
 :::
 
 ## Introduction
+This research reviews the application of deep learning (DL) models for diagnosing knee pathologies using MRI scans.
+Focuses on the performance and clinical relevance of convolutional neural networks (CNNs) in assisting medical professionals.
+Summarizes current approaches, strengths, and limitations in recent scientific literature.
+Highlights advances in automated diagnosis, dataset usage, and the role of validation/regulatory standards.
+Examines the extent to which current deep learning approaches match or exceed expert diagnostic accuracy.
 
-
-*This is an introduction to ..... regression, which is a non-parametric
-estimator that estimates the conditional expectation of two variables
-which is random. The goal of a kernel regression is to discover the
-non-linear relationship between two random variables. To discover the
-non-linear relationship, kernel estimator or kernel smoothing is the
-main method to estimate the curve for non-parametric statistics. In
-kernel estimator, weight function is known as kernel function
-[@efr2008]. Cite this paper [@bro2014principal]. The GEE [@wang2014].
-The PCA [@daffertshofer2004pca]*. Topology can be used in machine
-learning [@adams2021topology]
-
-For Symbolic Regression [@wang2019symbolic] *This is my work and I want
-to add more work...*
-
-Cite new paper [@su2012linear]
-
-Classification of Knee OA was studied here [@guida2021knee]
 
 Related Papers & Their Summaries:
 
@@ -60,6 +47,9 @@ Related Papers & Their Summaries:
 
 4. Moving Beyond Traditional Orthopaedic Data Analysis: It shows the effectiveness of using multimodal AI models that utilize MRI image data along with electronic health record data for the diagnosis of orthopaedic problems.
 [@oettl2025beyond]
+
+5. Classification of Knee OA was studied here [@guida2021knee]
+
 
 ## Methods
 
@@ -89,21 +79,7 @@ import pandas as pd
 
 ```{r, warning=FALSE, echo=TRUE}
 # Load Data
-kable(head(murders))
 
-ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total)) 
-
-  ggplot1 + geom_point(aes(col=region), size = 4) +
-  geom_text_repel(aes(label=abb)) +
-  scale_x_log10() +
-  scale_y_log10() +
-  geom_smooth(formula = "y~x", method=lm,se = F)+
-  xlab("Populations in millions (log10 scale)") + 
-  ylab("Total number of murders (log10 scale)") +
-  ggtitle("US Gun Murders in 2010") +
-  scale_color_discrete(name = "Region")+
-      theme_bw()
-  
 
 ```
 
