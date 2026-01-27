@@ -47,6 +47,20 @@ Cite new paper [@su2012linear]
 
 Classification of Knee OA was studied here [@guida2021knee]
 
+Related Papers & Their Summaries:
+
+1. Early diagnosis of the severity of knee osteoarthritis using vision transformer: This model utilizes Vision Transformers (ViT) instead of CNNs, which can help the AI model learn the overall features of the knee joint, thereby improving the detection of early-stage knee osteoarthritis, as CNNs are limited to recognizing individual pixels.
+[@panwar2025early]
+
+2. Federated knee injury diagnosis using few shot learning: This model utilizes the federated learning approach with few shot learning, which can help the AI model learn from multiple hospitals without compromising the data privacy of the patients, thereby improving the detection of knee injuries despite the limited data available.
+[@goel2025federated]
+
+3. Self-Supervised Learning with BYOL for ACL Tear Detection: It utilizes self-supervised learning with the Bootstrap Your Own Latent (BYOL) algorithm for the detection of ACL tears. It uses the BYOL self-supervised learning algorithm to pre-train the ResNet-18 model for feature extraction of the knee MRI scans.
+[@aidarkhan2025self]
+
+4. Moving Beyond Traditional Orthopaedic Data Analysis: It shows the effectiveness of using multimodal AI models that utilize MRI image data along with electronic health record data for the diagnosis of orthopaedic problems.
+[@oettl2025beyond]
+
 ## Methods
 
 
