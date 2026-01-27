@@ -1,7 +1,7 @@
 ---
 title: " MRI Knee Path- Using Deep Learning Models - Spring 2026 "
 subtitle: "This is a Report Template Quarto"
-author: "Bala Raju Pidatala (Advisor: Dr. Cohen)"
+author: "Bala Raju Pidatala & Sabna Balasubramoniapillai (Advisor: Dr. Cohen)"
 date: '`r Sys.Date()`'
 format:
   html:
@@ -28,7 +28,6 @@ and removing the unnecessary content!
 
 ## Introduction
 
-Example of writing including citing references:
 
 *This is an introduction to ..... regression, which is a non-parametric
 estimator that estimates the conditional expectation of two variables
@@ -60,14 +59,6 @@ $$
 ## Analysis and Results
 
 ### Data Exploration and Visualization
-
--   Describe your data sources and collection process.
-
--   Present initial findings and insights through visualizations.
-
--   Highlight unexpected patterns or anomalies.
-
-A study was conducted to determine how...
 
 ```{r, warning=FALSE, echo=T, message=FALSE}
 # loading packages 
@@ -106,9 +97,6 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 
 -   Explain your data preprocessing and cleaning steps.
 
--   Present your key findings in a clear and concise manner.
-
--   Use visuals to support your claims.
 
 -   **Tell a story about what the data reveals.**
 
@@ -118,8 +106,5 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 
 ### Conclusion
 
--   Summarize your key findings.
-
--   Discuss the implications of your results.
 
 ## References
