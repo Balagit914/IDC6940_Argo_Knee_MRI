@@ -1,6 +1,5 @@
 ---
 title: " MRI Knee Path- Using Deep Learning Models - Spring 2026 "
-subtitle: "This is a Report Template Quarto"
 author: "Bala Raju Pidatala & Sabna Balasubramoniapillai (Advisor: Dr. Cohen)"
 date: '`r Sys.Date()`'
 format:
