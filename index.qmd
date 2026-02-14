@@ -1,6 +1,6 @@
 ---
-title: " MRI Knee Path- Using Deep Learning Models - Spring 2026 "
-author: "Bala Raju Pidatala & Sabna Balasubramoniapillai (Advisor: Dr. Cohen)"
+title: " Dtetection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026 "
+author: "Bala Raju Pidatala (Advisor: Dr. Cohen)"
 date: '`r Sys.Date()`'
 format:
   html:
@@ -20,36 +20,6 @@ editor:
 Slides: [slides.html](slides.html){target="_blank"} ( Go to `slides.qmd`
 to edit)
 
-::: callout-important
-**DL Models:**
-
-ResNet-50/101,
-
-VGG,
-
-DenseNet,
-
-DarkNet,
-
-EfficientNet,
-
-Inception-ResNet-V2,
-
-ConveNet,
-
-SENet,
-
-3D CNNs
-
-Vision Transformer (ViT),
-
-CoAtNet
-
-KneexNet,
-
-YOLOv8
-:::
-
 ## Introduction
 The aim of this study is to conduct a comparative analysis of the performance of DL techniques, like Res-Net and Dense Net. As a result of exploring the capabilities of these two neural networks, we are aiming to determine their effectiveness and suitability for classifying the knee pathologies. Deep Learning (DL) architectures, specifically Convolutional Neural Networks (CNNs), are a flexible class of computational models that combine the strengths of hierarchical feature extraction and automated pattern recognition (LeCun et al. 2015). Like traditional image processing, CNNs can model complex visual data, such as medical radiographs and scans. However, modern architectures like DenseNet (Densely Connected Networks) and ResNet (Residual Networks) extend standard CNNs by incorporating advanced connectivity patterns such as skip connections and feature concatenation which account for the vanishing gradient problem and the need for efficient feature reuse. Wang et al. (2024) noted that manual diagnosis of anterior cruciate ligament (ACL) tears often struggles with inter-observer variability and the high cognitive load placed on radiologists. This made it difficult to provide consistent, rapid outcomes for patients. But the specialized layers in ResNet and DenseNet help model the complex relationships within image patches and allow for the detection of patterns that are not captured by traditional linear measurements.
 
@@ -58,21 +28,6 @@ Similarly, Awan et al. (2021) utilize a deep learning approach to investigate th
 This study investigates the potential for diagnosis of knee pathologies particularly focusing on the accurate classification of ACL injuries. To analyze these risks, we will apply  different cnn models which can be used for complex data.  
 
 
-Related Papers & Their Summaries:
-
-1. Early diagnosis of the severity of knee osteoarthritis using vision transformer: This model utilizes Vision Transformers (ViT) instead of CNNs, which can help the AI model learn the overall features of the knee joint, thereby improving the detection of early-stage knee osteoarthritis, as CNNs are limited to recognizing individual pixels.
-[@panwar2025early]
-
-2. Federated knee injury diagnosis using few shot learning: This model utilizes the federated learning approach with few shot learning, which can help the AI model learn from multiple hospitals without compromising the data privacy of the patients, thereby improving the detection of knee injuries despite the limited data available.
-[@goel2025federated]
-
-3. Self-Supervised Learning with BYOL for ACL Tear Detection: It utilizes self-supervised learning with the Bootstrap Your Own Latent (BYOL) algorithm for the detection of ACL tears. It uses the BYOL self-supervised learning algorithm to pre-train the ResNet-18 model for feature extraction of the knee MRI scans.
-[@aidarkhan2025self]
-
-4. Moving Beyond Traditional Orthopaedic Data Analysis: It shows the effectiveness of using multimodal AI models that utilize MRI image data along with electronic health record data for the diagnosis of orthopaedic problems.
-[@oettl2025beyond]
-
-5. Classification of Knee OA was studied here [@guida2021knee]
 
 
 
