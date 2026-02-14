@@ -1,14 +1,18 @@
 ---
 title: " Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026 "
 author: "Bala Raju Pidatala (Advisor: Dr. Archaf Cohen)"
-date: '`r Sys.Date()`'
+date: today
 format:
   html:
     code-fold: true
+    link-external-newwindow: true
+    linkcolor: blue
+    urlcolor: blue
 course: Capstone Projects in Data Science
 bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
-csl: ieee.csl
+link-citations: true
+reference-location: document
 self-contained: true
 execute: 
   warning: false
@@ -23,6 +27,8 @@ to edit)
 
 ## Introduction
 The incidence of musculoskeletal disorders, especially those involving the knee, including osteoarthritis (OA), anterior cruciate ligament (ACL) injuries, and meniscal injuries, is a major global healthcare concern that has a profound effect on the mobility and quality of life of affected patients. Conventional diagnostic tools, especially X-ray radiography, have several limitations, including the inability to image soft tissues, often resulting in the missed diagnosis of early degenerative changes until late-stage damage has been incurred [@panwar2025early]. Magnetic Resonance Imaging (MRI) has recently become the standard diagnostic tool for musculoskeletal imaging because of its high contrast resolution and multi-planar imaging capabilities, which enable the detailed evaluation of ligaments, cartilage, and bone marrow [@qiu2021fusion]. However, the current manual analysis of knee MRI scans is a time-consuming and error-prone process, especially with regard to inter-observer variability and the high cognitive load of radiologists, which can result in delays in diagnosis and treatment [@bien2018deep].
+
+Conventional MRI assessment of the knee relies on manual segmentation of anatomical structures, which is time-consuming and prone to variability. Zhou et al. (2018) demonstrated that a deep convolutional neural network can automatically segment knee joint tissues, including cartilage and meniscus, providing accurate and consistent delineation to support more efficient analysis of knee anatomy and pathology [@zhou2018deep]
 
 The synergy of artificial intelligence, particularly deep learning (DL) and Convolutional Neural Networks (CNNs), provides a revolutionary approach to overcome these diagnostic hurdles by enabling an automated, objective, and scalable analysis of complex medical images [@oettl2025beyond]. CNNs are especially suited for medical imaging applications because they have the capability to automatically learn hierarchical feature representations directly from raw pixel data, including subtle pathological patterns that may not be visible to the human eye [@yeoh2021emergence]. Recent breakthroughs have shown the effectiveness of both 2D and 3D CNN models for segmenting musculoskeletal tissues and grading the severity of structural damage [@liu2018deep; @guida2021knee]. However, there are still major challenges to overcome in the current state of research, such as the requirement for large and high-quality annotated datasets and the lack of generalizability of models across different MRI protocols and hardware configurations [@goel2025federated].
 
