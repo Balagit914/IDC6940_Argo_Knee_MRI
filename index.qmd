@@ -1,14 +1,18 @@
 ---
 title: " Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026 "
 author: "Bala Raju Pidatala (Advisor: Dr. Archaf Cohen)"
-date: '`r Sys.Date()`'
+date: today
 format:
   html:
     code-fold: true
+    link-external-newwindow: true
+    linkcolor: blue
+    urlcolor: blue
 course: Capstone Projects in Data Science
 bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
-csl: ieee.csl
+link-citations: true
+reference-location: document
 self-contained: true
 execute: 
   warning: false
