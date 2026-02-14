@@ -8,7 +8,7 @@
 
 <meta name="author" content="Bala Raju Pidatala (Advisor: Dr. Cohen)">
 
-<title>Dtetection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026</title>
+<title>Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
 width: 0.8em;
 margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
 }
-</style>
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}</style>
 
 
 <script>/*!
@@ -3051,7 +3071,7 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Dtetection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026</h1>
+<h1 class="title">Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026</h1>
 </div>
 
 
@@ -3083,18 +3103,56 @@ vertical-align: -.125em;
 <p>Slides: <a href="slides.html" target="_blank">slides.html</a> ( Go to <code>slides.qmd</code> to edit)</p>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The aim of this study is to conduct a comparative analysis of the performance of DL techniques, like Res-Net and Dense Net. As a result of exploring the capabilities of these two neural networks, we are aiming to determine their effectiveness and suitability for classifying the knee pathologies. Deep Learning (DL) architectures, specifically Convolutional Neural Networks (CNNs), are a flexible class of computational models that combine the strengths of hierarchical feature extraction and automated pattern recognition (LeCun et al. 2015). Like traditional image processing, CNNs can model complex visual data, such as medical radiographs and scans. However, modern architectures like DenseNet (Densely Connected Networks) and ResNet (Residual Networks) extend standard CNNs by incorporating advanced connectivity patterns such as skip connections and feature concatenation which account for the vanishing gradient problem and the need for efficient feature reuse. Wang et al. (2024) noted that manual diagnosis of anterior cruciate ligament (ACL) tears often struggles with inter-observer variability and the high cognitive load placed on radiologists. This made it difficult to provide consistent, rapid outcomes for patients. But the specialized layers in ResNet and DenseNet help model the complex relationships within image patches and allow for the detection of patterns that are not captured by traditional linear measurements.</p>
-<p>Similarly, Awan et al. (2021) utilize a deep learning approach to investigate the efficient detection of knee ACL injuries from MRI data. In their analysis, they demonstrate how optimized CNN architectures account for variation in regional joint data, proving that deep learning provides both the flexibility and tractability required for reliable medical classification.</p>
-<p>This study investigates the potential for diagnosis of knee pathologies particularly focusing on the accurate classification of ACL injuries. To analyze these risks, we will apply different cnn models which can be used for complex data.</p>
+<p>The incidence of musculoskeletal disorders, especially those involving the knee, including osteoarthritis (OA), anterior cruciate ligament (ACL) injuries, and meniscal injuries, is a major global healthcare concern that has a profound effect on the mobility and quality of life of affected patients. Conventional diagnostic tools, especially X-ray radiography, have several limitations, including the inability to image soft tissues, often resulting in the missed diagnosis of early degenerative changes until late-stage damage has been incurred <span class="citation" data-cites="panwar2025early">(<a href="#ref-panwar2025early" role="doc-biblioref">Panwar et al. 2025</a>)</span>. Magnetic Resonance Imaging (MRI) has recently become the standard diagnostic tool for musculoskeletal imaging because of its high contrast resolution and multi-planar imaging capabilities, which enable the detailed evaluation of ligaments, cartilage, and bone marrow <span class="citation" data-cites="qiu2021fusion">(<a href="#ref-qiu2021fusion" role="doc-biblioref">Qiu et al. 2021</a>)</span>. However, the current manual analysis of knee MRI scans is a time-consuming and error-prone process, especially with regard to inter-observer variability and the high cognitive load of radiologists, which can result in delays in diagnosis and treatment <span class="citation" data-cites="bien2018deep">(<a href="#ref-bien2018deep" role="doc-biblioref">Bien et al. 2018</a>)</span>.</p>
+<p>The synergy of artificial intelligence, particularly deep learning (DL) and Convolutional Neural Networks (CNNs), provides a revolutionary approach to overcome these diagnostic hurdles by enabling an automated, objective, and scalable analysis of complex medical images <span class="citation" data-cites="oettl2025beyond">(<a href="#ref-oettl2025beyond" role="doc-biblioref">Oettl et al. 2025</a>)</span>. CNNs are especially suited for medical imaging applications because they have the capability to automatically learn hierarchical feature representations directly from raw pixel data, including subtle pathological patterns that may not be visible to the human eye <span class="citation" data-cites="yeoh2021emergence">(<a href="#ref-yeoh2021emergence" role="doc-biblioref">Yeoh et al. 2021</a>)</span>. Recent breakthroughs have shown the effectiveness of both 2D and 3D CNN models for segmenting musculoskeletal tissues and grading the severity of structural damage <span class="citation" data-cites="liu2018deep guida2021knee">(<a href="#ref-liu2018deep" role="doc-biblioref">Liu et al. 2018</a>; <a href="#ref-guida2021knee" role="doc-biblioref">Guida, Zhang, and Shan 2021</a>)</span>. However, there are still major challenges to overcome in the current state of research, such as the requirement for large and high-quality annotated datasets and the lack of generalizability of models across different MRI protocols and hardware configurations <span class="citation" data-cites="goel2025federated">(<a href="#ref-goel2025federated" role="doc-biblioref">Goel 2025</a>)</span>.</p>
+<p>To overcome these challenges, there is an urgent need for the development of efficient automated systems that are capable of multi-pathology detection and grading to help doctors in high-throughput settings <span class="citation" data-cites="astuto2021automatic">(<a href="#ref-astuto2021automatic" role="doc-biblioref">Astuto et al. 2021</a>)</span>. Although specialized models have proved to be successful in specific tasks like the detection of ACL tears using self-supervised learning techniques <span class="citation" data-cites="aidarkhan2025self">(<a href="#ref-aidarkhan2025self" role="doc-biblioref">Aidarkhan et al. 2025</a>)</span> or staging meniscus degeneration <span class="citation" data-cites="pedoia20193d">(<a href="#ref-pedoia20193d" role="doc-biblioref">Pedoia et al. 2019</a>)</span>, the development of a comprehensive framework that can distinguish between different simultaneous knee injuries is still an intricate challenge. This research work is driven by the need to enhance the accuracy and efficiency of diagnosis in orthopedic radiology. Using the latest advancements in CNN models, this research aims to develop an automated system for the detection and grading of knee pathologies from MRI images, which can eventually help in providing better patient care strategies for early intervention <span class="citation" data-cites="awan2021improved">(<a href="#ref-awan2021improved" role="doc-biblioref">Awan et al. 2021</a>)</span>.</p>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
 </section>
 </section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+<section id="references" class="level2 unnumbered">
+
+
 </section>
 
-</main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-aidarkhan2025self" class="csl-entry" role="listitem">
+Aidarkhan, Assanali, Azamat Mukhamediya, Almira Askhatova, Roza Beisembekova, Zhadyra Alimbayeva, Aiman Ozhikenova, Kassymbek Ozhikenov, and Prashant K Jamwal. 2025. <span>“Self-Supervised Learning with BYOL for Anterior Cruciate Ligament Tear Detection from Knee MRI.”</span> <em>MethodsX</em>, 103664.
+</div>
+<div id="ref-astuto2021automatic" class="csl-entry" role="listitem">
+Astuto, Bruno, Io Flament, Nikan K. Namiri, Rutwik Shah, Upasana Bharadwaj, Thomas M. Link, Matthew D. Bucknor, Valentina Pedoia, and Sharmila Majumdar. 2021. <span>“Automatic Deep Learning–Assisted Detection and Grading of Abnormalities in Knee MRI Studies.”</span> <em>Radiology: Artificial Intelligence</em> 3 (3): e200165.
+</div>
+<div id="ref-awan2021improved" class="csl-entry" role="listitem">
+Awan, Mazhar Javed, Mohd Shafry Mohd Rahim, Naomie Salim, Amjad Rehman, Haitham Nobanee, and Hassan Shabir. 2021. <span>“Improved Deep Convolutional Neural Network to Classify Osteoarthritis from Anterior Cruciate Ligament Tear Using Magnetic Resonance Imaging.”</span> <em>Journal of Personalized Medicine</em> 11 (11): 1163.
+</div>
+<div id="ref-bien2018deep" class="csl-entry" role="listitem">
+Bien, Nicholas, Pranav Rajpurkar, Robyn L Ball, Jeremy Irvin, Allison Park, Erik Jones, Michael Bereket, et al. 2018. <span>“Deep-Learning-Assisted Diagnosis for Knee Magnetic Resonance Imaging: Development and Retrospective Validation of MRNet.”</span> <em>PLoS Medicine</em> 15 (11): e1002699.
+</div>
+<div id="ref-goel2025federated" class="csl-entry" role="listitem">
+Goel, Chirag. 2025. <span>“Federated Knee Injury Diagnosis Using Few Shot Learning.”</span> <em>Frontiers in Artificial Intelligence</em> 8: 1589358.
+</div>
+<div id="ref-guida2021knee" class="csl-entry" role="listitem">
+Guida, Carmine, Ming Zhang, and Juan Shan. 2021. <span>“Knee Osteoarthritis Classification Using 3D CNN and MRI.”</span> <em>Applied Sciences</em> 11 (11): 5196.
+</div>
+<div id="ref-liu2018deep" class="csl-entry" role="listitem">
+Liu, Fang, Zhaoye Zhou, Hyungseok Jang, Alexey Samsonov, Gengyan Zhao, and Richard Kijowski. 2018. <span>“Deep Convolutional Neural Network and 3D Deformable Approach for Tissue Segmentation in Musculoskeletal Magnetic Resonance Imaging.”</span> <em>Magnetic Resonance in Medicine</em> 79 (4): 2379–91.
+</div>
+<div id="ref-oettl2025beyond" class="csl-entry" role="listitem">
+Oettl, Felix C, Bálint Zsidai, Jacob F Oeding, Michael T Hirschmann, Robert Feldt, Thomas Tischer, Kristian Samuelsson, and ESSKA Artificial Intelligence Working Group. 2025. <span>“Beyond Traditional Orthopaedic Data Analysis: AI, Multimodal Models and Continuous Monitoring.”</span> <em>Knee Surgery, Sports Traumatology, Arthroscopy</em> 33 (6): 2269–75.
+</div>
+<div id="ref-panwar2025early" class="csl-entry" role="listitem">
+Panwar, Punita, Sandeep Chaurasia, Jayesh Gangrade, and Ashwani Bilandi. 2025. <span>“Early Diagnosis of Knee Osteoarthritis Severity Using Vision Transformer.”</span> <em>BMC Musculoskeletal Disorders</em> 26 (1): 884.
+</div>
+<div id="ref-pedoia20193d" class="csl-entry" role="listitem">
+Pedoia, Valentina, Berk Norman, Sarah N Mehany, Matthew D Bucknor, Thomas M Link, and Sharmila Majumdar. 2019. <span>“3D Convolutional Neural Networks for Detection and Severity Staging of Meniscus and PFJ Cartilage Morphological Degenerative Changes in Osteoarthritis and Anterior Cruciate Ligament Subjects.”</span> <em>Journal of Magnetic Resonance Imaging</em> 49 (2): 400–410.
+</div>
+<div id="ref-qiu2021fusion" class="csl-entry" role="listitem">
+Qiu, Xubin, Zhiwei Liu, Ming Zhuang, Dong Cheng, Chenlei Zhu, and Xiaoying Zhang. 2021. <span>“Fusion of CNN1 and CNN2-Based Magnetic Resonance Image Diagnosis of Knee Meniscus Injury and a Comparative Analysis with Computed Tomography.”</span> <em>Computer Methods and Programs in Biomedicine</em> 211: 106297.
+</div>
+<div id="ref-yeoh2021emergence" class="csl-entry" role="listitem">
+Yeoh, Pauline Shan Qing, Khin Wee Lai, Siew Li Goh, Khairunnisa Hasikin, Yan Chai Hum, Yee Kai Tee, and Samiappan Dhanalakshmi. 2021. <span>“Emergence of Deep Learning in Knee Osteoarthritis Diagnosis.”</span> <em>Computational Intelligence and Neuroscience</em> 2021 (1): 4931437.
+</div>
+</div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
