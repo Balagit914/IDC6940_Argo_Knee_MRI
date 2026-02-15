@@ -38,6 +38,148 @@ Manual assessment of knee osteoarthritis severity is often time-consuming and su
 
 This research work is driven by the need to enhance the accuracy and efficiency of diagnosis in orthopedic radiology.
 
+
+2. Methods:
+
+Convolutional Neural Network (CNN)
+
+A Convolutional Neural Network (CNN) is a deep learning model that has been specifically designed to work well with structured, grid-organized data, such as images. CNNs have been very successful in image processing and medical imaging tasks, as the network can learn the input images directly without the need to manually extract the features.
+
+In the early layers of the network, the network learns the fundamental spatial features of the image, such as the gradients of the image or the boundaries of the structures. As the layers of the network get deeper, the network learns more complex and abstract features, such as the degeneration of the cartilage or the disruption of the fibers of the anterior cruciate ligament (ACL).
+
+While 1D CNNs are often used to deal with sequential information and 2D CNNs are used to deal with information from individual image slices, 3D CNNs extend the operation of the convolutional layers to the volumetric space, including the dimension of depth in addition to height and width. This is particularly important in imaging modalities such as MRI, where spatial information across image slices is vital.
+
+3D CNNs have demonstrated their ability to achieve better results in the detection and grading of ACL tears, meniscus degeneration, and the severity of osteoarthritis in knee MRI scans. This is due to the spatial information maintained across image slices, providing a deeper understanding of anatomy and placing 3D CNNs at the forefront of the latest artificial intelligence technology in the realm of cutting-edge orthopedics (Bien et al., 2018; Guida et al., 2021; Oettl et al., 2025).
+
+In knee MRI applications, 3D CNNs have shown enhanced accuracy in detecting and grading ACL tears, meniscus degeneration, and osteoarthritis severity. By maintaining inter-slice spatial continuity, these models provide a richer anatomical understanding, positioning 3D CNNs as a powerful tool in cutting-edge orthopedic artificial intelligence systems (Bien et al., 2018; Guida et al., 2021; Oettl et al., 2025).
+
+
+Basic Architecture of a CNN
+
+ 
+A typical CNN consists of the following components:
+
+![Basic Architecture of a CNN](Images/Cnn_Architecture.jpg)
+
+
+1. Convolution Layer : 
+Applies filters (kernels) to extract features from input images.
+
+      Mathematical representation:
+$$
+Y(i,j) = \sum_{m}\sum_{n} \left[ X(i+m, j+n)\cdot W(m,n) \right] + b
+$$
+
+
+    Where:
+	X= input image
+	W= filter/kernel
+	b= bias
+	Y= output feature map
+	
+2. Activation Function:
+
+    Commonly ReLU:
+$$
+f(x) = \max(0, x)
+$$
+
+3. Pooling Layer
+Reduces spatial dimensions (e.g., Max Pooling).
+4. Fully Connected Layer
+Performs classification based on extracted features.
+5. Output Layer
+Uses Softmax (multi-class) or Sigmoid (binary/multi-label).
+
+In medical imaging, CNNs have demonstrated strong performance in MRI-based diagnosis and tissue segmentation (Zhou et al. 2018; Liu et al. 2018).
+
+
+Types of CNN:
+
+CNNs are categorized based on the dimensionality of the input data and the sliding direction of the kernel:
+
+| Type   | Input Data Examples | Kernel Movement |
+|--------|--------------------|-----------------|
+| 1D CNN | Time-series, audio, ECG signals (Ige & Sibiya, 2024). | Slides along one dimension (time/sequence). |
+| 2D CNN | Grayscale/RGB images, medical X-rays (Taye, 2023). | Slides along two dimensions (height and width). |
+| 3D CNN | Videos, MRI/CT scans, 3D point clouds (Guida et al., 2021). | Slides along three dimensions (height, width, and depth). |
+
+
+3D Convolutional Neural Networks:
+
+3D CNNs extend the capabilities of 2D networks by adding a third dimension (depth or time) to the convolution operation (Ige & Sibiya, 2024). This allows the network to capture spatiotemporal or volumetric contexts that are often lost when processing 3D data as independent 2D slices (Baheti et al., 2023; Guida et al., 2021).This characteristic makes 3D CNN particularly well-suited for medical imaging modalities such as magnetic resonance imaging (MRI) and computed tomography (CT), where anatomical structures extend across multiple slices.
+
+The 3D convolution is defined as:
+  
+$$
+Y(i,j,k) = \sum_{m}\sum_{n}\sum_{p} X(i+m, j+n, k+p)\cdot W(m,n,p) + b
+$$
+
+Where:
+	X= Input 3D MRI volume
+	W= 3D convolution kernel
+	b= Bias
+	Y= Output feature map
+	i,j,k= Spatial voxel indices
+This operation extracts volumetric features across depth, height, and width.
+
+
+Applications in Knee MRI Analysis
+
+3D CNNs have demonstrated strong performance in musculoskeletal imaging, particularly in knee MRI analysis.
+
+- Tissue Segmentation:
+
+   Liu et al. (2018) and Zhou et al. (2018) have used deep CNN-based architectures to achieve the segmentation of knee      joint anatomy, which has demonstrated better accuracy in tissue segmentation..
+
+- Meniscus and Cartilage Degeneration Detection:
+
+  Pedoia et al. (2019) have used 3D CNN architectures to identify and stage the degenerative morphological changes in      meniscus and patellofemoral cartilage, which emphasizes the need to extract volumetric features.
+
+- Osteoarthritis Classification:
+
+  Guida et al. (2021) have suggested a model based on the 3D CNN technique for the classification of knee osteoarthritis   using MRI, showing that the performance is enhanced compared to the 2D technique. Similarly, the effectiveness of the    CNN technique has been shown in the classification of osteoarthritis severity assessment by Rani et al. (2024).
+
+- ACL Tear Detection:
+
+  Bien et al. (2018) suggested the MRNet deep learning technique for the diagnosis of knee MRI. Recently, more efficient   learning techniques such as self-supervised learning have been used in the detection of ACL tears using the MRI scan,    as suggested in the study by Aidarkhan et al. (2025).
+
+- Multimodal and Federated Learning Approaches:
+
+  New frameworks have been developed to combine 3D CNNs with federated and few-shot learning techniques to achieve better   generalization across institutions (Goel, 2025). Moreover, the contribution of AI-based multimodal systems to the        development of orthopedic diagnostics has been emphasized in the study done by Oettl et al.(2025)
+
+Performance and Advantages:
+
+3D CNNs provide significant benefits in medical imaging (Avesta et al., 2023; Guida et al., 2021):
+
+- Volumetric Context:
+
+	They extract features from adjacent slices, detecting biomarkers (like cartilage degradation) that may be invisible in   a single 2D image (Guida et al., 2021).
+	
+- Higher Accuracy: 
+
+	Brain and knee imaging studies have established that the 3D model has higher dice scores and accuracy compared to the    2D and 2.5D approaches (Avesta et al., 2023; Guida et al., 2021).
+	
+- Efficiency in Convergence: 
+
+	3D models can converge 20% to 40% faster during training than their 2D counterparts when dealing with volumetric data    (Avesta et al., 2023).
+
+Limitations and Assumptions
+
+Despite their power, 3D CNNs face specific challenges (Avesta et al., 2023; Baheti et al., 2023):
+
+- Computational Cost: 
+
+	3D models require significantly more computational memory (often up to 20 times more) compared to 2D models (Avesta et   al., 2023).
+	
+- Data Scarcity: 
+
+  Unlike 2D CNNs, which have access to enormous pre-trained data sets like ImageNet, 3D CNNs may face a scarcity of        large-scale pre-trained models, which may affect the stability of the model due to the random weights used during        initialization (Baheti et al., 2023).
+
+
+
+
+
 ### Conclusion
 
 
