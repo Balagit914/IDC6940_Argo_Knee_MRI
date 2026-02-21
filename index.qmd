@@ -1,6 +1,6 @@
 ---
 title: " Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026 "
-author: "Bala Raju Pidatala (Advisor: Dr. Archaf Cohen)"
+author: "Bala Raju Pidatala & Sabna BalasubramoniPillai (Advisor: Dr. Archaf Cohen)"
 date: today
 format:
   html:
@@ -25,13 +25,37 @@ editor:
 Slides: [slides.html](slides.html){target="_blank"} ( Go to `slides.qmd`
 to edit)
 
-## Introduction
+## 1 Introduction
+
 The incidence of musculoskeletal disorders, especially those involving the knee, including osteoarthritis (OA), anterior cruciate ligament (ACL) injuries, and meniscal injuries, is a major global healthcare concern that has a profound effect on the mobility and quality of life of affected patients. Conventional diagnostic tools, especially X-ray radiography, have several limitations, including the inability to image soft tissues, often resulting in the missed diagnosis of early degenerative changes until late-stage damage has been incurred [@panwar2025early]. Magnetic Resonance Imaging (MRI) has recently become the standard diagnostic tool for musculoskeletal imaging because of its high contrast resolution and multi-planar imaging capabilities, which enable the detailed evaluation of ligaments, cartilage, and bone marrow [@qiu2021fusion]. However, the current manual analysis of knee MRI scans is a time-consuming and error-prone process, especially with regard to inter-observer variability and the high cognitive load of radiologists, which can result in delays in diagnosis and treatment [@bien2018deep].
 
 The synergy of artificial intelligence, particularly deep learning (DL) and Convolutional Neural Networks (CNNs), provides a revolutionary approach to overcome these diagnostic hurdles by enabling an automated, objective, and scalable analysis of complex medical images [@oettl2025beyond]. CNNs are especially suited for medical imaging applications because they have the capability to automatically learn hierarchical feature representations directly from raw pixel data, including subtle pathological patterns that may not be visible to the human eye [@yeoh2021emergence]. Recent breakthroughs have shown the effectiveness of both 2D and 3D CNN models for segmenting musculoskeletal tissues and grading the severity of structural damage [@liu2018deep; @guida2021knee]. However, there are still major challenges to overcome in the current state of research, such as the requirement for large and high-quality annotated datasets and the lack of generalizability of models across different MRI protocols and hardware configurations [@goel2025federated].
 
 To overcome these challenges, there is an urgent need for the development of efficient automated systems that are capable of multi-pathology detection and grading to help doctors in high-throughput settings [@astuto2021automatic]. Although specialized models have proved to be successful in specific tasks like the detection of ACL tears using self-supervised learning techniques [@aidarkhan2025self] or staging meniscus degeneration [@pedoia20193d], the development of a comprehensive framework that can distinguish between different simultaneous knee injuries is still an intricate challenge. This research work is driven by the need to enhance the accuracy and efficiency of diagnosis in orthopedic radiology. Using the latest advancements in CNN models, this research aims to develop an automated system for the detection and grading of knee pathologies from MRI images, which can eventually help in providing better patient care strategies for early intervention [@awan2021improved].
 
+## 2 Methods
+
+## 3 Analysis & Results:
+
+### 3.1 Dataset Description:
+The MRNet dataset, a publicly available set of knee MRI scans gathered by the School of Medicine at Stanford University, is used in this research. The dataset contains images gathered from clinical studies performed at the Stanford University Medical Center over an eleven-year period from 2001 to 2012.
+The structure of the dataset is divided into a training and validation set, with each MRI study labeled for three different diagnoses: the presence of any abnormality, tears of the anterior cruciate ligament (ACL), and meniscal injuries.
+
+#### Data Distribution and Class Balance
+It is important to understand the distribution of classes in the dataset to develop effective deep learning models for medical imaging tasks. An analysis of the given diagnostic labels shows that the dataset has the following properties, as described in the table below:
+
+#table
+
+#### Imaging Modalities and Sequences
+The MRNet dataset contains three different volumetric sequences per case, each of which has its own strengths in visualization and hence plays an important role in the comprehensive evaluation of the pathology:
+
+Axial T2-weighted sequences: These images are best suited for the visualization of fluid collection within joints and any abnormalities within soft tissue structures.
+Coronal T1-weighted sequences: This imaging modality provides the best visualization of bony structures and the medial and lateral collateral ligaments.
+Sagittal Fat-Saturated T2-weighted sequences: This type of sequence is most useful in the evaluation of the status of the ACL and meniscal tissues.
+
+#### Label Characteristics
+The data set uses a two-class labeling scheme, with 1 indicating the presence of the pathology and 0 indicating its absence. The "Abnormal" class includes a wide range of musculoskeletal disorders, including bone fractures and fluid effusions, as well as degenerative changes to tissues. In contrast, the ACL and Meniscus classes focus on disorders related to the respective body region. The training set shows a significant imbalance in the number of cases for each class, with only 18.4% of the data being cases of ACL tear [@yeoh2021emergence].
+#Visualization:
 
 ### Conclusion
 

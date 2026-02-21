@@ -6,8 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Bala Raju Pidatala (Advisor: Dr. Archaf Cohen)">
-<meta name="dcterms.date" content="2026-02-16">
+<meta name="author" content="Bala Raju Pidatala &amp; Sabna BalasubramoniPillai (Advisor: Dr. Archaf Cohen)">
+<meta name="dcterms.date" content="2026-02-20">
 
 <title>Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026</title>
 <style>
@@ -3082,14 +3082,14 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Bala Raju Pidatala (Advisor: Dr. Archaf Cohen) </p>
+             <p>Bala Raju Pidatala &amp; Sabna BalasubramoniPillai (Advisor: Dr. Archaf Cohen) </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 16, 2026</p>
+      <p class="date">February 20, 2026</p>
     </div>
   </div>
   
@@ -3103,10 +3103,34 @@ vertical-align: -.125em;
 
 <p>Slides: <a href="slides.html" target="_blank">slides.html</a> ( Go to <code>slides.qmd</code> to edit)</p>
 <section id="introduction" class="level2">
-<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<h2 class="anchored" data-anchor-id="introduction">1 Introduction</h2>
 <p>The incidence of musculoskeletal disorders, especially those involving the knee, including osteoarthritis (OA), anterior cruciate ligament (ACL) injuries, and meniscal injuries, is a major global healthcare concern that has a profound effect on the mobility and quality of life of affected patients. Conventional diagnostic tools, especially X-ray radiography, have several limitations, including the inability to image soft tissues, often resulting in the missed diagnosis of early degenerative changes until late-stage damage has been incurred <span class="citation" data-cites="panwar2025early">(<a href="#ref-panwar2025early" role="doc-biblioref">Panwar et al. 2025</a>)</span>. Magnetic Resonance Imaging (MRI) has recently become the standard diagnostic tool for musculoskeletal imaging because of its high contrast resolution and multi-planar imaging capabilities, which enable the detailed evaluation of ligaments, cartilage, and bone marrow <span class="citation" data-cites="qiu2021fusion">(<a href="#ref-qiu2021fusion" role="doc-biblioref">Qiu et al. 2021</a>)</span>. However, the current manual analysis of knee MRI scans is a time-consuming and error-prone process, especially with regard to inter-observer variability and the high cognitive load of radiologists, which can result in delays in diagnosis and treatment <span class="citation" data-cites="bien2018deep">(<a href="#ref-bien2018deep" role="doc-biblioref">Bien et al. 2018</a>)</span>.</p>
 <p>The synergy of artificial intelligence, particularly deep learning (DL) and Convolutional Neural Networks (CNNs), provides a revolutionary approach to overcome these diagnostic hurdles by enabling an automated, objective, and scalable analysis of complex medical images <span class="citation" data-cites="oettl2025beyond">(<a href="#ref-oettl2025beyond" role="doc-biblioref">Oettl et al. 2025</a>)</span>. CNNs are especially suited for medical imaging applications because they have the capability to automatically learn hierarchical feature representations directly from raw pixel data, including subtle pathological patterns that may not be visible to the human eye <span class="citation" data-cites="yeoh2021emergence">(<a href="#ref-yeoh2021emergence" role="doc-biblioref">Yeoh et al. 2021</a>)</span>. Recent breakthroughs have shown the effectiveness of both 2D and 3D CNN models for segmenting musculoskeletal tissues and grading the severity of structural damage <span class="citation" data-cites="liu2018deep guida2021knee">(<a href="#ref-liu2018deep" role="doc-biblioref">Liu et al. 2018</a>; <a href="#ref-guida2021knee" role="doc-biblioref">Guida, Zhang, and Shan 2021</a>)</span>. However, there are still major challenges to overcome in the current state of research, such as the requirement for large and high-quality annotated datasets and the lack of generalizability of models across different MRI protocols and hardware configurations <span class="citation" data-cites="goel2025federated">(<a href="#ref-goel2025federated" role="doc-biblioref">Goel 2025</a>)</span>.</p>
 <p>To overcome these challenges, there is an urgent need for the development of efficient automated systems that are capable of multi-pathology detection and grading to help doctors in high-throughput settings <span class="citation" data-cites="astuto2021automatic">(<a href="#ref-astuto2021automatic" role="doc-biblioref">Astuto et al. 2021</a>)</span>. Although specialized models have proved to be successful in specific tasks like the detection of ACL tears using self-supervised learning techniques <span class="citation" data-cites="aidarkhan2025self">(<a href="#ref-aidarkhan2025self" role="doc-biblioref">Aidarkhan et al. 2025</a>)</span> or staging meniscus degeneration <span class="citation" data-cites="pedoia20193d">(<a href="#ref-pedoia20193d" role="doc-biblioref">Pedoia et al. 2019</a>)</span>, the development of a comprehensive framework that can distinguish between different simultaneous knee injuries is still an intricate challenge. This research work is driven by the need to enhance the accuracy and efficiency of diagnosis in orthopedic radiology. Using the latest advancements in CNN models, this research aims to develop an automated system for the detection and grading of knee pathologies from MRI images, which can eventually help in providing better patient care strategies for early intervention <span class="citation" data-cites="awan2021improved">(<a href="#ref-awan2021improved" role="doc-biblioref">Awan et al. 2021</a>)</span>.</p>
+</section>
+<section id="methods" class="level2">
+<h2 class="anchored" data-anchor-id="methods">2 Methods</h2>
+</section>
+<section id="analysis-results" class="level2">
+<h2 class="anchored" data-anchor-id="analysis-results">3 Analysis &amp; Results:</h2>
+<section id="dataset-description" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-description">3.1 Dataset Description:</h3>
+<p>The MRNet dataset, a publicly available set of knee MRI scans gathered by the School of Medicine at Stanford University, is used in this research. The dataset contains images gathered from clinical studies performed at the Stanford University Medical Center over an eleven-year period from 2001 to 2012. The structure of the dataset is divided into a training and validation set, with each MRI study labeled for three different diagnoses: the presence of any abnormality, tears of the anterior cruciate ligament (ACL), and meniscal injuries.</p>
+<section id="data-distribution-and-class-balance" class="level4">
+<h4 class="anchored" data-anchor-id="data-distribution-and-class-balance">Data Distribution and Class Balance</h4>
+<p>It is important to understand the distribution of classes in the dataset to develop effective deep learning models for medical imaging tasks. An analysis of the given diagnostic labels shows that the dataset has the following properties, as described in the table below:</p>
+<p>#table</p>
+</section>
+<section id="imaging-modalities-and-sequences" class="level4">
+<h4 class="anchored" data-anchor-id="imaging-modalities-and-sequences">Imaging Modalities and Sequences</h4>
+<p>The MRNet dataset contains three different volumetric sequences per case, each of which has its own strengths in visualization and hence plays an important role in the comprehensive evaluation of the pathology:</p>
+<p>Axial T2-weighted sequences: These images are best suited for the visualization of fluid collection within joints and any abnormalities within soft tissue structures. Coronal T1-weighted sequences: This imaging modality provides the best visualization of bony structures and the medial and lateral collateral ligaments. Sagittal Fat-Saturated T2-weighted sequences: This type of sequence is most useful in the evaluation of the status of the ACL and meniscal tissues.</p>
+</section>
+<section id="label-characteristics" class="level4">
+<h4 class="anchored" data-anchor-id="label-characteristics">Label Characteristics</h4>
+<p>The data set uses a two-class labeling scheme, with 1 indicating the presence of the pathology and 0 indicating its absence. The “Abnormal” class includes a wide range of musculoskeletal disorders, including bone fractures and fluid effusions, as well as degenerative changes to tissues. In contrast, the ACL and Meniscus classes focus on disorders related to the respective body region. The training set shows a significant imbalance in the number of cases for each class, with only 18.4% of the data being cases of ACL tear <span class="citation" data-cites="yeoh2021emergence">(<a href="#ref-yeoh2021emergence" role="doc-biblioref">Yeoh et al. 2021</a>)</span>. #Visualization:</p>
+</section>
+</section>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
 </section>
