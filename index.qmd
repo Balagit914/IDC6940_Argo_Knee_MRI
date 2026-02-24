@@ -35,7 +35,7 @@ The synergy of artificial intelligence, particularly deep learning (DL) and Conv
 
 To overcome these challenges, there is an urgent need for the development of efficient automated systems that are capable of multi-pathology detection and grading to help doctors in high-throughput settings [@astuto2021automatic]. Although specialized models have proved to be successful in specific tasks like the detection of ACL tears using self-supervised learning techniques [@aidarkhan2025self] or staging meniscus degeneration [@pedoia20193d], the development of a comprehensive framework that can distinguish between different simultaneous knee injuries is still an intricate challenge. Using the latest advancements in CNN models, this research aims to develop an automated system for the detection and grading of knee pathologies from MRI images, which can eventually help in providing better patient care strategies for early intervention [@awan2021improved].
 
-<<<<<<< HEAD
+
 ## 2 Methods
 
 ## 3 Analysis & Results:
@@ -58,12 +58,12 @@ Sagittal Fat-Saturated T2-weighted sequences: This type of sequence is most usef
 
 #### Label Characteristics
 The data set uses a two-class labeling scheme, with 1 indicating the presence of the pathology and 0 indicating its absence. The "Abnormal" class includes a wide range of musculoskeletal disorders, including bone fractures and fluid effusions, as well as degenerative changes to tissues. In contrast, the ACL and Meniscus classes focus on disorders related to the respective body region. The training set shows a significant imbalance in the number of cases for each class, with only 18.4% of the data being cases of ACL tear [@yeoh2021emergence].
-#Visualization:
-=======
+## Visualization:
+
 Manual assessment of knee osteoarthritis severity is often time-consuming and subjective. A recent study demonstrated that a CNN-based deep learning model can automatically detect and grade knee osteoarthritis from imaging data, providing accurate and consistent classification that can support faster and more reliable diagnosis.[@rani2024deep]
 
 This research work is driven by the need to enhance the accuracy and efficiency of diagnosis in orthopedic radiology.
->>>>>>> 2277ee5242b025122d79ac72f9a82605806ee58b
+
 
 ### Conclusion
 
