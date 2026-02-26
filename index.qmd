@@ -46,16 +46,22 @@ This research work is driven by the need to enhance the accuracy and efficiency 
 The MRNet dataset, a publicly available set of knee MRI scans gathered by the School of Medicine at Stanford University, is used in this research. The dataset contains images gathered from clinical studies performed at the Stanford University Medical Center over an eleven-year period from 2001 to 2012.
 The structure of the dataset is divided into a training and validation set, with each MRI study labeled for three different diagnoses: 
 
-The presence of any abnormality, 
-Tears of the anterior cruciate ligament (ACL),
-Meniscal injuries.
+- The presence of any abnormality, 
+- Tears of the anterior cruciate ligament (ACL),
+- Meniscal injuries.
 
 #### Data Organization
 The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.
 
 #### Problem Formulation
 The task of clinical diagnosis is posed as a binary classification problem, where the goal of the model is to distinguish between ACL-intact and ACL-compromised knee examinations. Mathematically, the binary classification problem can be stated as:
-y={0No ACL tear present1ACL tear presenty = \begin{cases} 0 & \text{No ACL tear present} \\ 1 & \text{ACL tear present} \end{cases}y={01​No ACL tear presentACL tear present​
+
+$$
+y=\begin{cases}
+0 & \text{No ACL tear present} \\ 
+1 & \text{ACL tear present} 
+\end{cases}
+$$
 This problem statement allows the construction of a supervised learning model that can be used to automatically identify ACL tears from multi-planar MRI images[@yeoh2021emergence].
 
 #### Visualization:
