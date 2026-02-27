@@ -62,12 +62,11 @@ y=\begin{cases}
 1 & \text{ACL tear present} 
 \end{cases}
 $$
-This problem statement allows the construction of a supervised learning model that can be used to automatically identify ACL tears from multi-planar MRI images[@yeoh2021emergence].
+This problem statement allows the construction of a supervised learning model that can be used to automatically identify ACL tears from multi-planar MRI images.
 
 #### Visualization:
 
 Manual assessment of knee osteoarthritis severity is often time-consuming and subjective. A recent study demonstrated that a CNN-based deep learning model can automatically detect and grade knee osteoarthritis from imaging data, providing accurate and consistent classification that can support faster and more reliable diagnosis.[@rani2024deep]
-
 
 
 
