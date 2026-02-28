@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Bala Raju Pidatala &amp; Sabna BalasubramoniPillai (Advisor: Dr. Archaf Cohen)">
-<meta name="dcterms.date" content="2026-02-26">
+<meta name="dcterms.date" content="2026-02-27">
 
 <title>Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026</title>
 <style>
@@ -3228,7 +3228,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 26, 2026</p>
+      <p class="date">February 27, 2026</p>
     </div>
   </div>
   
@@ -3263,11 +3263,11 @@ window.Quarto = {
 <li>Meniscal injuries.</li>
 </ul>
 <section id="data-organization" class="level4">
-<h4 class="anchored" data-anchor-id="data-organization">Data Organization</h4>
+<h4 class="anchored" data-anchor-id="data-organization">3.1.2 Data Organization</h4>
 <p>The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.</p>
 </section>
 <section id="problem-formulation" class="level4">
-<h4 class="anchored" data-anchor-id="problem-formulation">Problem Formulation</h4>
+<h4 class="anchored" data-anchor-id="problem-formulation">3.1.3 Problem Formulation</h4>
 <p>The task of clinical diagnosis is posed as a binary classification problem, where the goal of the model is to distinguish between ACL-intact and ACL-compromised knee examinations. Mathematically, the binary classification problem can be stated as:</p>
 <p><span class="math display">\[
 y=\begin{cases}
@@ -3276,9 +3276,25 @@ y=\begin{cases}
 \end{cases}
 \]</span> This problem statement allows the construction of a supervised learning model that can be used to automatically identify ACL tears from multi-planar MRI images.</p>
 </section>
-<section id="visualization" class="level4">
-<h4 class="anchored" data-anchor-id="visualization">Visualization:</h4>
-<p>Manual assessment of knee osteoarthritis severity is often time-consuming and subjective. A recent study demonstrated that a CNN-based deep learning model can automatically detect and grade knee osteoarthritis from imaging data, providing accurate and consistent classification that can support faster and more reliable diagnosis.<span class="citation" data-cites="rani2024deep">(<a href="#ref-rani2024deep" role="doc-biblioref">Rani et al. 2024</a>)</span></p>
+</section>
+<section id="dataset-visualization-exploratory-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="dataset-visualization-exploratory-analysis">3.2 Dataset Visualization &amp; Exploratory Analysis:</h3>
+<p>Exploratory Data Analysis (EDA) is a fundamental component of any machine learning model’s pipeline. It is critical to understand the structure and composition of the data before moving forward to train any model. This section of the report outlines a detailed exploratory data analysis of the MRNet dataset, proposed by <span class="citation" data-cites="bien2018deep">(<a href="#ref-bien2018deep" role="doc-biblioref">Bien et al. 2018</a>)</span>. in 2018, which consists of knee MRI images from three different imaging planes, i.e., sagittal, coronal, and axial. Each of these imaging sessions is associated with a binary variable representing the ACL tear condition of the knee. The class balance, volumetric structure, imaging characteristics, and cross-plane imaging of the MRNet dataset have all been addressed in the following visualizations, which were critical to the decisions made in the subsequent sections of this report.</p>
+<section id="class-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="class-distribution">3.2.1 Class Distribution</h4>
+<p>The bar chart describes the class distribution of the ACL tear labels in the data set. The horizontal axis indicates the two classes in the diagnostic results, namely “No ACL Tear” and “ACL Tear,” while the vertical axis indicates the number of examinations in the data set. The data set contains a total of 1,130 examinations, with 922 (81.6%) labeled as “No ACL Tear” and 208 (18.4%) labeled as “ACL Tear.” This is a significant imbalance between the two classes, with an approximate ratio of 4.4:1 in favor of the negative class. This imbalance is clinically realistic, since ACL tears are not as common in the general population as the converse; nonetheless, it is a significant methodological limitation in the application of supervised machine learning, since a model trained on such an unbalanced data set will likely develop a bias toward the majority class, thereby achieving high accuracy but at the expense of poor sensitivity for the clinically important minority class. This figure is important because it establishes the underlying data set characteristics that directly influence the model design, loss function, and evaluation metric used in the study.</p>
+</section>
+<section id="sample-middle-slices-from-the-sagittal-plane" class="level4">
+<h4 class="anchored" data-anchor-id="sample-middle-slices-from-the-sagittal-plane">3.2.2 Sample Middle Slices from the Sagittal Plane</h4>
+<p>The following figure depicts four sample middle sagittal plane MRI slice images from the dataset, showing instances of both positive and negative ACL tear classes. As shown, each image has been labeled with the patient ID and the associated label, with “ACL Tear” instances depicted in red and “No ACL Tear” instances depicted in blue, based on their associated IDs 1 and 18, and 0 and 2, respectively. As depicted, the images have been shown in grayscale, consistent with standard MRI acquisition procedures. As shown, there are discernible structural differences in the ACL-tear and no ACL-tear classes, with the ACL-tear classes showing a lack of the characteristic linear hypointense feature representing the ligament, while the no ACL-tear classes show a well-defined ligamentous feature. However, discernible variability in knee orientation, contrast, and soft tissue intensity may be observed among the four sample images, showing the inherent variability in clinical data. As shown, the variability among the samples demonstrates the complexity of the classification task, warranting the use of deep learning architectures that are capable of learning complex hierarchical representations without relying on feature engineering.</p>
+</section>
+<section id="distribution-of-slice-counts-per-examination-sagittal-plane" class="level4">
+<h4 class="anchored" data-anchor-id="distribution-of-slice-counts-per-examination-sagittal-plane">3.2.3 Distribution of Slice Counts per Examination (Sagittal Plane)</h4>
+<p>The above histogram shows the distribution of the number of slices in the sagittal plane for each MRI exam. The horizontal axis shows the number of slices in each exam. This varies from around 15 slices to around 50 slices. The vertical axis shows the number of exams. The distribution of slices in the sagittal plane appears to be approximately unimodal. The main peak occurs at around 25 slices per exam, with approximately 150 exams. There is a smaller peak around 30-35 slices per exam, with around 100-110 exams. The distribution of slices in the sagittal plane appears skewed to the right. This means that a long tail of the distribution goes towards a maximum of 50 slices per exam. Here, the number of exams is less than 5. This variation in the number of slices in the sagittal plane arises due to the inherent variation in clinical images. This variation arises because different imaging protocols are followed in different hospitals and institutions. This figure is of great importance as it guides the way in which the volumetric inputs are standardized during the preprocessing stage.</p>
+</section>
+<section id="pixel-intensity" class="level4">
+<h4 class="anchored" data-anchor-id="pixel-intensity">3.2.4 Pixel Intensity</h4>
+<p>The histogram in the above image demonstrates the pixel intensity values for a random selection of ten images. The horizontal axis of the histogram ranges from values lower than 0 up to 255. The vertical axis of the histogram corresponds to the values’ frequencies. The values are highly skewed towards the right. The highest frequency values are concentrated in the lower intensity values and reach a peak of around 20-25. The frequency value in this region approaches 2000. After this peak, the values decrease gradually as the intensity increases. This demonstrates that the pixels in an MRI image are not uniformly distributed. The presence of a secondary peak of around 300 occurs when the intensity reaches its maximum value of 255. This could be due to the presence of pixels in images of joint effusion. This figure is useful as it justifies the normalization of all the images before they are fed into the model for training.</p>
 </section>
 </section>
 <section id="conclusion" class="level3">
@@ -3323,9 +3339,6 @@ Pedoia, Valentina, Berk Norman, Sarah N Mehany, Matthew D Bucknor, Thomas M Link
 </div>
 <div id="ref-qiu2021fusion" class="csl-entry" role="listitem">
 Qiu, Xubin, Zhiwei Liu, Ming Zhuang, Dong Cheng, Chenlei Zhu, and Xiaoying Zhang. 2021. <span>“Fusion of CNN1 and CNN2-Based Magnetic Resonance Image Diagnosis of Knee Meniscus Injury and a Comparative Analysis with Computed Tomography.”</span> <em>Computer Methods and Programs in Biomedicine</em> 211: 106297. <a href="https://doi.org/10.1016/j.cmpb.2021.106297">https://doi.org/10.1016/j.cmpb.2021.106297</a>.
-</div>
-<div id="ref-rani2024deep" class="csl-entry" role="listitem">
-Rani, Suman, Minakshi Memoria, Ahmad Almogren, Salil Bharany, Kapil Joshi, Ayman Altameem, Ateeq Ur Rehman, and Habib Hamam. 2024. <span>“Deep Learning to Combat Knee Osteoarthritis and Severity Assessment by Using CNN-Based Classification.”</span> <em>BMC Musculoskeletal Disorders</em> 25 (1): 817.
 </div>
 <div id="ref-yeoh2021emergence" class="csl-entry" role="listitem">
 Yeoh, Pauline Shan Qing, Khin Wee Lai, Siew Li Goh, Khairunnisa Hasikin, Yan Chai Hum, Yee Kai Tee, and Samiappan Dhanalakshmi. 2021. <span>“Emergence of Deep Learning in Knee Osteoarthritis Diagnosis.”</span> <em>Computational Intelligence and Neuroscience</em> 2021 (1): 4931437. <a href="https://doi.org/10.1155/2021/4931437">https://doi.org/10.1155/2021/4931437</a>.
