@@ -4,10 +4,12 @@ author: "Bala Raju Pidatala & Sabna BalasubramoniPillai (Advisor: Dr. Archaf Coh
 date: today
 format:
   html:
+    theme: flatly
+    toc: true
+    toc-depth: 2
     code-fold: true
     link-external-newwindow: true
-    linkcolor: blue
-    urlcolor: blue
+    css: styles.css
 course: Capstone Projects in Data Science
 bibliography: references.bib # file contains bibtex for references
 #always_allow_html: true # this allows to get PDF with HTML features
@@ -70,27 +72,207 @@ Exploratory Data Analysis (EDA) is a fundamental component of any machine learni
 
 #### 3.2.1 Class Distribution
 
-The bar chart describes the class distribution of the ACL tear labels in the data set. The horizontal axis indicates the two classes in the diagnostic results, namely "No ACL Tear" and "ACL Tear," while the vertical axis indicates the number of examinations in the data set. The data set contains a total of 1,130 examinations, with 922 (81.6%) labeled as "No ACL Tear" and 208 (18.4%) labeled as "ACL Tear." This is a significant imbalance between the two classes, with an approximate ratio of 4.4:1 in favor of the negative class. This imbalance is clinically realistic, since ACL tears are not as common in the general population as the converse; nonetheless, it is a significant methodological limitation in the application of supervised machine learning, since a model trained on such an unbalanced data set will likely develop a bias toward the majority class, thereby achieving high accuracy but at the expense of poor sensitivity for the clinically important minority class. This figure is important because it establishes the underlying data set characteristics that directly influence the model design, loss function, and evaluation metric used in the study.
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+class_counts = labels_df["diagnosis"].value_counts()
+
+plt.figure(figsize=(6, 4))
+ax = class_counts.plot(kind="bar",
+                       color=["#4C9BE8", "#E8654C"],
+                       edgecolor="white",
+                       width=0.5)
+
+# Add count labels on top of each bar
+for bar in ax.patches:
+    ax.text(
+        bar.get_x() + bar.get_width() / 2,
+        bar.get_height() + 1,
+        str(int(bar.get_height())),
+        ha="center", va="bottom", fontweight="bold"
+    )
+
+plt.title("Class Distribution – ACL Tear Labels", fontsize=13, fontweight="bold")
+plt.xlabel("")
+plt.ylabel("Number of Exams")
+plt.xticks(rotation=0)
+plt.tight_layout()
+plt.show()
+plt.savefig("figures/class_distribution.png", dpi=300)
+```
+
+</details>
+
+<p>The bar chart describes the class distribution of the ACL tear labels in the data set. The horizontal axis indicates the two classes in the diagnostic results, namely "No ACL Tear" and "ACL Tear," while the vertical axis indicates the number of examinations in the data set. The data set contains a total of 1,130 examinations, with 922 (81.6%) labeled as "No ACL Tear" and 208 (18.4%) labeled as "ACL Tear." This is a significant imbalance between the two classes, with an approximate ratio of 4.4:1 in favor of the negative class. This imbalance is clinically realistic, since ACL tears are not as common in the general population as the converse; nonetheless, it is a significant methodological limitation in the application of supervised machine learning, since a model trained on such an unbalanced data set will likely develop a bias toward the majority class, thereby achieving high accuracy but at the expense of poor sensitivity for the clinically important minority class. This figure is important because it establishes the underlying data set characteristics that directly influence the model design, loss function, and evaluation metric used in the study.</p>
+
+<center>
+```{r}
+#| echo: false
+#| fig-cap: "Figure 3.1: Class distribution of ACL tear labels"
+#| out-width: "70%"
+#| fig-align: "center"
+#| fig-cap-location: margin
+knitr::include_graphics("figures/Class_Distribution.png")
+```
+</center>
 
 #### 3.2.2 Sample Middle Slices from the Sagittal Plane
 
-The following figure depicts four sample middle sagittal plane MRI slice images from the dataset, showing instances of both positive and negative ACL tear classes. As shown, each image has been labeled with the patient ID and the associated label, with "ACL Tear" instances depicted in red and "No ACL Tear" instances depicted in blue, based on their associated IDs 1 and 18, and 0 and 2, respectively. As depicted, the images have been shown in grayscale, consistent with standard MRI acquisition procedures. As shown, there are discernible structural differences in the ACL-tear and no ACL-tear classes, with the ACL-tear classes showing a lack of the characteristic linear hypointense feature representing the ligament, while the no ACL-tear classes show a well-defined ligamentous feature. However, discernible variability in knee orientation, contrast, and soft tissue intensity may be observed among the four sample images, showing the inherent variability in clinical data. As shown, the variability among the samples demonstrates the complexity of the classification task, warranting the use of deep learning architectures that are capable of learning complex hierarchical representations without relying on feature engineering.
+<details class="collapase">
+<summary><b>Code</b></summary>
 
-#### 3.2.3 Distribution of Slice Counts per Examination (Sagittal Plane)
+```python
+# Visualise Sample MRI Slices (Sagittal Plane)
+# Grab exam IDs for each class
+positive_ids = labels_df[labels_df["label"] == 1]["exam_id"].values[:2]
+negative_ids = labels_df[labels_df["label"] == 0]["exam_id"].values[:2]
 
-The above histogram shows the distribution of the number of slices in the sagittal plane for each MRI exam. The horizontal axis shows the number of slices in each exam. This varies from around 15 slices to around 50 slices. The vertical axis shows the number of exams. The distribution of slices in the sagittal plane appears to be approximately unimodal. The main peak occurs at around 25 slices per exam, with approximately 150 exams. There is a smaller peak around 30-35 slices per exam, with around 100-110 exams. The distribution of slices in the sagittal plane appears skewed to the right. This means that a long tail of the distribution goes towards a maximum of 50 slices per exam. Here, the number of exams is less than 5. This variation in the number of slices in the sagittal plane arises due to the inherent variation in clinical images. This variation arises because different imaging protocols are followed in different hospitals and institutions. This figure is of great importance as it guides the way in which the volumetric inputs are standardized during the preprocessing stage.
+# Combine them with their labels for the plot title
+sample_exams = [(eid, "ACL Tear")    for eid in positive_ids] + \
+               [(eid, "No ACL Tear") for eid in negative_ids]
+
+fig, axes = plt.subplots(1, 4, figsize=(14, 4))
+
+for ax, (exam_id, diagnosis) in zip(axes, sample_exams):
+
+   
+    npy_path = os.path.join(DATA_DIR, "train", "sagittal", f"{exam_id:0>4}.npy")
+    volume = np.load(npy_path)           # shape: (S, H, W)
+
+    # Pick the middle slice as the most representative view
+    middle_idx = volume.shape[0] // 2
+    slice_img  = volume[middle_idx]      # shape: (H, W)
+
+    ax.imshow(slice_img, cmap="gray")
+    ax.set_title(f"ID: {exam_id}\n{diagnosis}", fontsize=10, fontweight="bold",
+                 color="#E8654C" if diagnosis == "ACL Tear" else "#4C9BE8")
+    ax.axis("off")
+
+fig.suptitle("Sample Middle Slices – Sagittal Plane", fontsize=13, fontweight="bold")
+plt.tight_layout()
+plt.show()
+```
+
+</details>
+
+
+<p>The following figure depicts four sample middle sagittal plane MRI slice images from the dataset, showing instances of both positive and negative ACL tear classes. As shown, each image has been labeled with the patient ID and the associated label, with "ACL Tear" instances depicted in red and "No ACL Tear" instances depicted in blue, based on their associated IDs 1 and 18, and 0 and 2, respectively. As depicted, the images have been shown in grayscale, consistent with standard MRI acquisition procedures. As shown, there are discernible structural differences in the ACL-tear and no ACL-tear classes, with the ACL-tear classes showing a lack of the characteristic linear hypointense feature representing the ligament, while the no ACL-tear classes show a well-defined ligamentous feature. However, discernible variability in knee orientation, contrast, and soft tissue intensity may be observed among the four sample images, showing the inherent variability in clinical data. As shown, the variability among the samples demonstrates the complexity of the classification task, warranting the use of deep learning architectures that are capable of learning complex hierarchical representations without relying on feature engineering.</p>
+
+<center>
+```{r}
+#| echo: false
+#| fig-cap: "Figure 3.2: Sample Middle Slices"
+#| out-width: "70%"
+#| fig-align: "center"
+knitr::include_graphics("figures/Sample Middle Slices.png")
+```
+</center>
+
+#### 3.2.3 Distribution of Slice Counts per Examination
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+# Slice Count Histogram
+
+slice_counts = []
+
+for exam_id in labels_df["exam_id"]:
+    npy_path = os.path.join(DATA_DIR, "train", "sagittal", f"{exam_id:0>4}.npy")
+    volume = np.load(npy_path)
+    slice_counts.append(volume.shape[0])   # number of slices
+
+labels_df["num_slices"] = slice_counts
+
+plt.figure(figsize=(7, 4))
+plt.hist(labels_df["num_slices"], bins=20, color="#4C9BE8", edgecolor="white")
+plt.title("Distribution of Slice Counts (Sagittal Plane)", fontsize=13, fontweight="bold")
+plt.xlabel("Number of Slices per Exam")
+plt.ylabel("Number of Exams")
+plt.tight_layout()
+plt.show()
+
+# Quick stats
+print(f"Min slices : {labels_df['num_slices'].min()}")
+print(f"Max slices : {labels_df['num_slices'].max()}")
+print(f"Mean slices: {labels_df['num_slices'].mean():.1f}")
+```
+
+</details>
+
+
+<p>The above histogram shows the distribution of the number of slices in the sagittal plane for each MRI exam. The horizontal axis shows the number of slices in each exam. This varies from around 15 slices to around 50 slices. The vertical axis shows the number of exams. The distribution of slices in the sagittal plane appears to be approximately unimodal. The main peak occurs at around 25 slices per exam, with approximately 150 exams. There is a smaller peak around 30-35 slices per exam, with around 100-110 exams. The distribution of slices in the sagittal plane appears skewed to the right. This means that a long tail of the distribution goes towards a maximum of 50 slices per exam. Here, the number of exams is less than 5. This variation in the number of slices in the sagittal plane arises due to the inherent variation in clinical images. This variation arises because different imaging protocols are followed in different hospitals and institutions. This figure is of great importance as it guides the way in which the volumetric inputs are standardized during the pre-processing stage.</p>
+
+<center>
+
+```{r}
+#| echo: false
+#| fig-cap: "Figure 3.3: Distribution of Slice Counts"
+#| out-width: "70%"
+#| fig-align: "center"
+knitr::include_graphics("figures/Distribution of Slice Counts.png")
+```
+</center>
 
 #### 3.2.4 Pixel Intensity
 
-The histogram in the above image demonstrates the pixel intensity values for a random selection of ten images. The horizontal axis of the histogram ranges from values lower than 0 up to 255. The vertical axis of the histogram corresponds to the values’ frequencies. The values are highly skewed towards the right. The highest frequency values are concentrated in the lower intensity values and reach a peak of around 20-25. The frequency value in this region approaches 2000. After this peak, the values decrease gradually as the intensity increases. This demonstrates that the pixels in an MRI image are not uniformly distributed. The presence of a secondary peak of around 300 occurs when the intensity reaches its maximum value of 255. This could be due to the presence of pixels in images of joint effusion. This figure is useful as it justifies the normalization of all the images before they are fed into the model for training.
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+# Pixel Intensity Histogram
+
+# Only load a small sample to avoid slow runtimes
+n_sample  = 10
+sample_ids = labels_df["exam_id"].sample(n=n_sample, random_state=42).values
+
+all_pixels = []
+
+for exam_id in sample_ids:
+    npy_path = os.path.join(DATA_DIR, "train", "sagittal", f"{exam_id:0>4}.npy")
+    volume = np.load(npy_path).astype(np.float32)
+
+    # Flatten volume and take a random subset of pixels (for speed)
+    flat = volume.ravel()
+    sample_px = flat[np.random.choice(len(flat), size=3000, replace=False)]
+    all_pixels.append(sample_px)
+
+all_pixels = np.concatenate(all_pixels)
+
+plt.figure(figsize=(7, 4))
+plt.hist(all_pixels, bins=60, color="#E8A84C", edgecolor="white")
+plt.title(f"Pixel Intensity Distribution (sample of {n_sample} exams)",
+          fontsize=13, fontweight="bold")
+plt.xlabel("Pixel Intensity Value")
+plt.ylabel("Frequency")
+plt.tight_layout()
+plt.show()
+
+print(f"Intensity range: {all_pixels.min():.1f} – {all_pixels.max():.1f}")
+print(f"Mean intensity : {all_pixels.mean():.1f}")
+```
+
+</details>
+
+
+<p>The histogram in the above image demonstrates the pixel intensity values for a random selection of ten images. The horizontal axis of the histogram ranges from values lower than 0 up to 255. The vertical axis of the histogram corresponds to the values’ frequencies. The values are highly skewed towards the right. The highest frequency values are concentrated in the lower intensity values and reach a peak of around 20-25. The frequency value in this region approaches 2000. After this peak, the values decrease gradually as the intensity increases. This demonstrates that the pixels in an MRI image are not uniformly distributed. The presence of a secondary peak of around 300 occurs when the intensity reaches its maximum value of 255. This could be due to the presence of pixels in images of joint effusion. This figure is useful as it justifies the normalization of all the images before they are fed into the model for training.</p>
+
+<center>
+```{r}
+#| echo: false
+#| fig-cap: "Figure 3.4: Pixel Intensity"
+#| out-width: "70%"
+#| fig-align: "center"
+knitr::include_graphics("figures/Pixel Intensity.png")
+```
+</center>
 
 
 
-
-
-
-
-### Conclusion
+## Conclusion
 
 
 ## References
