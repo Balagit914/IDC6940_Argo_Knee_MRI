@@ -1,12 +1,12 @@
 ---
 title: " Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026 "
-Authors: "Bala Raju Pidatala, Sabna Balasubramoniapillai (Advisor: Dr. Archaf Cohen)"
+authors: "Bala Raju Pidatala, Sabna Balasubramoniapillai (Advisor: Dr. Archaf Cohen)"
 date: today
 format:
   html:
-    theme:flatly
-    toc:true
-    toc-depth:2
+    theme: flatly
+    toc: true
+    toc-depth: 2
     code-fold: true
     link-external-newwindow: true
     linkcolor: blue
@@ -178,7 +178,7 @@ Despite their power, 3D CNNs face specific challenges (Avesta et al., 2023; Bahe
 
   Unlike 2D CNNs, which have access to enormous pre-trained data sets like ImageNet, 3D CNNs may face a scarcity of        large-scale pre-trained models, which may affect the stability of the model due to the random weights used during        initialization (Baheti et al., 2023).
 
-<<<<<<< HEAD
+
 
 ## 3 Analysis & Results:
 
@@ -411,8 +411,7 @@ knitr::include_graphics("figures/Pixel Intensity.png")
 
 
 ## Conclusion
->>>>>>> 5164d87f1bb70bfdb0beed4f35ceeaa08c96889a
-=======
+
 2. Methods:
 
 Convolutional Neural Network (CNN)
@@ -555,7 +554,7 @@ Despite their power, 3D CNNs face specific challenges (Avesta et al., 2023; Bahe
 
 
 ### Conclusion
->>>>>>> 3a51c1616e149663c12c475ca2c98f78302ea33e
+
 
 
 ## References
