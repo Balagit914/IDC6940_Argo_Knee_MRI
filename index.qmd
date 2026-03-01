@@ -4,6 +4,9 @@ Authors: "Bala Raju Pidatala, Sabna Balasubramoniapillai (Advisor: Dr. Archaf Co
 date: today
 format:
   html:
+    theme:flatly
+    toc:true
+    toc-depth:2
     code-fold: true
     link-external-newwindow: true
     linkcolor: blue
