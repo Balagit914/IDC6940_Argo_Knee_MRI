@@ -4,7 +4,7 @@ authors: "Bala Raju Pidatala, Sabna Balasubramoniapillai (Advisor: Dr. Archaf Co
 date: today
 format:
   html:
-    theme: flatly
+    theme: quartz
     toc: true
     toc-depth: 2
     code-fold: true
@@ -240,7 +240,6 @@ plt.tight_layout()
 plt.show()
 plt.savefig("figures/class_distribution.png", dpi=300)
 ```
-
 </details>
 
 <p>The bar chart describes the class distribution of the ACL tear labels in the data set. The horizontal axis indicates the two classes in the diagnostic results, namely "No ACL Tear" and "ACL Tear," while the vertical axis indicates the number of examinations in the data set. The data set contains a total of 1,130 examinations, with 922 (81.6%) labeled as "No ACL Tear" and 208 (18.4%) labeled as "ACL Tear." This is a significant imbalance between the two classes, with an approximate ratio of 4.4:1 in favor of the negative class. This imbalance is clinically realistic, since ACL tears are not as common in the general population as the converse; nonetheless, it is a significant methodological limitation in the application of supervised machine learning, since a model trained on such an unbalanced data set will likely develop a bias toward the majority class, thereby achieving high accuracy but at the expense of poor sensitivity for the clinically important minority class. This figure is important because it establishes the underlying data set characteristics that directly influence the model design, loss function, and evaluation metric used in the study.</p>
