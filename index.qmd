@@ -56,11 +56,14 @@ While 1D CNNs are typically used for sequential data and 2D CNNs for individual 
 In knee MRI applications, 3D CNNs have demonstrated superior performance in detecting and grading ACL tears, meniscal degeneration, and osteoarthritis severity. By preserving inter-slice spatial relationships, these models provide a more comprehensive understanding of knee anatomy, positioning 3D CNNs at the forefront of advanced artificial intelligence systems in orthopedic imaging [@bien2018deep; @guida2021knee; @oettl2025beyond]..
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 In knee MRI applications, 3D CNNs have shown enhanced accuracy in detecting and grading ACL tears, meniscus degeneration, and osteoarthritis severity. By maintaining inter-slice spatial continuity, these models provide a richer anatomical understanding, positioning 3D CNNs as a powerful tool in cutting-edge orthopedic artificial intelligence systems (Bien et al., 2018; Guida et al., 2021; Oettl et al., 2025).
 
 
 >>>>>>> b3640ee26c5f445fd959fdd5fb412e2075fbb33f
+=======
+>>>>>>> 7feadf31797bb9bc53b6c74a418c7f3a41086950
 ### Basic Architecture of a CNN
 
  
@@ -160,6 +163,9 @@ This operation extracts volumetric features across depth, height, and width.
 3D CNNs have demonstrated strong performance in musculoskeletal imaging, particularly in knee MRI analysis.
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7feadf31797bb9bc53b6c74a418c7f3a41086950
 - **Tissue Segmentation:**  [@liu2018deep]  and [@zhou2018deep] have used deep CNN-based architectures to achieve the segmentation of knee joint anatomy, which has demonstrated better accuracy in tissue segmentation..
 
 - **Meniscus and Cartilage Degeneration Detection:** [@pedoia20193d]  have used 3D CNN architectures to identify and stage the degenerative morphological changes in meniscus and patellofemoral cartilage, which emphasizes the need to extract volumetric features.
@@ -188,6 +194,7 @@ Despite their power, 3D CNNs face specific challenges:
 	
 - **Large Data Requirements:** 
 For CNNs, a large annotated dataset is required to achieve optimal performance. However, in the context of medical image datasets, the datasets are limited in size and expensive to label, thereby limiting the generalization of the models [@bien2018deep; @yeoh2021emergence]. Recent advances, such as self-supervised learning, aim to address this limitation [@aidarkhan2025self].   
+<<<<<<< HEAD
 =======
 - **Tissue Segmentation:** Liu et al. (2018) and Zhou et al. (2018) have used deep CNN-based architectures to achieve the segmentation of knee      joint anatomy, which has demonstrated better accuracy in tissue segmentation..
 
@@ -218,6 +225,8 @@ Despite their power, 3D CNNs face specific challenges (Avesta et al., 2023; Bahe
 - **Data Scarcity:** Unlike 2D CNNs, which have access to enormous pre-trained data sets like ImageNet, 3D CNNs may face a scarcity of        large-scale pre-trained models, which may affect the stability of the model due to the random weights used during        initialization (Baheti et al., 2023).
 
 >>>>>>> b3640ee26c5f445fd959fdd5fb412e2075fbb33f
+=======
+>>>>>>> 7feadf31797bb9bc53b6c74a418c7f3a41086950
 
 - **Risk of Overfitting:**
 Due to the limited nature of the medical image dataset, CNNs tend to overfit, especially when using a deep 3D structure [@awan2021improved; @rani2024deep]. 
@@ -291,7 +300,6 @@ plt.savefig("figures/class_distribution.png", dpi=300)
 #| fig-cap: "Figure 3.1: Class distribution of ACL tear labels"
 #| out-width: "70%"
 #| fig-align: "center"
-#| fig-cap-location: margin
 knitr::include_graphics("figures/Class_Distribution.png")
 ```
 </center>
