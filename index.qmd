@@ -47,24 +47,20 @@ This research work is driven by the need to enhance the accuracy and efficiency 
 
 ### Convolutional Neural Network (CNN)
 
-A Convolutional Neural Network (CNN) is a deep learning model specifically designed to process structured, grid-organized data such as images. CNNs have been highly successful in image processing and medical imaging because they can automatically learn relevant features directly from input images, eliminating the need for manual feature extraction.
+A Convolutional Neural Network (CNN) is a deep learning model specifically designed to process structured, grid-organized data such as images. CNNs have been highly successful in image processing and medical imaging because they can automatically learn relevant features directly from input images, eliminating the need for manual feature extraction.[@yeoh2021emergence;@awan2021improved]
 
-In the early layers, CNNs capture fundamental spatial characteristics such as gradients and structural boundaries. As the network becomes deeper, it learns increasingly complex and abstract representations, including pathological changes like cartilage degeneration or disruption of the fibers of the anterior cruciate ligament (ACL).
+In the early layers, CNNs capture fundamental spatial characteristics such as gradients and structural boundaries. As the network becomes deeper, it learns increasingly complex and abstract representations, including pathological changes like cartilage degeneration or disruption of the fibers of the anterior cruciate ligament(ACL).[@astuto2021automatic]
 
-While 1D CNNs are typically used for sequential data and 2D CNNs for individual image slices, 3D CNNs extend convolution operations into the volumetric domain by incorporating depth in addition to height and width. This is particularly important in imaging modalities such as MRI, where spatial continuity across slices is essential.
+While 1D CNNs are typically used for sequential data and 2D CNNs for individual image slices, 3D CNNs extend convolution operations into the volumetric domain by incorporating depth in addition to height and width. This is particularly important in imaging modalities such as MRI, where spatial continuity across slices is essential.[@guida2021knee]
 
 In knee MRI applications, 3D CNNs have demonstrated superior performance in detecting and grading ACL tears, meniscal degeneration, and osteoarthritis severity. By preserving inter-slice spatial relationships, these models provide a more comprehensive understanding of knee anatomy, positioning 3D CNNs at the forefront of advanced artificial intelligence systems in orthopedic imaging [@bien2018deep; @guida2021knee; @oettl2025beyond]..
 
-<<<<<<< HEAD
-=======
-In knee MRI applications, 3D CNNs have shown enhanced accuracy in detecting and grading ACL tears, meniscus degeneration, and osteoarthritis severity. By maintaining inter-slice spatial continuity, these models provide a richer anatomical understanding, positioning 3D CNNs as a powerful tool in cutting-edge orthopedic artificial intelligence systems (Bien et al., 2018; Guida et al., 2021; Oettl et al., 2025).
 
 
->>>>>>> b3640ee26c5f445fd959fdd5fb412e2075fbb33f
 ### Basic Architecture of a CNN
 
  
-A typical CNN consists of the following components:
+A typical CNN consists of several key components that enable hierarchical feature extraction and classification [@yeoh2021emergence;@awan2021improved].
 
 <center>
 ![Basic Architecture of a CNN](Images/Cnn_Architecture.jpg)
@@ -85,23 +81,26 @@ Where:
 - $W$ = Filter/kernel
 - $b$ = Bias
 - $Y$ = Output feature map
+
+This operation allows CNNs to learn spatially localized features and is fundamental to many medical image analysis frameworks [@yeoh2021emergence; qiu2021fusion].
 	
 **2. Activation Function**
 
-Explains non-linearity using ReLU:
+Non-linear activation functions are applied after convolution to introduce non-linearity into the model, enabling it to learn complex patterns. The most commonly used activation function is the Rectified Linear Unit (ReLU):
 
 
 $$
 f(x) = \max(0, x)
 $$
+ReLU improves training efficiency and mitigates vanishing gradient issues in deep neural networks [@yeoh2021emergence ; @awan2021improved].
 
 **3. Pooling Layer**
 
-Reduces spatial dimensions (e.g., Max Pooling).
+Pooling layers reduce the spatial dimensions of feature maps while preserving the most important information. Max pooling, one of the most commonly used pooling techniques, selects the maximum value within a sliding window. This operation helps reduce computational complexity and improves model robustness to small spatial variations [@yeoh2021emergence]  
 
 **4. Fully Connected Layer**
 
-Performs classification based on extracted features.
+Performs classification based on extracted features.These layers combine the learned representations to predict the target class, such as the presence or severity of knee pathology [@awan2021improved].
 
 **5. Output Layer**
 
@@ -152,7 +151,7 @@ Where:
 - $Y$ = Output feature map
 - $i,j,k$ = Spatial voxel indices
 
-This operation extracts volumetric features across depth, height, and width.
+This operation extracts volumetric features across depth, height, and width.[@guida2021knee].
 
 
 #### Applications in Knee MRI Analysis
@@ -188,7 +187,7 @@ Despite their power, 3D CNNs face specific challenges:
 	
 - **Large Data Requirements:** 
 For CNNs, a large annotated dataset is required to achieve optimal performance. However, in the context of medical image datasets, the datasets are limited in size and expensive to label, thereby limiting the generalization of the models [@bien2018deep; @yeoh2021emergence]. Recent advances, such as self-supervised learning, aim to address this limitation [@aidarkhan2025self].   
-=======
+
 - **Tissue Segmentation:** Liu et al. (2018) and Zhou et al. (2018) have used deep CNN-based architectures to achieve the segmentation of knee      joint anatomy, which has demonstrated better accuracy in tissue segmentation..
 
 - **Meniscus and Cartilage Degeneration Detection:** Pedoia et al. (2019) have used 3D CNN architectures to identify and stage the degenerative morphological changes in      meniscus and patellofemoral cartilage, which emphasizes the need to extract volumetric features.
@@ -217,7 +216,6 @@ Despite their power, 3D CNNs face specific challenges (Avesta et al., 2023; Bahe
 	
 - **Data Scarcity:** Unlike 2D CNNs, which have access to enormous pre-trained data sets like ImageNet, 3D CNNs may face a scarcity of        large-scale pre-trained models, which may affect the stability of the model due to the random weights used during        initialization (Baheti et al., 2023).
 
->>>>>>> b3640ee26c5f445fd959fdd5fb412e2075fbb33f
 
 - **Risk of Overfitting:**
 Due to the limited nature of the medical image dataset, CNNs tend to overfit, especially when using a deep 3D structure [@awan2021improved; @rani2024deep]. 
