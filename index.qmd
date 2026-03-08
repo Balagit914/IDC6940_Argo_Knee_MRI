@@ -80,7 +80,7 @@ Where:
 - $b$ = Bias
 - $Y$ = Output feature map
 
-This operation allows CNNs to learn spatially localized features and is fundamental to many medical image analysis frameworks [@yeoh2021emergence; qiu2021fusion].
+This operation allows CNNs to learn spatially localized features and is fundamental to many medical image analysis frameworks [@yeoh2021emergence; @qiu2021fusion].
 	
 **2. Activation Function**
 
@@ -184,34 +184,6 @@ Despite their power, 3D CNNs face specific challenges:
 	
 - **Large Data Requirements:** 
 For CNNs, a large annotated dataset is required to achieve optimal performance. However, in the context of medical image datasets, the datasets are limited in size and expensive to label, thereby limiting the generalization of the models [@bien2018deep; @yeoh2021emergence]. Recent advances, such as self-supervised learning, aim to address this limitation [@aidarkhan2025self].   
-
-- **Tissue Segmentation:** Liu et al. (2018) and Zhou et al. (2018) have used deep CNN-based architectures to achieve the segmentation of knee      joint anatomy, which has demonstrated better accuracy in tissue segmentation..
-
-- **Meniscus and Cartilage Degeneration Detection:** Pedoia et al. (2019) have used 3D CNN architectures to identify and stage the degenerative morphological changes in      meniscus and patellofemoral cartilage, which emphasizes the need to extract volumetric features.
-
-- **Osteoarthritis Classification:** Guida et al. (2021) have suggested a model based on the 3D CNN technique for the classification of knee osteoarthritis   using MRI, showing that the performance is enhanced compared to the 2D technique. Similarly, the effectiveness of the    CNN technique has been shown in the classification of osteoarthritis severity assessment by Rani et al. (2024).
-
-- **ACL Tear Detection:** Bien et al. (2018) suggested the MRNet deep learning technique for the diagnosis of knee MRI. Recently, more efficient   learning techniques such as self-supervised learning have been used in the detection of ACL tears using the MRI scan,    as suggested in the study by Aidarkhan et al. (2025).
-
-- **Multimodal and Federated Learning Approaches:** New frameworks have been developed to combine 3D CNNs with federated and few-shot learning techniques to achieve better   generalization across institutions (Goel, 2025). Moreover, the contribution of AI-based multimodal systems to the        development of orthopedic diagnostics has been emphasized in the study done by Oettl et al.(2025)
-
-#### Performance and Advantages:
-
-3D CNNs provide significant benefits in medical imaging (Avesta et al., 2023; Guida et al., 2021):
-
-- **Volumetric Context:** They extract features from adjacent slices, detecting biomarkers (like cartilage degradation) that may be invisible in   a single 2D image (Guida et al., 2021).
-	
-- **Higher Accuracy:** Brain and knee imaging studies have established that the 3D model has higher dice scores and accuracy compared to the    2D and 2.5D approaches (Avesta et al., 2023; Guida et al., 2021).
-	
-- **Efficiency in Convergence:** 3D models can converge 20% to 40% faster during training than their 2D counterparts when dealing with volumetric data    (Avesta et al., 2023).
-
-#### Limitations and Assumptions
-
-Despite their power, 3D CNNs face specific challenges (Avesta et al., 2023; Baheti et al., 2023):
-
-- **Computational Cost:** 3D models require significantly more computational memory (often up to 20 times more) compared to 2D models (Avesta et   al., 2023).
-	
-- **Data Scarcity:** Unlike 2D CNNs, which have access to enormous pre-trained data sets like ImageNet, 3D CNNs may face a scarcity of        large-scale pre-trained models, which may affect the stability of the model due to the random weights used during        initialization (Baheti et al., 2023).
 
 - **Risk of Overfitting:**
 Due to the limited nature of the medical image dataset, CNNs tend to overfit, especially when using a deep 3D structure [@awan2021improved; @rani2024deep]. 
