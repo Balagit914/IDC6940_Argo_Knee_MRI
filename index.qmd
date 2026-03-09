@@ -416,6 +416,42 @@ knitr::include_graphics("figures/Pixel Intensity.png")
 </center>
 
 
+## Modeling and Results
+
+Our data preprocessing focused on preparing 3D MRI volumes for input into a deep learning model. The dataset consisted of knee MRI scans stored as NumPy arrays, along with three associated labels for each exam: ACL tear, meniscus tear, and abnormality.
+
+Each MRI scan is a 3D volume composed of multiple 2D slices. Since the number of slices varies across exams, we standardized all inputs to a fixed depth of 32 slices. Volumes with more than 32 slices were truncated, while those with fewer slices were padded with zeros. This ensured consistent input dimensions for the model.
+
+We implemented a 3D convolutional neural network using a pretrained 3D ResNet-18 architecture. The pretrained model was loaded and the final fully connected layer of the network was modified to output three values corresponding to the three prediction tasks: ACL tear, meniscus tear, and abnormality. Since each condition is independent, the model performs multi-label classification.
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+# Code used for modeling
+
+import torchvision.models.video as models
+import torch.nn as nn
+
+class MRNet3DResNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        # Load pretrained 3D ResNet
+        self.model = models.r3d_18(pretrained=True)
+
+        # Modify final layer for 3 outputs
+        self.model.fc = nn.Linear(self.model.fc.in_features, 3)
+
+    def forward(self, x):
+        return self.model(x)
+        
+```
+
+</details>
+
+
 
 ## Conclusion
 
