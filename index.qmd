@@ -418,6 +418,9 @@ knitr::include_graphics("figures/Pixel Intensity.png")
 
 # 3.3 Modeling and Results
 
+##3.3.1 Data Preprocessing
+
+
 Our data preprocessing focused on preparing 3D MRI volumes for input into a deep learning model. The dataset consisted of knee MRI scans stored as NumPy arrays, along with three associated labels for each exam: ACL tear, meniscus tear, and abnormality.
 
 Each MRI scan is a 3D volume composed of multiple 2D slices. Since the number of slices varies across exams, we standardized all inputs to a fixed depth of 32 slices. Volumes with more than 32 slices were truncated, while those with fewer slices were padded with zeros. This ensured consistent input dimensions for the model.
@@ -431,213 +434,251 @@ We implemented a 3D convolutional neural network using a pretrained 3D ResNet-18
 
 # Code used for modeling
 
-import torchvision.models.video as models
-import torch.nn as nn
+train_dataset = MRNetMultiPlaneDataset(DATA_DIR, "train", augment=True)
+valid_dataset = MRNetMultiPlaneDataset(DATA_DIR, "valid", augment=False)
 
-class MRNet3DResNet(nn.Module):
-    def __init__(self):
-        super().__init__()
-
-        # Load pretrained 3D ResNet
-        self.model = models.r3d_18(pretrained=True)
-
-        # Modify final layer for 3 outputs
-        self.model.fc = nn.Linear(self.model.fc.in_features, 3)
-
-    def forward(self, x):
-        return self.model(x)
+train_loader = DataLoader(train_dataset, batch_size=2, shuffle=True)
+valid_loader = DataLoader(valid_dataset, batch_size=2, shuffle=False)
         
 ```
 
 </details>
 
-Model Training
+## 3.3.2 3D CNN Model Architecture
 
-The model was trained using batches of MRI volumes. Since the pretrained ResNet expects 3-channel input, the single-channel MRI volumes were duplicated across three channels.
-We used the Binary Cross-Entropy loss function with logits, which is appropriate for multi-label classification. Class weights were applied to address imbalance in the dataset. The Adam optimizer was used to update model weights.
+We implemented a custom 3D convolutional neural network with residual connections, inspired by 3D ResNet architectures. The model consists of four residual blocks with increasing channels, followed by global average pooling. A learnable plane-attention mechanism was applied to fuse features from sagittal, coronal, and axial planes. The final fully connected layer outputs three values corresponding to the three prediction tasks: ACL tear, meniscus tear, and abnormality.
+
 
 <details class="collapase">
 <summary><b>Code</b></summary>
 
 ```python
 
-# Code used for for training setup:
+model = Improved3DCNN().to(device)
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+criterion = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([3,2,1]).to(device))
+optimizer = torch.optim.Adam(model.parameters(), lr=2e-4)
+        
+```
 
-model = MRNet3DResNet().to(device)
+</details>
 
-pos_weight = torch.tensor([2.0, 2.0, 1.5]).to(device)
-criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
+## 3.3.3 Model Training
 
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+The model was trained using batches of multi-plane MRI volumes. Binary Cross-Entropy loss with logits was used to accommodate multi-label classification, and class weights were applied to mitigate label imbalance. The Adam optimizer updated the network weights. Mixed-precision training was optionally used to reduce memory consumption.
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
 
 epochs = 20
-
-#Code used for training loop:
+train_losses = []
 
 for epoch in range(epochs):
-
     model.train()
     total_loss = 0
-
-    for volumes, labels in train_loader:
-
-        volumes = volumes.to(device)
-        labels = labels.to(device)
-
+    for sag, cor, axi, labels in train_loader:
+        sag, cor, axi, labels = sag.to(device), cor.to(device), axi.to(device), labels.to(device)
         optimizer.zero_grad()
-
-        # Convert 1 channel → 3 channels
-        volumes = volumes.repeat(1, 3, 1, 1, 1)
-
-        outputs = model(volumes)
-
+        outputs = model(sag, cor, axi)
         loss = criterion(outputs, labels)
-
         loss.backward()
         optimizer.step()
-
         total_loss += loss.item()
-
-    print(f"Epoch {epoch+1}/{epochs} Loss: {total_loss/len(train_loader):.4f}")
-        
+    epoch_loss = total_loss / len(train_loader)
+    train_losses.append(epoch_loss)
+    print(f"Epoch {epoch+1}: {epoch_loss:.4f}")
+    
 ```
 
-</details>
+</details>    
 
-Results :
+# 3.4 Results
+    
+## 3.4.1 Training Performance
 
-# 3.3.1 Training performance:
-
-The model was trained for 20 epochs, and the training loss consistently decreased from 0.6707 to 0.0482, indicating that the model successfully learned patterns from the MRI data.
-The most significant improvements occurred during the early epochs, with slower convergence in later epochs. Minor fluctuations suggest possible overfitting but overall stable convergence.
+The training loss consistently decreased over 20 epochs, indicating the model successfully learned meaningful patterns from the MRI data. Early epochs showed rapid improvement, followed by slower convergence in later epochs. Minor fluctuations may indicate slight overfitting, but overall convergence was stable.
 
 <details class="collapase">
 <summary><b>Code</b></summary>
 
 ```python
 
-#Code used to generate training results:
+plt.figure()
+plt.plot(train_losses, marker='o')
+plt.title("Training Loss Curve")
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.grid()
+plt.show()
 
-print(f"Epoch {epoch+1}/{epochs} Loss: {total_loss/len(train_loader):.4f}")
 ```
 
-</details>
-
-Training loss output:
+</details> 
 
 <center>
-![Epoch Output](Images/Epoch output.png)
+![Training Loss Curve](Images/Training Loss Curve.png)
+
+</center>
+
+## 3.4.2 ROC Curves
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+plt.figure()
+for i, name in enumerate(labels_names):
+    fpr, tpr, _ = roc_curve(all_labels[:, i], all_probs[:, i])
+    plt.plot(fpr, tpr, label=f"{name} (AUC={auc(fpr,tpr):.3f})")
+plt.plot([0,1],[0,1],'k--')
+plt.title("ROC Curves")
+plt.xlabel("FPR")
+plt.ylabel("TPR")
+plt.legend()
+plt.grid()
+plt.show()
+```
+
+</details> 
+
+
+<center>
+![Training Loss Curve](Images/ROC.png)
 </center>
 
 
-# 3.3.2 Validation Metrics:
-
-After training, the model was evaluated on the validation dataset. Predictions were converted into probabilities using a sigmoid function and then thresholded at 0.5 to produce binary outputs.
-
-Performance was measured using sensitivity, specificity, accuracy, and AUC-ROC for each condition.
-
+## 3.4.3 Confusion Matrix Heatmaps
 
 <details class="collapase">
 <summary><b>Code</b></summary>
 
 ```python
 
-# Code used for evaluation:
-
-model.eval()
-
-all_labels = []
-all_preds = []
-all_probs = []
-
-with torch.no_grad():
-    for volumes, labels in valid_loader:
-
-        volumes = volumes.to(device)
-        volumes = volumes.repeat(1, 3, 1, 1, 1)
-
-        outputs = model(volumes)
-
-        probs = torch.sigmoid(outputs).cpu().numpy()
-        preds = (probs > 0.5).astype(int)
-
-        all_probs.extend(probs)
-        all_preds.extend(preds)
-        all_labels.extend(labels.numpy())
-```
-
-</details>
-
-
-
-<details class="collapase">
-<summary><b>Code</b></summary>
-
-```python
-
-# Code used for metrics calculation:
-
-from sklearn.metrics import roc_auc_score, confusion_matrix
-
-def compute_metrics(y_true, y_pred, y_prob):
-
-    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
-
-    sensitivity = tp / (tp + fn + 1e-6)
-    specificity = tn / (tn + fp + 1e-6)
-    accuracy = (tp + tn) / (tp + tn + fp + fn)
-    auc = roc_auc_score(y_true, y_prob)
-
-```
-
-</details>
-
-
-# 3.3.3 Results for metric evaluations:
-
-<details class="collapase">
-<summary><b>Code</b></summary>
-
-```python
-
-# Code used to print results:
-labels_names = ["ACL", "Meniscus", "Abnormal"]
-
+fig, axes = plt.subplots(1,3,figsize=(15,4))
 for i, name in enumerate(labels_names):
-
-    sens, spec, acc, auc = compute_metrics(
-        all_labels[:, i],
-        all_preds[:, i],
-        all_probs[:, i]
-    )
-
-    print(f"\n{name}:")
-    print(f"Sensitivity: {sens:.3f}")
-    print(f"Specificity: {spec:.3f}")
-    print(f"Accuracy: {acc:.3f}")
-    print(f"AUC-ROC: {auc:.3f}")
+    cm = confusion_matrix(all_labels[:,i], all_preds[:,i])
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=axes[i])
+    axes[i].set_title(name)
+plt.tight_layout()
+plt.show()
 ```
 
 </details>
-
-Metrics Evaluation output:
 
 <center>
-![Epoch Output](Images/Metrics output.png)
+![Training Loss Curve](Images/Confusion Matrix.png)
+
+</center>
+
+## 3.4.4 Probability Distribution Plots
 
 
-# 3.3.4 Summary of the evaluation metrics:
+<details class="collapase">
+<summary><b>Code</b></summary>
 
-- **ACL:** Strong performance with high specificity (0.955) and AUC (0.953)
+```python
 
-- **Meniscus:** Moderate performance with lower specificity (0.559)
+for i, name in enumerate(labels_names):
+    plt.figure()
+    plt.hist(all_probs[:,i][all_labels[:,i]==1], bins=20, alpha=0.6, label="Positive")
+    plt.hist(all_probs[:,i][all_labels[:,i]==0], bins=20, alpha=0.6, label="Negative")
+    plt.title(f"{name} Probability Distribution")
+    plt.legend()
+    plt.show()
+```
 
-- **Abnormal:** Very high sensitivity (0.989) but extremely low specificity (0.080), indicating overprediction
+</details>
+
+<center>
+![Training Loss Curve](Images/ACL Probability.png)
+</center>
+
+<center>
+![Training Loss Curve](Images/Meniscus Probability.png)
+</center>
+
+<center>
+![Training Loss Curve](Images/Abnormal Probability.png)
+</center>
 
 
-These results suggest that the model performs well overall but may require threshold tuning or class balancing to improve specificity, particularly for abnormality detection.
+## 3.4.5 Plane Attention Weights
+
+The learned plane-attention weights indicate the relative importance of sagittal, coronal, and axial planes for the predictions.
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+weights = torch.softmax(model.plane_weights, dim=0).cpu().detach().numpy()
+plt.figure()
+plt.bar(["Sagittal","Coronal","Axial"], weights)
+plt.title("Plane Attention Weights")
+plt.ylabel("Importance")
+plt.show()
+
+```
+
+</details> 
+
+<center>
+![Training Loss Curve](Images/Plane Weights.png)
+</center>
+
+## 3.4.6 Validation Metrics
+
+After training, the model was evaluated on the validation dataset. Predictions were converted into probabilities using a sigmoid function and then thresholded to produce binary outputs. Sensitivity, specificity, accuracy, and AUC-ROC were calculated for each condition.
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+model.eval()
+all_labels, all_probs, all_preds = [], [], []
+
+with torch.no_grad():
+    for sag, cor, axi, labels in valid_loader:
+        sag, cor, axi = sag.to(device), cor.to(device), axi.to(device)
+        probs = torch.sigmoid(model(sag, cor, axi)).cpu().numpy()
+        preds = (probs > [0.5,0.5,0.7]).astype(int)  # adjustable thresholds
+        all_labels.extend(labels.numpy())
+        all_probs.extend(probs)
+        all_preds.extend(preds)
+
+all_labels = np.array(all_labels)
+all_probs = np.array(all_probs)
+all_preds = np.array(all_preds)
+labels_names = ["ACL","Meniscus","Abnormal"]
+
+```
+
+</details> 
+
+
+![Training Loss Curve](Images/Metrics.png)
+
+
+# 3.4.7 Summary of the evaluation metrics:
+
+- **ACL:** 
+
+Moderate performance with balanced sensitivity (0.630) and specificity (0.697), and good discriminative ability (AUC 0.793).
+
+- **Meniscus:** 
+
+Very high sensitivity (0.923) but low specificity (0.382), indicating overprediction of meniscus tears. AUC is 0.767
+
+- **Abnormal:** 
+
+Very high sensitivity (0.926) but low specificity (0.400), suggesting the model frequently flags normal cases as abnormal. AUC is 0.806.
+
+
+These results suggest that the model detects positive cases effectively but tends to overpredict meniscus tears and abnormalities. Threshold tuning, class balancing, or loss function adjustments may improve specificity and overall reliability for clinical applicatio.
 
 
 ## Conclusion
