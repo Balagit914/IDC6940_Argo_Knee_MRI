@@ -632,7 +632,7 @@ Metrics Evaluation output:
 ![Epoch Output](Images/Metrics output.png)
 
 
-# 3.3.4 Summary of the evaluation metrics:
+**3.3.4 Summary of the evaluation metrics:**
 
 - **ACL:** Strong performance with high specificity (0.955) and AUC (0.953)
 
