@@ -47,18 +47,18 @@ This research work is driven by the need to enhance the accuracy and efficiency 
 
 ### Convolutional Neural Network (CNN)
 
-A Convolutional Neural Network (CNN) is a deep learning model specifically designed to process structured, grid-organized data such as images. CNNs have been highly successful in image processing and medical imaging because they can automatically learn relevant features directly from input images, eliminating the need for manual feature extraction.
+A Convolutional Neural Network (CNN) is a deep learning model specifically designed to process structured, grid-organized data such as images. CNNs have been highly successful in image processing and medical imaging because they can automatically learn relevant features directly from input images, eliminating the need for manual feature extraction.[@yeoh2021emergence;@awan2021improved]
 
-In the early layers, CNNs capture fundamental spatial characteristics such as gradients and structural boundaries. As the network becomes deeper, it learns increasingly complex and abstract representations, including pathological changes like cartilage degeneration or disruption of the fibers of the anterior cruciate ligament (ACL).
+In the early layers, CNNs capture fundamental spatial characteristics such as gradients and structural boundaries. As the network becomes deeper, it learns increasingly complex and abstract representations, including pathological changes like cartilage degeneration or disruption of the fibers of the anterior cruciate ligament(ACL).[@astuto2021automatic]
 
-While 1D CNNs are typically used for sequential data and 2D CNNs for individual image slices, 3D CNNs extend convolution operations into the volumetric domain by incorporating depth in addition to height and width. This is particularly important in imaging modalities such as MRI, where spatial continuity across slices is essential.
+While 1D CNNs are typically used for sequential data and 2D CNNs for individual image slices, 3D CNNs extend convolution operations into the volumetric domain by incorporating depth in addition to height and width. This is particularly important in imaging modalities such as MRI, where spatial continuity across slices is essential.[@guida2021knee]
 
 In knee MRI applications, 3D CNNs have demonstrated superior performance in detecting and grading ACL tears, meniscal degeneration, and osteoarthritis severity. By preserving inter-slice spatial relationships, these models provide a more comprehensive understanding of knee anatomy, positioning 3D CNNs at the forefront of advanced artificial intelligence systems in orthopedic imaging [@bien2018deep; @guida2021knee; @oettl2025beyond]..
 
 ### Basic Architecture of a CNN
 
  
-A typical CNN consists of the following components:
+A typical CNN consists of several key components that enable hierarchical feature extraction and classification [@yeoh2021emergence;@awan2021improved].
 
 <center>
 ![Basic Architecture of a CNN](Images/Cnn_Architecture.jpg)
@@ -79,23 +79,26 @@ Where:
 - $W$ = Filter/kernel
 - $b$ = Bias
 - $Y$ = Output feature map
+
+This operation allows CNNs to learn spatially localized features and is fundamental to many medical image analysis frameworks [@yeoh2021emergence; @qiu2021fusion].
 	
 **2. Activation Function**
 
-Explains non-linearity using ReLU:
+Non-linear activation functions are applied after convolution to introduce non-linearity into the model, enabling it to learn complex patterns. The most commonly used activation function is the Rectified Linear Unit (ReLU):
 
 
 $$
 f(x) = \max(0, x)
 $$
+ReLU improves training efficiency and mitigates vanishing gradient issues in deep neural networks [@yeoh2021emergence ; @awan2021improved].
 
 **3. Pooling Layer**
 
-Reduces spatial dimensions (e.g., Max Pooling).
+Pooling layers reduce the spatial dimensions of feature maps while preserving the most important information. Max pooling, one of the most commonly used pooling techniques, selects the maximum value within a sliding window. This operation helps reduce computational complexity and improves model robustness to small spatial variations [@yeoh2021emergence]  
 
 **4. Fully Connected Layer**
 
-Performs classification based on extracted features.
+Performs classification based on extracted features.These layers combine the learned representations to predict the target class, such as the presence or severity of knee pathology [@awan2021improved].
 
 **5. Output Layer**
 
@@ -146,7 +149,7 @@ Where:
 - $Y$ = Output feature map
 - $i,j,k$ = Spatial voxel indices
 
-This operation extracts volumetric features across depth, height, and width.
+This operation extracts volumetric features across depth, height, and width.[@guida2021knee].
 
 
 #### Applications in Knee MRI Analysis
@@ -187,7 +190,8 @@ Due to the limited nature of the medical image dataset, CNNs tend to overfit, es
 
 ## 3 Analysis & Results:
 
-#### 3.1 Dataset Description:**
+#### 3.1 Dataset Description:
+
 The MRNet dataset, a publicly available set of knee MRI scans gathered by the School of Medicine at Stanford University, is used in this research. The dataset contains images gathered from clinical studies performed at the Stanford University Medical Center over an eleven-year period from 2001 to 2012.
 The structure of the dataset is divided into a training and validation set, with each MRI study labeled for three different diagnoses: 
 
@@ -199,6 +203,7 @@ The structure of the dataset is divided into a training and validation set, with
 The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.
 
 **3.1.3 Problem Formulation**
+
 The task of clinical diagnosis is posed as a binary classification problem, where the goal of the model is to distinguish between ACL-intact and ACL-compromised knee examinations. Mathematically, the binary classification problem can be stated as:
 
 $$
@@ -209,11 +214,13 @@ y=\begin{cases}
 $$
 This problem statement allows the construction of a supervised learning model that can be used to automatically identify ACL tears from multi-planar MRI images.
 
+
 #### 3.2 Dataset Visualization & Exploratory Analysis:
 
 Exploratory Data Analysis (EDA) is a fundamental component of any machine learning model's pipeline. It is critical to understand the structure and composition of the data before moving forward to train any model. This section of the report outlines a detailed exploratory data analysis of the MRNet dataset, proposed by [@bien2018deep]. in 2018, which consists of knee MRI images from three different imaging planes, i.e., sagittal, coronal, and axial. Each of these imaging sessions is associated with a binary variable representing the ACL tear condition of the knee. The class balance, volumetric structure, imaging characteristics, and cross-plane imaging of the MRNet dataset have all been addressed in the following visualizations, which were critical to the decisions made in the subsequent sections of this report.
 
 **3.2.1 Class Distribution**
+
 
 <details class="collapase">
 <summary><b>Code</b></summary>
@@ -254,6 +261,7 @@ plt.savefig("figures/class_distribution.png", dpi=300)
 #| fig-cap: "Figure 3.1: Class distribution of ACL tear labels"
 #| out-width: "70%"
 #| fig-align: "center"
+#| fig-cap-location: margin
 knitr::include_graphics("figures/Class_Distribution.png")
 ```
 </center>
@@ -412,8 +420,232 @@ knitr::include_graphics("figures/Pixel Intensity.png")
 </center>
 
 
+# 3.3 Modeling and Results
+
+Our data preprocessing focused on preparing 3D MRI volumes for input into a deep learning model. The dataset consisted of knee MRI scans stored as NumPy arrays, along with three associated labels for each exam: ACL tear, meniscus tear, and abnormality.
+
+Each MRI scan is a 3D volume composed of multiple 2D slices. Since the number of slices varies across exams, we standardized all inputs to a fixed depth of 32 slices. Volumes with more than 32 slices were truncated, while those with fewer slices were padded with zeros. This ensured consistent input dimensions for the model.
+
+We implemented a 3D convolutional neural network using a pretrained 3D ResNet-18 architecture. The pretrained model was loaded and the final fully connected layer of the network was modified to output three values corresponding to the three prediction tasks: ACL tear, meniscus tear, and abnormality. Since each condition is independent, the model performs multi-label classification.
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+# Code used for modeling
+
+import torchvision.models.video as models
+import torch.nn as nn
+
+class MRNet3DResNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        # Load pretrained 3D ResNet
+        self.model = models.r3d_18(pretrained=True)
+
+        # Modify final layer for 3 outputs
+        self.model.fc = nn.Linear(self.model.fc.in_features, 3)
+
+    def forward(self, x):
+        return self.model(x)
+        
+```
+
+</details>
+
+Model Training
+
+The model was trained using batches of MRI volumes. Since the pretrained ResNet expects 3-channel input, the single-channel MRI volumes were duplicated across three channels.
+We used the Binary Cross-Entropy loss function with logits, which is appropriate for multi-label classification. Class weights were applied to address imbalance in the dataset. The Adam optimizer was used to update model weights.
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+# Code used for for training setup:
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+model = MRNet3DResNet().to(device)
+
+pos_weight = torch.tensor([2.0, 2.0, 1.5]).to(device)
+criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
+
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+
+epochs = 20
+
+#Code used for training loop:
+
+for epoch in range(epochs):
+
+    model.train()
+    total_loss = 0
+
+    for volumes, labels in train_loader:
+
+        volumes = volumes.to(device)
+        labels = labels.to(device)
+
+        optimizer.zero_grad()
+
+        # Convert 1 channel → 3 channels
+        volumes = volumes.repeat(1, 3, 1, 1, 1)
+
+        outputs = model(volumes)
+
+        loss = criterion(outputs, labels)
+
+        loss.backward()
+        optimizer.step()
+
+        total_loss += loss.item()
+
+    print(f"Epoch {epoch+1}/{epochs} Loss: {total_loss/len(train_loader):.4f}")
+        
+```
+
+</details>
+
+Results :
+
+# 3.3.1 Training performance:
+
+The model was trained for 20 epochs, and the training loss consistently decreased from 0.6707 to 0.0482, indicating that the model successfully learned patterns from the MRI data.
+The most significant improvements occurred during the early epochs, with slower convergence in later epochs. Minor fluctuations suggest possible overfitting but overall stable convergence.
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+#Code used to generate training results:
+
+print(f"Epoch {epoch+1}/{epochs} Loss: {total_loss/len(train_loader):.4f}")
+```
+
+</details>
+
+Training loss output:
+
+<center>
+![Epoch Output](Images/Epoch output.png)
+</center>
+
+
+# 3.3.2 Validation Metrics:
+
+After training, the model was evaluated on the validation dataset. Predictions were converted into probabilities using a sigmoid function and then thresholded at 0.5 to produce binary outputs.
+
+Performance was measured using sensitivity, specificity, accuracy, and AUC-ROC for each condition.
+
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+# Code used for evaluation:
+
+model.eval()
+
+all_labels = []
+all_preds = []
+all_probs = []
+
+with torch.no_grad():
+    for volumes, labels in valid_loader:
+
+        volumes = volumes.to(device)
+        volumes = volumes.repeat(1, 3, 1, 1, 1)
+
+        outputs = model(volumes)
+
+        probs = torch.sigmoid(outputs).cpu().numpy()
+        preds = (probs > 0.5).astype(int)
+
+        all_probs.extend(probs)
+        all_preds.extend(preds)
+        all_labels.extend(labels.numpy())
+```
+
+</details>
+
+
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+# Code used for metrics calculation:
+
+from sklearn.metrics import roc_auc_score, confusion_matrix
+
+def compute_metrics(y_true, y_pred, y_prob):
+
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+
+    sensitivity = tp / (tp + fn + 1e-6)
+    specificity = tn / (tn + fp + 1e-6)
+    accuracy = (tp + tn) / (tp + tn + fp + fn)
+    auc = roc_auc_score(y_true, y_prob)
+
+```
+
+</details>
+
+
+# 3.3.3 Results for metric evaluations:
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+# Code used to print results:
+labels_names = ["ACL", "Meniscus", "Abnormal"]
+
+for i, name in enumerate(labels_names):
+
+    sens, spec, acc, auc = compute_metrics(
+        all_labels[:, i],
+        all_preds[:, i],
+        all_probs[:, i]
+    )
+
+    print(f"\n{name}:")
+    print(f"Sensitivity: {sens:.3f}")
+    print(f"Specificity: {spec:.3f}")
+    print(f"Accuracy: {acc:.3f}")
+    print(f"AUC-ROC: {auc:.3f}")
+```
+
+</details>
+
+Metrics Evaluation output:
+
+<center>
+![Epoch Output](Images/Metrics output.png)
+
+
+# 3.3.4 Summary of the evaluation metrics:
+
+- **ACL:** Strong performance with high specificity (0.955) and AUC (0.953)
+
+- **Meniscus:** Moderate performance with lower specificity (0.559)
+
+- **Abnormal:** Very high sensitivity (0.989) but extremely low specificity (0.080), indicating overprediction
+
+
+These results suggest that the model performs well overall but may require threshold tuning or class balancing to improve specificity, particularly for abnormality detection.
+
 
 ## Conclusion
+
 
 
 

@@ -3255,12 +3255,19 @@ font-size: 15px;
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1 Introduction</a></li>
   <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">2 Methodology</a></li>
   <li><a href="#analysis-results" id="toc-analysis-results" class="nav-link" data-scroll-target="#analysis-results">3 Analysis &amp; Results:</a></li>
+  <li><a href="#modeling-and-results" id="toc-modeling-and-results" class="nav-link" data-scroll-target="#modeling-and-results">3.3 Modeling and Results</a></li>
+  <li><a href="#training-performance" id="toc-training-performance" class="nav-link" data-scroll-target="#training-performance">3.3.1 Training performance:</a></li>
+  <li><a href="#validation-metrics" id="toc-validation-metrics" class="nav-link" data-scroll-target="#validation-metrics">3.3.2 Validation Metrics:</a></li>
+  <li><a href="#results-for-metric-evaluations" id="toc-results-for-metric-evaluations" class="nav-link" data-scroll-target="#results-for-metric-evaluations">3.3.3 Results for metric evaluations:</a></li>
+  <li><a href="#summary-of-the-evaluation-metrics" id="toc-summary-of-the-evaluation-metrics" class="nav-link" data-scroll-target="#summary-of-the-evaluation-metrics">3.3.4 Summary of the evaluation metrics:</a>
+  <ul class="collapse">
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -3307,14 +3314,14 @@ font-size: 15px;
 <h2 class="anchored" data-anchor-id="methodology">2 Methodology</h2>
 <section id="convolutional-neural-network-cnn" class="level3">
 <h3 class="anchored" data-anchor-id="convolutional-neural-network-cnn">Convolutional Neural Network (CNN)</h3>
-<p>A Convolutional Neural Network (CNN) is a deep learning model specifically designed to process structured, grid-organized data such as images. CNNs have been highly successful in image processing and medical imaging because they can automatically learn relevant features directly from input images, eliminating the need for manual feature extraction.</p>
-<p>In the early layers, CNNs capture fundamental spatial characteristics such as gradients and structural boundaries. As the network becomes deeper, it learns increasingly complex and abstract representations, including pathological changes like cartilage degeneration or disruption of the fibers of the anterior cruciate ligament (ACL).</p>
-<p>While 1D CNNs are typically used for sequential data and 2D CNNs for individual image slices, 3D CNNs extend convolution operations into the volumetric domain by incorporating depth in addition to height and width. This is particularly important in imaging modalities such as MRI, where spatial continuity across slices is essential.</p>
+<p>A Convolutional Neural Network (CNN) is a deep learning model specifically designed to process structured, grid-organized data such as images. CNNs have been highly successful in image processing and medical imaging because they can automatically learn relevant features directly from input images, eliminating the need for manual feature extraction.<span class="citation" data-cites="yeoh2021emergence awan2021improved">(<a href="#ref-yeoh2021emergence" role="doc-biblioref">Yeoh et al. 2021</a>; <a href="#ref-awan2021improved" role="doc-biblioref">Awan et al. 2021</a>)</span></p>
+<p>In the early layers, CNNs capture fundamental spatial characteristics such as gradients and structural boundaries. As the network becomes deeper, it learns increasingly complex and abstract representations, including pathological changes like cartilage degeneration or disruption of the fibers of the anterior cruciate ligament(ACL).<span class="citation" data-cites="astuto2021automatic">(<a href="#ref-astuto2021automatic" role="doc-biblioref">Astuto et al. 2021</a>)</span></p>
+<p>While 1D CNNs are typically used for sequential data and 2D CNNs for individual image slices, 3D CNNs extend convolution operations into the volumetric domain by incorporating depth in addition to height and width. This is particularly important in imaging modalities such as MRI, where spatial continuity across slices is essential.<span class="citation" data-cites="guida2021knee">(<a href="#ref-guida2021knee" role="doc-biblioref">Guida, Zhang, and Shan 2021</a>)</span></p>
 <p>In knee MRI applications, 3D CNNs have demonstrated superior performance in detecting and grading ACL tears, meniscal degeneration, and osteoarthritis severity. By preserving inter-slice spatial relationships, these models provide a more comprehensive understanding of knee anatomy, positioning 3D CNNs at the forefront of advanced artificial intelligence systems in orthopedic imaging <span class="citation" data-cites="bien2018deep guida2021knee oettl2025beyond">(<a href="#ref-bien2018deep" role="doc-biblioref">Bien et al. 2018</a>; <a href="#ref-guida2021knee" role="doc-biblioref">Guida, Zhang, and Shan 2021</a>; <a href="#ref-oettl2025beyond" role="doc-biblioref">Oettl et al. 2025</a>)</span>..</p>
 </section>
 <section id="basic-architecture-of-a-cnn" class="level3">
 <h3 class="anchored" data-anchor-id="basic-architecture-of-a-cnn">Basic Architecture of a CNN</h3>
-<p>A typical CNN consists of the following components:</p>
+<p>A typical CNN consists of several key components that enable hierarchical feature extraction and classification <span class="citation" data-cites="yeoh2021emergence awan2021improved">(<a href="#ref-yeoh2021emergence" role="doc-biblioref">Yeoh et al. 2021</a>; <a href="#ref-awan2021improved" role="doc-biblioref">Awan et al. 2021</a>)</span>.</p>
 <center>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -3330,15 +3337,16 @@ font-size: 15px;
 Y(i,j) = \sum_{m}\sum_{n} \left[ X(i+m, j+n)\cdot W(m,n) \right] + b
 \]</span></p>
 <p>Where: - <span class="math inline">\(X\)</span> = Input image - <span class="math inline">\(W\)</span> = Filter/kernel - <span class="math inline">\(b\)</span> = Bias - <span class="math inline">\(Y\)</span> = Output feature map</p>
+<p>This operation allows CNNs to learn spatially localized features and is fundamental to many medical image analysis frameworks <span class="citation" data-cites="yeoh2021emergence qiu2021fusion">(<a href="#ref-yeoh2021emergence" role="doc-biblioref">Yeoh et al. 2021</a>; <a href="#ref-qiu2021fusion" role="doc-biblioref">Qiu et al. 2021</a>)</span>.</p>
 <p><strong>2. Activation Function</strong></p>
-<p>Explains non-linearity using ReLU:</p>
+<p>Non-linear activation functions are applied after convolution to introduce non-linearity into the model, enabling it to learn complex patterns. The most commonly used activation function is the Rectified Linear Unit (ReLU):</p>
 <p><span class="math display">\[
 f(x) = \max(0, x)
-\]</span></p>
+\]</span> ReLU improves training efficiency and mitigates vanishing gradient issues in deep neural networks <span class="citation" data-cites="yeoh2021emergence awan2021improved">(<a href="#ref-yeoh2021emergence" role="doc-biblioref">Yeoh et al. 2021</a>; <a href="#ref-awan2021improved" role="doc-biblioref">Awan et al. 2021</a>)</span>.</p>
 <p><strong>3. Pooling Layer</strong></p>
-<p>Reduces spatial dimensions (e.g., Max Pooling).</p>
+<p>Pooling layers reduce the spatial dimensions of feature maps while preserving the most important information. Max pooling, one of the most commonly used pooling techniques, selects the maximum value within a sliding window. This operation helps reduce computational complexity and improves model robustness to small spatial variations <span class="citation" data-cites="yeoh2021emergence">(<a href="#ref-yeoh2021emergence" role="doc-biblioref">Yeoh et al. 2021</a>)</span></p>
 <p><strong>4. Fully Connected Layer</strong></p>
-<p>Performs classification based on extracted features.</p>
+<p>Performs classification based on extracted features.These layers combine the learned representations to predict the target class, such as the presence or severity of knee pathology <span class="citation" data-cites="awan2021improved">(<a href="#ref-awan2021improved" role="doc-biblioref">Awan et al. 2021</a>)</span>.</p>
 <p><strong>5. Output Layer</strong></p>
 <p>Uses Softmax (multi-class) or Sigmoid (binary/multi-label).</p>
 <p>In medical imaging, CNNs have demonstrated strong performance in MRI-based diagnosis and tissue segmentation<span class="citation" data-cites="liu2018deep zhou2018deep">(<a href="#ref-liu2018deep" role="doc-biblioref">Liu et al. 2018</a>; <a href="#ref-zhou2018deep" role="doc-biblioref">Zhou et al. 2018</a>)</span>.</p>
@@ -3401,7 +3409,7 @@ Y(i,j,k) = \sum_{m}\sum_{n}\sum_{p} X(i+m, j+n, k+p)\cdot W(m,n,p) + b
 <li><span class="math inline">\(Y\)</span> = Output feature map</li>
 <li><span class="math inline">\(i,j,k\)</span> = Spatial voxel indices</li>
 </ul>
-<p>This operation extracts volumetric features across depth, height, and width.</p>
+<p>This operation extracts volumetric features across depth, height, and width.<span class="citation" data-cites="guida2021knee">(<a href="#ref-guida2021knee" role="doc-biblioref">Guida, Zhang, and Shan 2021</a>)</span>.</p>
 <section id="applications-in-knee-mri-analysis" class="level4">
 <h4 class="anchored" data-anchor-id="applications-in-knee-mri-analysis">Applications in Knee MRI Analysis</h4>
 <p>3D CNNs have demonstrated strong performance in musculoskeletal imaging, particularly in knee MRI analysis.</p>
@@ -3433,10 +3441,10 @@ Y(i,j,k) = \sum_{m}\sum_{n}\sum_{p} X(i+m, j+n, k+p)\cdot W(m,n,p) + b
 </section>
 </section>
 </section>
-<section id="analysis-results" class="level2">
+<section id="analysis-results" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="analysis-results">3 Analysis &amp; Results:</h2>
 <section id="dataset-description" class="level4">
-<h4 class="anchored" data-anchor-id="dataset-description">3.1 Dataset Description:**</h4>
+<h4 class="anchored" data-anchor-id="dataset-description">3.1 Dataset Description:</h4>
 <p>The MRNet dataset, a publicly available set of knee MRI scans gathered by the School of Medicine at Stanford University, is used in this research. The dataset contains images gathered from clinical studies performed at the Stanford University Medical Center over an eleven-year period from 2001 to 2012. The structure of the dataset is divided into a training and validation set, with each MRI study labeled for three different diagnoses:</p>
 <ul>
 <li>The presence of any abnormality,</li>
@@ -3444,7 +3452,8 @@ Y(i,j,k) = \sum_{m}\sum_{n}\sum_{p} X(i+m, j+n, k+p)\cdot W(m,n,p) + b
 <li>Meniscal injuries.</li>
 </ul>
 <p><strong>3.1.2 Data Organization</strong> The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.</p>
-<p><strong>3.1.3 Problem Formulation</strong> The task of clinical diagnosis is posed as a binary classification problem, where the goal of the model is to distinguish between ACL-intact and ACL-compromised knee examinations. Mathematically, the binary classification problem can be stated as:</p>
+<p><strong>3.1.3 Problem Formulation</strong></p>
+<p>The task of clinical diagnosis is posed as a binary classification problem, where the goal of the model is to distinguish between ACL-intact and ACL-compromised knee examinations. Mathematically, the binary classification problem can be stated as:</p>
 <p><span class="math display">\[
 y=\begin{cases}
 0 &amp; \text{No ACL tear present} \\
@@ -3452,7 +3461,7 @@ y=\begin{cases}
 \end{cases}
 \]</span> This problem statement allows the construction of a supervised learning model that can be used to automatically identify ACL tears from multi-planar MRI images.</p>
 </section>
-<section id="dataset-visualization-exploratory-analysis" class="level4">
+<section id="dataset-visualization-exploratory-analysis" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="dataset-visualization-exploratory-analysis">3.2 Dataset Visualization &amp; Exploratory Analysis:</h4>
 <p>Exploratory Data Analysis (EDA) is a fundamental component of any machine learning model’s pipeline. It is critical to understand the structure and composition of the data before moving forward to train any model. This section of the report outlines a detailed exploratory data analysis of the MRNet dataset, proposed by <span class="citation" data-cites="bien2018deep">(<a href="#ref-bien2018deep" role="doc-biblioref">Bien et al. 2018</a>)</span>. in 2018, which consists of knee MRI images from three different imaging planes, i.e., sagittal, coronal, and axial. Each of these imaging sessions is associated with a binary variable representing the ACL tear condition of the knee. The class balance, volumetric structure, imaging characteristics, and cross-plane imaging of the MRNet dataset have all been addressed in the following visualizations, which were critical to the decisions made in the subsequent sections of this report.</p>
 <p><strong>3.2.1 Class Distribution</strong></p>
@@ -3488,13 +3497,13 @@ y=\begin{cases}
 <p>
 The bar chart describes the class distribution of the ACL tear labels in the data set. The horizontal axis indicates the two classes in the diagnostic results, namely “No ACL Tear” and “ACL Tear,” while the vertical axis indicates the number of examinations in the data set. The data set contains a total of 1,130 examinations, with 922 (81.6%) labeled as “No ACL Tear” and 208 (18.4%) labeled as “ACL Tear.” This is a significant imbalance between the two classes, with an approximate ratio of 4.4:1 in favor of the negative class. This imbalance is clinically realistic, since ACL tears are not as common in the general population as the converse; nonetheless, it is a significant methodological limitation in the application of supervised machine learning, since a model trained on such an unbalanced data set will likely develop a bias toward the majority class, thereby achieving high accuracy but at the expense of poor sensitivity for the clinically important minority class. This figure is important because it establishes the underlying data set characteristics that directly influence the model design, loss function, and evaluation metric used in the study.
 </p>
-<center>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
+<center class="page-columns page-full">
+<div class="cell page-columns page-full" data-layout-align="center">
+<div class="cell-output-display page-columns page-full">
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full">
 <p><img role="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkgAAAGACAYAAABWTZ3rAAAAOnRFWHRTb2Z0d2FyZQBNYXRwbG90bGliIHZlcnNpb24zLjEwLjAsIGh0dHBzOi8vbWF0cGxvdGxpYi5vcmcvlHJYcgAAAAlwSFlzAAAPYQAAD2EBqD+naQAASllJREFUeJzt3Xl8TGf///HXZCNpQkgRtPZaYtfkFlspVdWiX4Jqb7SI2tVe611aa2ljr9K0Wktjp+hC7Vq1FVUSau1dxBIkJJF1fn/45dxmEm0mkkwi7+fj4SE55zpnPieZybznOte5jslsNpsREREREYODvQsQERERyWkUkERERESsKCCJiIiIWFFAEhEREbGigCQiIiJiRQFJRERExIoCkoiIiIgVBSQRERERKwpIIiIiIlYUkCTHunv3LnPmzKF169bUqlWL2rVr065dO4KDg4mPj7doO3LkSCpVqkTdunXtVO3fS6nvwX9Vq1bF39+fHj16sGvXrodu8yjHdP78eRISEtLVds6cOUZt0dHRD12WmaKiorh69arx/dq1a43HO336dKY/XnbZs2ePcRwtWrT4x/Y3btxg6tSptGjRgho1alCnTh06derEypUrSU5Otmj7KM8L6+fgw/7t37/f5n1npr/++suoZenSpZmyz/379xv73LFjR6bsE/73M502bVqm7VNyBgUkyZHOnTtHmzZtmDt3LqdPnyY2NpaYmBhOnDjBhx9+yBtvvJElb9jZKTExkVu3brF3717efvttFi5cmGn7jomJYcaMGbRu3TpVmMwJzGYzq1evpkWLFpw8edLe5WS6b775xvj6woULHDly5KFtf/31V15++WW++OILLly4QFxcHNHR0Rw5coRx48bRt29fkpKSsqNsEXmAk70LELEWExNDnz59uHTpEi4uLgwcOJBmzZoRGRnJJ598wq5duzh+/DjTpk3j/ffft3e5NilYsCDffPMNZrOZmJgYTp48yUcffcSVK1cICgrCz8+P2rVrAzBq1CgGDRqEg4Ptn2M+//xzFi1aZNM23bp1o0OHDgC4ubnZ/Ji2OHjwIGPGjEm1vGXLltSvXx+AJ598MktryCqxsbH8+OOPFsvWrVtn/F4fdO3aNfr06UNkZCQFChRg2LBh1K1b13g+HDt2jB07dhAcHMzbb7/9yLU92FMZHh7Oa6+9BsA777xDu3bt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/dhERCTrKSDJY2vGjBlMmzaN3bt3ExMTw7PPPsuAAQOoV68eR48e5dq1a0bbiIgIi21v3rxJUlISe/bsMZZFRUURFRVlfP/gtAEiIvJ4UUCSx1bhwoUt5jp6UK1atTh16pTx/cNuO3DkyJEsr1NERHIejUESERERsaKAJML9OZJcXV11V28REQF0ik2sJCebcXDIeyHB1dUVHx8fe5dhV3n1dy8ikhYFJLHg4GBixo5I/rqdaO9SJBs95enEsOc1t5OISAoFJEnlr9uJnI1QQBIRkbxLY5BERERErCggiYiIiFhRQBIRERGxooAkIiIiYkUBSURERMSKApKIiIiIFQUkERERESsKSCIiIiJWFJBERERErCggiYiIiFhRQBIRERGxooAkIiIiYkUBSURERMSKApKIiIiIFQUkERERESsKSCIiIiJWFJBERERErCggiYiIiFhRQBIRERGxooAkIiIiYkUBSURERMSKApKIiIiIFQUkERERESsKSCIiIiJWFJBERERErCggiYiIiFhRQBIRERGxooAkIiIiYkUBSURERMSKApKIiIiIFQUkERERESt2D0gJCQkEBQXRpEkTateuzRtvvMGvv/5qrA8NDaVz587UqlWLJk2aEBwcbLF9cnIys2fPplGjRtSsWZPu3btz8eLF7D4MEREReYzYPSB98sknrFmzhokTJ7J+/XrKlStHz549uXr1Krdu3aJbt26UKVOGNWvWMGDAAGbNmsWaNWuM7efPn09ISAgTJ05kxYoVmEwmevbsSXx8vB2PSkRERHIzuwekbdu20apVKxo2bEjp0qUZOXIkd+/e5ejRo6xcuRIXFxfGjx9P+fLlCQgI4K233mLRokUAxMfH8/nnnzNgwAAaN25M5cqVCQoK4urVq2zdutXORyYiIiK5ld0DkqenJzt27OCvv/4iKSmJFStW4OLiQpUqVTh06BB+fn44OTkZ7f39/Tl//jwRERGEhYURHR2Nv7+/sb5AgQL4+Phw8OBBexyOiIiIPAac/rlJ1hozZgyDBw+mWbNmODo64uDgwKxZsyhVqhTh4eFUrFjRon3RokUBuHz5MuHh4QAUL148VZsrV65kzwGIiIjIY8fuAens2bMUKFCAefPmUaxYMVatWsW7777L0qVLuXfvHi4uLhbt8+XLB0BcXByxsbEAabaJjIzMcE1ms5mYmJgM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w8/Pj+DgYE0SKSIiIhlmMts44GDDhg1MmjQJV1dXpk6dSs2aNZk6dSorV66kZs2afPDBB6nGFOUmx48fB+6fOsyrBq2L4GxEor3LkGxU3suJmW297F2GSLaJiYkhNDSUKlWq6BRbHmLLe7zNPUivvvoq/v7+jBs3jh49elCoUCHi4+MZN24cb7zxhgb6ioiISK6XoZvVFi5c2BhzFBERQaFChahUqZLCkYiIiDwWbA5IBw4coE2bNixYsICePXuyefNmihYtSteuXXnvvfeMyR9FREREciubT7F17dqVsmXLsnz5cqMXaenSpSxevJiZM2eyc+dOdu3alemFioiIiGQXm3uQ3nrrLTZs2GCEoweXr1u3LtV90URERERyG5t7kEaOHPnQdWXLliUkJOSRChIRERGxt3T1IH344YeEh4dbLLt69SpJSUkWy06dOkXr1q0zrzoRERERO0hXQPriiy8s7omWlJREkyZNCAsLs2h37949m+5zIiIiIpITpSsgpTWXpG5oKSIiIo+rDM2DJCIiIvI4U0ASERERsaKAJCIiImJFAUlERETESrrnQVq9ejW7d+8G7g/QNplMrFixgqJFixptrl69mvkVioiIiGSzdAeklStXpmuZblgrIiIiuV26ApL1fEciIiIijzONQRIRERGxooAkIiIiYkUBSURERMSKApKIiIiIlXQFpA0bNnDr1q2srkVEREQkR0hXQBo/fjznz58HoFmzZrqqTURERB5r6brM38XFhQ0bNpCYmMilS5c4evQod+7ceWh7Pz+/TCtQREREJLulKyB16NCBzz77jJUrV2IymZgwYUKa7VJm2A4NDc3UIkVERESyU7oC0rBhw3j11Ve5desWXbt25T//+Q8VKlTI6tpERERE7CLdtxp55plnAOjfvz/NmjWjWLFiWVaUiIiIiD2lOyCl6N+/P/Hx8YSEhLB//36ioqIoVKgQvr6+tG3blnz58mVFnSIiIiLZxuaAFBUVRdeuXQkLC6NEiRIUKVKE8+fPs2nTJpYtW8by5cvx8PDIilpFREREsoXNE0V+9NFHhIeHs3TpUrZv386KFSvYvn07S5cuJSIiglmzZmVFnSIiIiLZxuaAtG3bNgYNGoSvr6/Fcl9fXwYOHMiWLVsyrTgRERERe7A5IEVHR/P000+nue7pp5/m9u3bj1qTiIiIiF3ZHJDK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U6hQIcaPH4+np2cWlCQiIiJiXzYHpD///JOgoCCaNm2aFfWIiIiI2J3N92KrVKmScXpNRERE5HFkcw/S6NGjGTZsGA4ODtSoUSPNeVNKlCiRKcWJiIiI2EOGr2IbPXr0Q9drkLaIiIjkZjYHpPHjx+Po6MjgwYMpUqRIVtQkIiIiYlc2B6Rz584xa9Ysnn/++ayoR0RERMTubB6kXbp0ad3tW0RERB5rNgekd955h6CgIH766Seio6OzoiYRERERu7L5FNtHH33EjRs3CAwMTHO9yWTi5MmTj1yYiIiIiL3YHJBeeeWVrKhDREREJMewOSD1798/K+oQERERyTFsDkiXL1/+xzaaKFJERERyM5sDUtOmTTGZTH/bRhNFioiISG5mc0CaPHlyqoAUExPD4cOH+eWXX5g8eXKmFSciIiJiDzYHpHbt2qW5/N///jfTpk1j48aNNGnS5FHrEhEREbEbm+dB+jtNmjRh586dmblLERERkWyXqQHp6NGjODll6P63IiIiIjmGzWlm1KhRqZYlJydz5coVDh06RPv27TOlMBERERF7sTkg7d+/P9Uyk8mEu7s7PXv2pHfv3plSmIiIiIi92ByQtm/fnhV1iIiIiOQYmToGSURERORxkK4epLTGHT2MyWTSXEgiIiKSq6UrIKU17sjarVu3iI2NVUASERGRXC9dAenvxh0lJCTwySefsHDhQp588knGjx+fWbWJiIiI2MUjTVoUGhrKyJEjOX36NK+88grjxo2jYMGCmVWbiIiIiF1kKCAlJiYyb948Fi1ahKenJ3PnzqVZs2aZXZuIiIiIXdgckE6ePMmoUaM4deoUbdq0YezYsRQoUCArahMRERGxi3QHpMTERObOnctnn31G4cKF+eSTT3j++eezsjYRERERu0hXQDpx4gQjR47kzJkz/N///R9jxozB3d09q2sTERERsYt0BaSOHTuSnJyMh4cHly5dom/fvg9tazKZ+PLLLzOtQBEREZHslq6AVKdOHeNrs9n8t23/ab2IiIhITpeugLRkyZKsrkNEREQkx9C92ERERESsKCCJiIiIWFFAEhEREbGigCQiIiJiRQFJRERExIoCkoiIiIgVBSQRERERKwpIIiKS6yUmJvLVV1/RunVratWqRbNmzZgwYQKRkZFGm9OnT/PWW29Rs2ZNmjRpwsKFC7lz547FfsLC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xozhzJkzrF27li+//JJevXoB97vJOnfuzIwZM9i2bRthYWEMHjwYb29vmjdvbs9DExERkVzMrj1IP/zwAwkJCWzdupWtW7darGvbti1Tp07ls88+Y9KkSbRt25YiRYowYsQI2rZta7QbOHAgiYmJjB07lnv37uHn50dwcHC6zzGKiIiIWLP7rUZyGt1qRLcayYt0q5G8LWLiIF3Floc4lSqP19iZ9i7DLnLVrUZEREREchoFJBERERErCkgiIiIiVhSQRERERKwoIImIiIhYUUASERERsaKAJCIiImJFAUlERETEigKSiIiIiBUFJBERERErCkgiIiIiVhSQRERERKwoIImIiIhYUUASERERsaKAJCIiImJFAUlERETEigKSiIiIiBUFJBERERErCkgiIiIiVhSQRERERKwoIImIiIhYUUASERERsaKAJCIiImJFAUlERETEigKSiIiIiBUFJBERERErCkgiIiIiVhSQRERERKwoIImIiIhYUUASERERsaKAJCIiImJFAUlERETEigKSiIiIiBUFJBERERErCkgiIiIiVhSQRERERKwoIImIiIhYUUASERERsaKAJCIiImJFAUlERETEigKSiIiIiBUFJBERERErCkgiIiIiVhSQRERERKwoIImIiIhYUUASERERsaKAJCIiImJFAUlERETEigKSiIiIiBUFJBERERErCkgiIiIiVhSQRERERKwoIImIiIhYeSwCUnJyMrNnz6ZRo0bUrFmT7t27c/HiRXuXJSIiIrnUYxGQ5s+fT0hICBMnTmTFihWYTCZ69uxJfHy8vUsTERGRXCjXB6T4+Hg+//xzBgwYQOPGjalcuTJBQUFcvXqVrVu32rs8ERERyYVyfUAKCwsjOjoaf39/Y1mBAgXw8fHh4MGDdqxMREREcqtcH5DCw8MBKF68uMXyokWLcuXKFXuUJCIiIrmck70LeFSxsbEAuLi4WCzPly8fkZGRNu8vISEBs9nMb7/9lin15TYmk4n2TyWTWMLelUh2cnKA48cvYzab7V2KZDOTyURy0/aQlGjvUiS7ODpx+fjxPPl6T0hIwGQypattrg9I+fPnB+6PRUr5GiAuLg5XV1eb95fyg0vvD/BxVDB/ru9YlAzKy8/7vMzBo6C9SxA7yIuvd5PJlHcCUsqptWvXrlGqVClj+bVr16hcubLN+6tdu3am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" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption>Figure 3.1: Class distribution of ACL tear labels</figcaption>
+<figcaption class="margin-caption">Figure 3.1: Class distribution of ACL tear labels</figcaption>
 </figure>
 </div>
 </div>
@@ -3648,12 +3657,207 @@ The histogram in the above image demonstrates the pixel intensity values for a r
 </center>
 </section>
 </section>
+<section id="modeling-and-results" class="level1">
+<h1>3.3 Modeling and Results</h1>
+<p>Our data preprocessing focused on preparing 3D MRI volumes for input into a deep learning model. The dataset consisted of knee MRI scans stored as NumPy arrays, along with three associated labels for each exam: ACL tear, meniscus tear, and abnormality.</p>
+<p>Each MRI scan is a 3D volume composed of multiple 2D slices. Since the number of slices varies across exams, we standardized all inputs to a fixed depth of 32 slices. Volumes with more than 32 slices were truncated, while those with fewer slices were padded with zeros. This ensured consistent input dimensions for the model.</p>
+<p>We implemented a 3D convolutional neural network using a pretrained 3D ResNet-18 architecture. The pretrained model was loaded and the final fully connected layer of the network was modified to output three values corresponding to the three prediction tasks: ACL tear, meniscus tear, and abnormality. Since each condition is independent, the model performs multi-label classification.</p>
+<details class="collapase">
+<summary>
+<b>Code</b>
+</summary>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Code used for modeling</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torchvision.models.video <span class="im">as</span> models</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> MRNet3DResNet(nn.Module):</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>()</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Load pretrained 3D ResNet</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> models.r3d_18(pretrained<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Modify final layer for 3 outputs</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model.fc <span class="op">=</span> nn.Linear(<span class="va">self</span>.model.fc.in_features, <span class="dv">3</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.model(x)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<p>Model Training</p>
+<p>The model was trained using batches of MRI volumes. Since the pretrained ResNet expects 3-channel input, the single-channel MRI volumes were duplicated across three channels. We used the Binary Cross-Entropy loss function with logits, which is appropriate for multi-label classification. Class weights were applied to address imbalance in the dataset. The Adam optimizer was used to update model weights.</p>
+<details class="collapase">
+<summary>
+<b>Code</b>
+</summary>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Code used for for training setup:</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>device <span class="op">=</span> torch.device(<span class="st">&quot;cuda&quot;</span> <span class="cf">if</span> torch.cuda.is_available() <span class="cf">else</span> <span class="st">&quot;cpu&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> MRNet3DResNet().to(device)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>pos_weight <span class="op">=</span> torch.tensor([<span class="fl">2.0</span>, <span class="fl">2.0</span>, <span class="fl">1.5</span>]).to(device)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>criterion <span class="op">=</span> nn.BCEWithLogitsLoss(pos_weight<span class="op">=</span>pos_weight)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>optimizer <span class="op">=</span> torch.optim.Adam(model.parameters(), lr<span class="op">=</span><span class="fl">1e-4</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>epochs <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Code used for training loop:</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(epochs):</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    model.train()</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    total_loss <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> volumes, labels <span class="kw">in</span> train_loader:</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        volumes <span class="op">=</span> volumes.to(device)</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        labels <span class="op">=</span> labels.to(device)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        optimizer.zero_grad()</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Convert 1 channel → 3 channels</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        volumes <span class="op">=</span> volumes.repeat(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        outputs <span class="op">=</span> model(volumes)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        loss <span class="op">=</span> criterion(outputs, labels)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        loss.backward()</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        optimizer.step()</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>        total_loss <span class="op">+=</span> loss.item()</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss"> Loss: </span><span class="sc">{</span>total_loss<span class="op">/</span><span class="bu">len</span>(train_loader)<span class="sc">:.4f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<p>Results :</p>
+</section>
+<section id="training-performance" class="level1">
+<h1>3.3.1 Training performance:</h1>
+<p>The model was trained for 20 epochs, and the training loss consistently decreased from 0.6707 to 0.0482, indicating that the model successfully learned patterns from the MRI data. The most significant improvements occurred during the early epochs, with slower convergence in later epochs. Minor fluctuations suggest possible overfitting but overall stable convergence.</p>
+<details class="collapase">
+<summary>
+<b>Code</b>
+</summary>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Code used to generate training results:</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f&quot;Epoch </span><span class="sc">{</span>epoch<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>epochs<span class="sc">}</span><span class="ss"> Loss: </span><span class="sc">{</span>total_loss<span class="op">/</span><span class="bu">len</span>(train_loader)<span class="sc">:.4f}</span><span class="ss">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<p>Training loss output:</p>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img role="img" src="Images/Epoch%20output.png" class="img-fluid figure-img"></p>
+<figcaption>Epoch Output</figcaption>
+</figure>
+</div>
+</center>
+</section>
+<section id="validation-metrics" class="level1">
+<h1>3.3.2 Validation Metrics:</h1>
+<p>After training, the model was evaluated on the validation dataset. Predictions were converted into probabilities using a sigmoid function and then thresholded at 0.5 to produce binary outputs.</p>
+<p>Performance was measured using sensitivity, specificity, accuracy, and AUC-ROC for each condition.</p>
+<details class="collapase">
+<summary>
+<b>Code</b>
+</summary>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Code used for evaluation:</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>model.<span class="bu">eval</span>()</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>all_labels <span class="op">=</span> []</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>all_preds <span class="op">=</span> []</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>all_probs <span class="op">=</span> []</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> volumes, labels <span class="kw">in</span> valid_loader:</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>        volumes <span class="op">=</span> volumes.to(device)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>        volumes <span class="op">=</span> volumes.repeat(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>        outputs <span class="op">=</span> model(volumes)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>        probs <span class="op">=</span> torch.sigmoid(outputs).cpu().numpy()</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>        preds <span class="op">=</span> (probs <span class="op">&gt;</span> <span class="fl">0.5</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>        all_probs.extend(probs)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>        all_preds.extend(preds)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        all_labels.extend(labels.numpy())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<details class="collapase">
+<summary>
+<b>Code</b>
+</summary>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Code used for metrics calculation:</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_auc_score, confusion_matrix</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> compute_metrics(y_true, y_pred, y_prob):</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    tn, fp, fn, tp <span class="op">=</span> confusion_matrix(y_true, y_pred).ravel()</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    sensitivity <span class="op">=</span> tp <span class="op">/</span> (tp <span class="op">+</span> fn <span class="op">+</span> <span class="fl">1e-6</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    specificity <span class="op">=</span> tn <span class="op">/</span> (tn <span class="op">+</span> fp <span class="op">+</span> <span class="fl">1e-6</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    accuracy <span class="op">=</span> (tp <span class="op">+</span> tn) <span class="op">/</span> (tp <span class="op">+</span> tn <span class="op">+</span> fp <span class="op">+</span> fn)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    auc <span class="op">=</span> roc_auc_score(y_true, y_prob)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</section>
+<section id="results-for-metric-evaluations" class="level1">
+<h1>3.3.3 Results for metric evaluations:</h1>
+<details class="collapase">
+<summary>
+<b>Code</b>
+</summary>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Code used to print results:</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>labels_names <span class="op">=</span> [<span class="st">&quot;ACL&quot;</span>, <span class="st">&quot;Meniscus&quot;</span>, <span class="st">&quot;Abnormal&quot;</span>]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, name <span class="kw">in</span> <span class="bu">enumerate</span>(labels_names):</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    sens, spec, acc, auc <span class="op">=</span> compute_metrics(</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        all_labels[:, i],</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        all_preds[:, i],</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        all_probs[:, i]</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;</span><span class="ch">\n</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">:&quot;</span>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Sensitivity: </span><span class="sc">{</span>sens<span class="sc">:.3f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Specificity: </span><span class="sc">{</span>spec<span class="sc">:.3f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;Accuracy: </span><span class="sc">{</span>acc<span class="sc">:.3f}</span><span class="ss">&quot;</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f&quot;AUC-ROC: </span><span class="sc">{</span>auc<span class="sc">:.3f}</span><span class="ss">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<p>Metrics Evaluation output:</p>
+<center>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img role="img" src="Images/Metrics%20output.png" class="img-fluid figure-img"></p>
+<figcaption>Epoch Output</figcaption>
+</figure>
+</div>
+</center></section>
+<section id="summary-of-the-evaluation-metrics" class="level1">
+<h1>3.3.4 Summary of the evaluation metrics:</h1>
+<ul>
+<li><p><strong>ACL:</strong> Strong performance with high specificity (0.955) and AUC (0.953)</p></li>
+<li><p><strong>Meniscus:</strong> Moderate performance with lower specificity (0.559)</p></li>
+<li><p><strong>Abnormal:</strong> Very high sensitivity (0.989) but extremely low specificity (0.080), indicating overprediction</p></li>
+</ul>
+<p>These results suggest that the model performs well overall but may require threshold tuning or class balancing to improve specificity, particularly for abnormality detection.</p>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
 </section>
 <section id="references" class="level2 unnumbered">
 
 
+</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
