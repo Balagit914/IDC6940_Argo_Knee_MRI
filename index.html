@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-03-02">
+<meta name="dcterms.date" content="2026-03-27">
 
 <title>Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026</title>
 <style>
@@ -3281,7 +3281,7 @@ font-size: 15px;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 2, 2026</p>
+      <p class="date">March 27, 2026</p>
     </div>
   </div>
   
@@ -3435,21 +3435,16 @@ Y(i,j,k) = \sum_{m}\sum_{n}\sum_{p} X(i+m, j+n, k+p)\cdot W(m,n,p) + b
 </section>
 <section id="analysis-results" class="level2">
 <h2 class="anchored" data-anchor-id="analysis-results">3 Analysis &amp; Results:</h2>
-<section id="dataset-description" class="level3">
-<h3 class="anchored" data-anchor-id="dataset-description">3.1 Dataset Description:</h3>
+<section id="dataset-description" class="level4">
+<h4 class="anchored" data-anchor-id="dataset-description">3.1 Dataset Description:**</h4>
 <p>The MRNet dataset, a publicly available set of knee MRI scans gathered by the School of Medicine at Stanford University, is used in this research. The dataset contains images gathered from clinical studies performed at the Stanford University Medical Center over an eleven-year period from 2001 to 2012. The structure of the dataset is divided into a training and validation set, with each MRI study labeled for three different diagnoses:</p>
 <ul>
 <li>The presence of any abnormality,</li>
 <li>Tears of the anterior cruciate ligament (ACL),</li>
 <li>Meniscal injuries.</li>
 </ul>
-<section id="data-organization" class="level4">
-<h4 class="anchored" data-anchor-id="data-organization">3.1.2 Data Organization</h4>
-<p>The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.</p>
-</section>
-<section id="problem-formulation" class="level4">
-<h4 class="anchored" data-anchor-id="problem-formulation">3.1.3 Problem Formulation</h4>
-<p>The task of clinical diagnosis is posed as a binary classification problem, where the goal of the model is to distinguish between ACL-intact and ACL-compromised knee examinations. Mathematically, the binary classification problem can be stated as:</p>
+<p><strong>3.1.2 Data Organization</strong> The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.</p>
+<p><strong>3.1.3 Problem Formulation</strong> The task of clinical diagnosis is posed as a binary classification problem, where the goal of the model is to distinguish between ACL-intact and ACL-compromised knee examinations. Mathematically, the binary classification problem can be stated as:</p>
 <p><span class="math display">\[
 y=\begin{cases}
 0 &amp; \text{No ACL tear present} \\
@@ -3457,12 +3452,10 @@ y=\begin{cases}
 \end{cases}
 \]</span> This problem statement allows the construction of a supervised learning model that can be used to automatically identify ACL tears from multi-planar MRI images.</p>
 </section>
-</section>
-<section id="dataset-visualization-exploratory-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="dataset-visualization-exploratory-analysis">3.2 Dataset Visualization &amp; Exploratory Analysis:</h3>
+<section id="dataset-visualization-exploratory-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="dataset-visualization-exploratory-analysis">3.2 Dataset Visualization &amp; Exploratory Analysis:</h4>
 <p>Exploratory Data Analysis (EDA) is a fundamental component of any machine learning model’s pipeline. It is critical to understand the structure and composition of the data before moving forward to train any model. This section of the report outlines a detailed exploratory data analysis of the MRNet dataset, proposed by <span class="citation" data-cites="bien2018deep">(<a href="#ref-bien2018deep" role="doc-biblioref">Bien et al. 2018</a>)</span>. in 2018, which consists of knee MRI images from three different imaging planes, i.e., sagittal, coronal, and axial. Each of these imaging sessions is associated with a binary variable representing the ACL tear condition of the knee. The class balance, volumetric structure, imaging characteristics, and cross-plane imaging of the MRNet dataset have all been addressed in the following visualizations, which were critical to the decisions made in the subsequent sections of this report.</p>
-<section id="class-distribution" class="level4">
-<h4 class="anchored" data-anchor-id="class-distribution">3.2.1 Class Distribution</h4>
+<p><strong>3.2.1 Class Distribution</strong></p>
 <details class="collapase">
 <summary>
 <b>Code</b>
@@ -3507,9 +3500,7 @@ The bar chart describes the class distribution of the ACL tear labels in the dat
 </div>
 </div>
 </center>
-</section>
-<section id="sample-middle-slices-from-the-sagittal-plane" class="level4">
-<h4 class="anchored" data-anchor-id="sample-middle-slices-from-the-sagittal-plane">3.2.2 Sample Middle Slices from the Sagittal Plane</h4>
+<p><strong>3.2.2 Sample Middle Slices from the Sagittal Plane</strong></p>
 <details class="collapase">
 <summary>
 <b>Code</b>
@@ -3559,9 +3550,7 @@ The following figure depicts four sample middle sagittal plane MRI slice images 
 </div>
 </div>
 </center>
-</section>
-<section id="distribution-of-slice-counts-per-examination" class="level4">
-<h4 class="anchored" data-anchor-id="distribution-of-slice-counts-per-examination">3.2.3 Distribution of Slice Counts per Examination</h4>
+<p><strong>3.2.3 Distribution of Slice Counts per Examination</strong></p>
 <details class="collapase">
 <summary>
 <b>Code</b>
@@ -3605,9 +3594,7 @@ The above histogram shows the distribution of the number of slices in the sagitt
 </div>
 </div>
 </center>
-</section>
-<section id="pixel-intensity" class="level4">
-<h4 class="anchored" data-anchor-id="pixel-intensity">3.2.4 Pixel Intensity</h4>
+<p><strong>3.2.4 Pixel Intensity</strong></p>
 <details class="collapase">
 <summary>
 <b>Code</b>
@@ -3659,7 +3646,6 @@ The histogram in the above image demonstrates the pixel intensity values for a r
 </div>
 </div>
 </center>
-</section>
 </section>
 </section>
 <section id="conclusion" class="level2">
