@@ -85,40 +85,41 @@ This operation allows CNNs to learn spatially localized features and is fundamen
 	
 **2. Activation Function**
 
-Non-linear activation functions are applied after convolution to introduce non-linearity into the model, enabling it to learn complex patterns. The most commonly used activation function is the Rectified Linear Unit (ReLU):
+In order to enable a deep neural network to learn also complex features, it is common to use non-linear activation functions after the convolutional layers. The most common used activation function in that context is the Rectified Linear Unit (ReLU).
 
 
 $$
 f(x) = \max(0, x)
 $$
-ReLU improves training efficiency and mitigates vanishing gradient issues in deep neural networks [@yeoh2021emergence ; @awan2021improved].
+
+ReLU facilitates faster training and is known to overcome vanishing gradients when compared to traditional sigmoid and tanh functions in deep learning architectures.
 
 **3. Pooling Layer**
 
-Pooling layers reduce the spatial dimensions of feature maps while preserving the most important information. Max pooling, one of the most commonly used pooling techniques, selects the maximum value within a sliding window. This operation helps reduce computational complexity and improves model robustness to small spatial variations [@yeoh2021emergence]  
+The pooling layers reduce the spatial dimensions of the feature maps extracted from input images keeping only the most relevant information. Among the different types of pooling operations, max pooling is the most popular one. In the max pooling approach, the model selects the maximum value within a defined window during a sliding operation. It helps in reducing the number of parameters and contributes to the model’s robustness for small spatial variations across images.
 
 **4. Fully Connected Layer**
 
-Performs classification based on extracted features.These layers combine the learned representations to predict the target class, such as the presence or severity of knee pathology [@awan2021improved].
+These classification layers learn features from previous layers and use these features to determine a target classification (e.g. the presence of a knee pathology, severity of knee pathology, etc.), such as in [@awan2021improved] improved knee-OD diagnostic model.
 
 **5. Output Layer**
 
 Uses Softmax (multi-class) or Sigmoid (binary/multi-label).
 
-In medical imaging, CNNs have demonstrated strong performance in MRI-based diagnosis and tissue segmentation[@liu2018deep; @zhou2018deep].
+Deep learning techniques, particularly convolutional neural networks (CNNs), have achieved outstanding performance in several medical imaging applications, including MRI-based disease diagnosis and tissue segmentation.
 
 ---
 
 ### Types of CNN:
 
-CNNs are categorized based on the dimensionality of the input data and the sliding direction of the kernel:
+Deep Neural Networks known as CNNs are categorized based on the dimensionality of the input data and the sliding direction of the kernel.
 
-| Type   | Input Data Examples | Kernel Movement |
+| Feature | Type of input data used to construct the feature | Direction of movement allowed for the kernel in the feature |
 |--------|--------------------|-----------------|
-| 1D CNN | Time-series, audio, ECG signals (Ige & Sibiya, 2024). | Slides along one dimension (time/sequence). |
-| 2D CNN | Grayscale/RGB images, medical X-rays (Taye, 2023). | Slides along two dimensions (height and width). |
-| 3D CNN | Videos, MRI/CT scans, 3D point clouds (Guida et al., 2021). | Slides along three dimensions (height, width, and depth). |
-: Table 1: Types of Convolutional Neural Networks {.striped .hover .custom-table}
+| 1D CNN | Time-series, audio, ECG signals (Ige & Sibiya, 2024). | These filters move across the 1D data (time/sequence) instead of the regular 2D images.
+| 2D CNN | 2D input features (e.g. 2D images such as: Grayscale/RGB images, medical X-rays). | 2D regions (slides over height dimension, then width dimension). |
+| 3D CNN | Videos, MRI/CT scans, 3D point clouds [@guida2021knee]. | The network slides along three dimensions (height, width, and depth). |
+: Single and Multi-Path Architectures in CNNs - Table 1
 
 ---
 
@@ -155,39 +156,39 @@ This operation extracts volumetric features across depth, height, and width.[@gu
 
 #### Applications in Knee MRI Analysis
 
-3D CNNs have demonstrated strong performance in musculoskeletal imaging, particularly in knee MRI analysis.
+3D Convolutional Neural Networks (3D CNN) have shown great potential in processing musculoskeletal images, especially knee MRI.
 
-- **Tissue Segmentation:**  [@liu2018deep]  and [@zhou2018deep] have used deep CNN-based architectures to achieve the segmentation of knee joint anatomy, which has demonstrated better accuracy in tissue segmentation..
+- **Tissue Segmentation:** The techniques in this subcategory, including several deep CNN-based architectures developed in 2018, such as DDN, DCAN, and AC-Net, have been able to achieve results for knee joint anatomy segmentation and improved tissue segmentation accuracy by [@liu2018deep] and [@zhou2018deep].
 
-- **Meniscus and Cartilage Degeneration Detection:** [@pedoia20193d]  have used 3D CNN architectures to identify and stage the degenerative morphological changes in meniscus and patellofemoral cartilage, which emphasizes the need to extract volumetric features.
+- **Meniscus and Cartilage Degeneration Detection:** In[@pedoia20193d], 3D CNNs were used to identify and staging of degenerative changes of meniscus and patellofemoral cartilage. Special attention was paid to extract volumetric features from knee MRI scans.
 
-- **Osteoarthritis Classification:**  [@guida2021knee] have suggested a model based on the 3D CNN technique for the classification of knee osteoarthritis   using MRI, showing that the performance is enhanced compared to the 2D technique. Similarly, the effectiveness of the  CNN technique has been shown in the classification of osteoarthritis severity assessment by [@rani2024deep].
+- **Osteoarthritis Classification:** Classification of knee osteoarthritis in knee by [@guida2021knee] using MRI scan using deep learning technique 3D CNN. It achieves higher accuracy compared to the 2D technique. Classification and severity assessment of osteoarthritis using CNN technique is also shown by [@rani2024deep].
 
-- **ACL Tear Detection:** [@bien2018deep] suggested the MRNet deep learning technique for the diagnosis of knee MRI. Recently, more efficient learning techniques such as self-supervised learning have been used in the detection of ACL tears using the MRI scan, as suggested in the study by [@aidarkhan2025self].
+- **ACL Tear Detection:** ACL tears can be detected from the knee MRI scan using the deep learning technique MRNet proposed in[@bien2018deep] and then improved using more efficient learning techniques such as self-supervised learning.
 
-- **Multimodal and Federated Learning Approaches:** New frameworks have been developed to combine 3D CNNs with federated and few-shot learning techniques to achieve better generalization across institutions [@goel2025federated]. Moreover, the contribution of AI-based multimodal systems to the development of orthopedic diagnostics has been emphasized in the study done by [@oettl2025beyond].
+- **Multimodal and Federated Learning Approaches** New frameworks have been derived to combine 3D CNNs with federated and few-shot learning techniques to improve generalization across institutions. The potential of AI-based multimodal systems for orthopedic diagnostics has been demonstrated.
 
 #### Performance and Advantages:
 
 3D CNNs provide significant benefits in medical imaging:
 
-- **Volumetric Context:** They extract features from adjacent slices, detecting biomarkers (like cartilage degradation) that may be invisible in   a single 2D image [@guida2021knee].
-	
-- **Higher Accuracy:** Brain and knee imaging studies have established that the 3D model has higher dice scores and accuracy compared to the    2D and 2.5D approaches [@avesta2023comparing;@guida2021knee ].
-	
-- **Efficiency in Convergence:** 3D models can converge 20% to 40% faster during training than their 2D counterparts when dealing with volumetric data [@avesta2023comparing].
+- **Volumetric Context:** Features from adjacent slices are taken into account, bio-markers for certain conditions, such as cartilage degradation, that are not present in single 2D images can be detected.
+
+- **Higher Accuracy:** Evidence from brain and knee imaging studies shows that 3D model has higher accuracy compared to 2D and 2.5D approaches.
+
+- **Efficiency in Convergence:** For volumetric data, 3D models can often converge 20% to 40% faster than their 2D equivalents as the model learns.
 
 #### Limitations and Assumptions
 
 Despite their power, 3D CNNs face specific challenges:
 
-- **Computational Cost:** 3D models require significantly more computational memory (often up to 20 times more) compared to 2D models [@avesta2023comparing].
-	
-- **Large Data Requirements:** 
-For CNNs, a large annotated dataset is required to achieve optimal performance. However, in the context of medical image datasets, the datasets are limited in size and expensive to label, thereby limiting the generalization of the models [@bien2018deep; @yeoh2021emergence]. Recent advances, such as self-supervised learning, aim to address this limitation [@aidarkhan2025self].   
+- **Computational Cost:** 3D models need huge amount of memory to run which is around 20 times bigger than 2D models to view and interact [@avesta2023comparing].
+
+- **Large Data Requirements:**
+Large annotated datasets are the primary requirement to achieve the highest accuracy for CNNs. However, for medical image datasets, these datasets are small and expensive to obtain and manually label, which in turn hampers the generalisation performance of the learnt models. In recent years, self-supervised learning has emerged as a promising technique for expanding the current repertoire of CNNs to tackle these challenges.
 
 - **Risk of Overfitting:**
-Due to the limited nature of the medical image dataset, CNNs tend to overfit, especially when using a deep 3D structure [@awan2021improved; @rani2024deep]. 
+One of the major challenges faced by the researchers during CT image segmentation is the overfitting of the CNN due to limited number of medical images. Usually 3D CNNs are employed to tackle this problem which also increase the overfitting because of depth. 
 
 ## 3 Analysis & Results:
 
