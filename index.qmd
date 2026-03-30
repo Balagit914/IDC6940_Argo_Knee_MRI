@@ -192,7 +192,8 @@ One of the major challenges faced by the researchers during CT image segmentatio
 
 ## 3 Analysis & Results:
 
-#### 3.1 Dataset Description:
+
+**3.1 Dataset Description:**
 
 The MRNet dataset, a publicly available set of knee MRI scans gathered by the School of Medicine at Stanford University, is used in this research. The dataset contains images gathered from clinical studies performed at the Stanford University Medical Center over an eleven-year period from 2001 to 2012.
 The structure of the dataset is divided into a training and validation set, with each MRI study labeled for three different diagnoses: 
@@ -201,27 +202,34 @@ The structure of the dataset is divided into a training and validation set, with
 - Tears of the anterior cruciate ligament (ACL),
 - Meniscal injuries.
 
+
 **3.1.2 Data Organization**
 The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.
 
-**3.1.3 Problem Formulation**
 
-The task of clinical diagnosis is posed as a binary classification problem, where the goal of the model is to distinguish between ACL-intact and ACL-compromised knee examinations. Mathematically, the binary classification problem can be stated as:
+**3.1.3 Problem Formulation:**
 
-$$
-y=\begin{cases}
-0 & \text{No ACL tear present} \\ 
-1 & \text{ACL tear present} 
-\end{cases}
-$$
-This problem statement allows the construction of a supervised learning model that can be used to automatically identify ACL tears from multi-planar MRI images.
+This study aims to investigate the effectiveness of a 3D Convolutional Neural Network (3D CNN) in automatically detecting knee abnormalities—including ACL tears, meniscus tears, and general abnormalities—from volumetric MRI scans in the MRNet dataset.
+
+The central research question is:
+Can a 3D CNN effectively learn spatial and anatomical features from multi-plane MRI volumes to accurately detect multiple types of knee injuries?
+
+To address this, the proposed model leverages:
+
+- 3D convolutional layers for volumetric feature extraction
+- Multi-plane fusion to integrate complementary anatomical views
+- Supervised learning to identify diagnostic patterns
+
+This formulation enables the development of an automated system capable of assisting in clinical diagnosis by providing reliable predictions across multiple knee conditions.
+
 
 
 #### 3.2 Dataset Visualization & Exploratory Analysis:
 
 Exploratory Data Analysis (EDA) is a fundamental component of any machine learning model's pipeline. It is critical to understand the structure and composition of the data before moving forward to train any model. This section of the report outlines a detailed exploratory data analysis of the MRNet dataset, proposed by [@bien2018deep]. in 2018, which consists of knee MRI images from three different imaging planes, i.e., sagittal, coronal, and axial. Each of these imaging sessions is associated with a binary variable representing the ACL tear condition of the knee. The class balance, volumetric structure, imaging characteristics, and cross-plane imaging of the MRNet dataset have all been addressed in the following visualizations, which were critical to the decisions made in the subsequent sections of this report.
 
-**3.2.1 Class Distribution**
+
+**3.2.1 Class Distribution:**
 
 
 <details class="collapase">
@@ -422,9 +430,9 @@ knitr::include_graphics("figures/Pixel Intensity.png")
 </center>
 
 
-# 3.3 Modeling and Results
+### 3.3 Modeling and Results
 
-##3.3.1 Data Preprocessing
+**3.3.1 Data Preprocessing:**
 
 
 Our data preprocessing focused on preparing 3D MRI volumes for input into a deep learning model. The dataset consisted of knee MRI scans stored as NumPy arrays, along with three associated labels for each exam: ACL tear, meniscus tear, and abnormality.
@@ -450,7 +458,7 @@ valid_loader = DataLoader(valid_dataset, batch_size=2, shuffle=False)
 
 </details>
 
-## 3.3.2 3D CNN Model Architecture
+**3.3.2 3D CNN Model Architecture:**
 
 We implemented a custom 3D convolutional neural network with residual connections, inspired by 3D ResNet architectures. The model consists of four residual blocks with increasing channels, followed by global average pooling. A learnable plane-attention mechanism was applied to fuse features from sagittal, coronal, and axial planes. The final fully connected layer outputs three values corresponding to the three prediction tasks: ACL tear, meniscus tear, and abnormality.
 
@@ -469,7 +477,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=2e-4)
 
 </details>
 
-## 3.3.3 Model Training
+**3.3.3 Model Training**
 
 The model was trained using batches of multi-plane MRI volumes. Binary Cross-Entropy loss with logits was used to accommodate multi-label classification, and class weights were applied to mitigate label imbalance. The Adam optimizer updated the network weights. Mixed-precision training was optionally used to reduce memory consumption.
 
@@ -500,9 +508,9 @@ for epoch in range(epochs):
 
 </details>    
 
-# 3.4 Results
+### 3.4 Results
     
-## 3.4.1 Training Performance
+**3.4.1 Training Performance**
 
 The training loss consistently decreased over 20 epochs, indicating the model successfully learned meaningful patterns from the MRI data. Early epochs showed rapid improvement, followed by slower convergence in later epochs. Minor fluctuations may indicate slight overfitting, but overall convergence was stable.
 
@@ -524,11 +532,11 @@ plt.show()
 </details> 
 
 <center>
-![Training Loss Curve](Images/Training Loss Curve.png)
+![Training Loss Curve](Images/Results/Training Loss Curve.png)
 
 </center>
 
-## 3.4.2 ROC Curves
+**3.4.2 ROC Curves**
 
 The Receiver Operating Characteristic (ROC) curves were plotted to evaluate the model’s ability to distinguish between positive and negative cases across the three classification tasks: ACL tear, meniscus tear, and abnormality detection.
 
@@ -555,8 +563,9 @@ plt.show()
 
 
 <center>
-![Training Loss Curve](Images/ROC.png)
+![ROC Curves](Images/Results/ROC Curves.png)
 </center>
+
 
 
 The Area Under the Curve (AUC) values obtained are as follows:
@@ -571,7 +580,9 @@ Among the three tasks, abnormality detection shows the highest performance (AUC 
 
 
 
-## 3.4.3 Confusion Matrix Heatmaps
+
+**3.4.3 Confusion Matrix Heatmaps**
+
 
 Confusion matrices were used to evaluate the classification performance of the model for each task: ACL tear, meniscus tear, and abnormality detection. Each matrix presents the number of true negatives (TN), false positives (FP), false negatives (FN), and true positives (TP).
 
@@ -593,9 +604,10 @@ plt.show()
 </details>
 
 <center>
-![Training Loss Curve](Images/Confusion Matrix.png)
+![Confusion Matrix](Images/Results/Confusion Matrix.png)
 
 </center>
+
 
 - The model demonstrates strong detection capability, particularly for abnormalities and meniscus tears.
 
@@ -605,7 +617,9 @@ plt.show()
 
 This behavior is consistent with the applied class weighting and thresholding strategy, which prioritizes capturing positive cases.
 
-## 3.4.4 Probability Distribution Plots
+
+**3.4.4 Probability Distribution Plots**
+
 
 - **ACL:**
 
@@ -638,19 +652,19 @@ for i, name in enumerate(labels_names):
 </details>
 
 <center>
-![Training Loss Curve](Images/ACL Probability.png)
+![ACL Probability Distribution](Images/Results/ACL Probability Dist.png)
 </center>
 
 <center>
-![Training Loss Curve](Images/Meniscus Probability.png)
+![Meniscus Probability Distribution](Images/Results/Meniscus Probability Dist.png)
 </center>
 
 <center>
-![Training Loss Curve](Images/Abnormal Probability.png)
+![Abnormal Probability Distribution](Images/Results/Probability Distribution.png)
 </center>
 
 
-## 3.4.5 Plane Attention Weights
+**3.4.5 Plane Attention Weights**
 
 The learned plane-attention weights indicate the relative importance of sagittal, coronal, and axial planes for the predictions.
 
@@ -671,8 +685,9 @@ plt.show()
 </details> 
 
 <center>
-![Training Loss Curve](Images/Plane Weights.png)
+![Plane Attention Weights](Images/Results/Plane Attention.png)
 </center>
+
 
 Axial has the Highest Importance (~0.36): The model relies most heavily on the Axial plane. This suggests that, for the specific condition being predicted, the Axial view contains the most distinct features or "evidence" for the model's decision-making process.
 
@@ -680,7 +695,8 @@ Sagittal is a Close Second (~0.35): The importance of the Sagittal plane is near
 
 Coronal has the Lowest Importance (~0.29): While still contributing significantly, the Coronal plane is weighted the least. This implies that the features found in the Coronal view are either more redundant or slightly less informative for the final classification than the other two.
 
-## 3.4.6 Validation Metrics
+**3.4.6 Validation Metrics**
+
 
 After training, the model was evaluated on the validation dataset. Predictions were converted into probabilities using a sigmoid function and then thresholded to produce binary outputs. Sensitivity, specificity, accuracy, and AUC-ROC were calculated for each condition.
 
@@ -714,7 +730,7 @@ labels_names = ["ACL","Meniscus","Abnormal"]
 ![Training Loss Curve](Images/Metrics.png)
 
 
-# 3.4.7 Summary of the evaluation metrics:
+**3.4.7 Summary of the evaluation metrics:**
 
 - **ACL:** 
 
@@ -729,7 +745,7 @@ Very high sensitivity (0.923) but low specificity (0.382), indicating overpredic
 Very high sensitivity (0.926) but low specificity (0.400), suggesting the model frequently flags normal cases as abnormal. AUC is 0.806.
 
 
-These results suggest that the model detects positive cases effectively but tends to overpredict meniscus tears and abnormalities. Threshold tuning, class balancing, or loss function adjustments may improve specificity and overall reliability for clinical applicatio.
+These results suggest that the model detects positive cases effectively but tends to overpredict meniscus tears and abnormalities. Threshold tuning, class balancing, or loss function adjustments may improve specificity and overall reliability for clinical application.
 
 
 ## Conclusion
