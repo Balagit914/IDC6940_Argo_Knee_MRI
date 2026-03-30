@@ -31,29 +31,30 @@ Slides: [slides.html](slides.html){target="_blank"} ( Go to `slides.qmd`
 to edit)
 
 ## 1 Introduction
-The incidence of musculoskeletal disorders, especially those involving the knee, including osteoarthritis (OA), anterior cruciate ligament (ACL) injuries, and meniscal injuries, is a major global healthcare concern that has a profound effect on the mobility and quality of life of affected patients. Conventional diagnostic tools, especially X-ray radiography, have several limitations, including the inability to image soft tissues, often resulting in the missed diagnosis of early degenerative changes until late-stage damage has been incurred [@panwar2025early]. Magnetic Resonance Imaging (MRI) has recently become the standard diagnostic tool for musculoskeletal imaging because of its high contrast resolution and multi-planar imaging capabilities, which enable the detailed evaluation of ligaments, cartilage, and bone marrow [@qiu2021fusion]. However, the current manual analysis of knee MRI scans is a time-consuming and error-prone process, especially with regard to inter-observer variability and the high cognitive load of radiologists, which can result in delays in diagnosis and treatment [@bien2018deep].
 
-Conventional MRI assessment of the knee relies on manual segmentation of anatomical structures, which is time-consuming and prone to variability. Zhou et al. (2018) demonstrated that a deep convolutional neural network can automatically segment knee joint tissues, including cartilage and meniscus, providing accurate and consistent delineation to support more efficient analysis of knee anatomy and pathology [@zhou2018deep]
+Musculoskeletal disorders affecting knee and related tissues like osteoarthritis, ACL injury and meniscal injury are widespread and greatly affect quality of life and mobility of patients globally. Current methods for diagnosis include X-ray radiography but these are ineffective for soft tissue diagnosis and, hence, diagnosis of early changes are often delayed until knee is significantly degenerated [@panwar2025early]. On the other hand, magnetic resonance imaging has emerged as a leading diagnostic method for musculoskeletal and sports medicine imaging due to several features, like high contrast resolution and multiplanar imaging, which can aid in thorough evaluation of large joints, like knee along with ligaments, cartilage, bone, tendons, and muscles, and provides distinct images of different soft tissues to get a complete overview [@qiu2021fusion]. However, current methods of MRI scans analysis manually pose huge challenge for radiologists due to time consumption, high rate of errors, low reproducibility, heavy cognitive load, and high inter-observer variability [@bien2018deep].
 
-The synergy of artificial intelligence, particularly deep learning (DL) and Convolutional Neural Networks (CNNs), provides a revolutionary approach to overcome these diagnostic hurdles by enabling an automated, objective, and scalable analysis of complex medical images [@oettl2025beyond]. CNNs are especially suited for medical imaging applications because they have the capability to automatically learn hierarchical feature representations directly from raw pixel data, including subtle pathological patterns that may not be visible to the human eye [@yeoh2021emergence]. Recent breakthroughs have shown the effectiveness of both 2D and 3D CNN models for segmenting musculoskeletal tissues and grading the severity of structural damage [@liu2018deep; @guida2021knee]. However, there are still major challenges to overcome in the current state of research, such as the requirement for large and high-quality annotated datasets and the lack of generalizability of models across different MRI protocols and hardware configurations [@goel2025federated].
+Manual segmentation of knee structures is a time-consuming step in MRI-based knee assessment. Deep learning methods can potentially improve this process by enabling fast and reproducible automated segmentation of knee tissues. In their study, [@zhou2018deep] developed a deep convolutional neural network for automatic cartilage and meniscus segmentation of knee joints, achieving highly accurate results for multiple types of knee tissues, to facilitate efficient assessment of knee anatomy and pathology.
 
-To overcome these challenges, there is an urgent need for the development of efficient automated systems that are capable of multi-pathology detection and grading to help doctors in high-throughput settings [@astuto2021automatic]. Although specialized models have proved to be successful in specific tasks like the detection of ACL tears using self-supervised learning techniques [@aidarkhan2025self] or  staging meniscus degeneration [@pedoia20193d], the development of a comprehensive framework that can distinguish between different simultaneous knee injuries is still an intricate challenge. Using the latest advancements in CNN models, this research aims to develop an automated system for the detection and grading of knee pathologies from MRI images, which can eventually help in providing better patient care strategies for early intervention [@awan2021improved].
+State-of-the-art artificial intelligence techniques based on deep learning (DL), particularly deep learning Convolutional Neural Networks (CNNs), allow for automated, objective, and scaleable image analysis, which constitutes a major paradigm shift for overcoming challenges in medical diagnostics. CNNs are especially suited for the analysis of medical images since they have the ability to learn automatically hierarchical features directly from raw pixel data. Including pathological changes that the human eye cannot even detect. 2D and 3D CNN models have recently shown promising results in the segmentation and even grading of musculoskeletal tissues and degree of damage of their structures. Although crucial advances have been achieved, however, there are more important challenges to be addressed, including the acquisition and labeling of a large, high-quality dataset and the lack of generalization capability in different MRI platforms and hardware.
 
-Manual assessment of knee osteoarthritis severity is often time-consuming and subjective. A recent study demonstrated that a CNN-based deep learning model can automatically detect and grade knee osteoarthritis from imaging data, providing accurate and consistent classification that can support faster and more reliable diagnosis.[@rani2024deep]
+Fast diagnosis and monitoring of patients is a current challenge. To address this problem, efficient automated systems for the multiplex detection in time-consuming workflows are needed to help doctors. The problem of discrimination of multiple co-occurring knee injuries in the knee is still an open challenging problem. Based on recent CNN models, in this paper we present an automated system for the detection of various knee common injuries and degeneration from knee MRI images. The system can enable early intervention and help develop strategies for better patient care.
 
-This research work is driven by the need to enhance the accuracy and efficiency of diagnosis in orthopedic radiology.
+Knee osteoarthritis assessment based on visual inspection of clinical images is traditionally time-consuming and operator-dependent. Recent studies indicate that knee osteoarthritis can be automatically detected from imaging data using a deep learning-based convolutional neural network (CNN) approach, resulting in robust and accurate classification.
+
+In this work we aim to develop a 3D Convolutional Neural Network (3D CNN) that can reliably identify whether an ACL is torn or not from a volumetric knee MRI. We utilize the Stanford MRNet dataset and evaluate our model as a binary classification problem between torn ACL and intact ACL. We utilize AUC, sensitivity and specificity as our main performance metrics for evaluation. We also train and evaluate a secondary comparison model based on a pre-trained 3D ResNet-18 architecture.
 
 ## 2 Methodology
 
 ### Convolutional Neural Network (CNN)
 
-A Convolutional Neural Network (CNN) is a deep learning model specifically designed to process structured, grid-organized data such as images. CNNs have been highly successful in image processing and medical imaging because they can automatically learn relevant features directly from input images, eliminating the need for manual feature extraction.[@yeoh2021emergence;@awan2021improved]
+A Convolutional Neural Network or (CNN) is a deep learning model which processes structured data. CNNs have been adopted due to their remarkable efficiency in image processing and medical imaging applications. In such systems, the CNN can automatically extract vital features directly from images without the requirement for manually extracting features.
 
-In the early layers, CNNs capture fundamental spatial characteristics such as gradients and structural boundaries. As the network becomes deeper, it learns increasingly complex and abstract representations, including pathological changes like cartilage degeneration or disruption of the fibers of the anterior cruciate ligament(ACL).[@astuto2021automatic]
+In the early layers of a deep CNN, it is possible to observe the learning of basic spatial features, such as gradients and structural contours. In the subsequent layers, the network continues to learn more complex and abstract features related to normal and pathological tissues, such as severely degenerated cartilage or ACL fibers disruption.
 
-While 1D CNNs are typically used for sequential data and 2D CNNs for individual image slices, 3D CNNs extend convolution operations into the volumetric domain by incorporating depth in addition to height and width. This is particularly important in imaging modalities such as MRI, where spatial continuity across slices is essential.[@guida2021knee]
+Commonly, 1D, 2D or even 3D CNNs are employed for processing sequential data. For image data, however, 2D CNNs are standard practice since individual 2D slices are processed. For volumetric data, however, a 3D convolution operation can be performed that considers not only the neighbour pixels in height and width but also in depth. This is particularly relevant for MRI data, where slices are highly correlated.
 
-In knee MRI applications, 3D CNNs have demonstrated superior performance in detecting and grading ACL tears, meniscal degeneration, and osteoarthritis severity. By preserving inter-slice spatial relationships, these models provide a more comprehensive understanding of knee anatomy, positioning 3D CNNs at the forefront of advanced artificial intelligence systems in orthopedic imaging [@bien2018deep; @guida2021knee; @oettl2025beyond]..
+Deep learning techniques such as 3D CNNs have achieved state-of-the-art results in knee MRI for the detection and grading of ACL tears as well as for the assessment of meniscal tears and osteoarthritis. Inter-slice spatial relationships are crucial for the adequate understanding of 3D knee anatomy, and 3D CNNs are currently the most advanced artificial intelligence approach in orthopedic imaging, in pursuit of computerized diagnosis.
 
 ### Basic Architecture of a CNN
 
@@ -84,56 +85,57 @@ This operation allows CNNs to learn spatially localized features and is fundamen
 	
 **2. Activation Function**
 
-Non-linear activation functions are applied after convolution to introduce non-linearity into the model, enabling it to learn complex patterns. The most commonly used activation function is the Rectified Linear Unit (ReLU):
+In order to enable a deep neural network to learn also complex features, it is common to use non-linear activation functions after the convolutional layers. The most common used activation function in that context is the Rectified Linear Unit (ReLU).
 
 
 $$
 f(x) = \max(0, x)
 $$
-ReLU improves training efficiency and mitigates vanishing gradient issues in deep neural networks [@yeoh2021emergence ; @awan2021improved].
+
+ReLU facilitates faster training and is known to overcome vanishing gradients when compared to traditional sigmoid and tanh functions in deep learning architectures.
 
 **3. Pooling Layer**
 
-Pooling layers reduce the spatial dimensions of feature maps while preserving the most important information. Max pooling, one of the most commonly used pooling techniques, selects the maximum value within a sliding window. This operation helps reduce computational complexity and improves model robustness to small spatial variations [@yeoh2021emergence]  
+The pooling layers reduce the spatial dimensions of the feature maps extracted from input images keeping only the most relevant information. Among the different types of pooling operations, max pooling is the most popular one. In the max pooling approach, the model selects the maximum value within a defined window during a sliding operation. It helps in reducing the number of parameters and contributes to the model’s robustness for small spatial variations across images.
 
 **4. Fully Connected Layer**
 
-Performs classification based on extracted features.These layers combine the learned representations to predict the target class, such as the presence or severity of knee pathology [@awan2021improved].
+These classification layers learn features from previous layers and use these features to determine a target classification (e.g. the presence of a knee pathology, severity of knee pathology, etc.), such as in [@awan2021improved] improved knee-OD diagnostic model.
 
 **5. Output Layer**
 
 Uses Softmax (multi-class) or Sigmoid (binary/multi-label).
 
-In medical imaging, CNNs have demonstrated strong performance in MRI-based diagnosis and tissue segmentation[@liu2018deep; @zhou2018deep].
+Deep learning techniques, particularly convolutional neural networks (CNNs), have achieved outstanding performance in several medical imaging applications, including MRI-based disease diagnosis and tissue segmentation.
 
 ---
 
 ### Types of CNN:
 
-CNNs are categorized based on the dimensionality of the input data and the sliding direction of the kernel:
+Deep Neural Networks known as CNNs are categorized based on the dimensionality of the input data and the sliding direction of the kernel.
 
-| Type   | Input Data Examples | Kernel Movement |
+| Feature | Type of input data used to construct the feature | Direction of movement allowed for the kernel in the feature |
 |--------|--------------------|-----------------|
-| 1D CNN | Time-series, audio, ECG signals (Ige & Sibiya, 2024). | Slides along one dimension (time/sequence). |
-| 2D CNN | Grayscale/RGB images, medical X-rays (Taye, 2023). | Slides along two dimensions (height and width). |
-| 3D CNN | Videos, MRI/CT scans, 3D point clouds (Guida et al., 2021). | Slides along three dimensions (height, width, and depth). |
-: Table 1: Types of Convolutional Neural Networks {.striped .hover .custom-table}
+| 1D CNN | Time-series, audio, ECG signals (Ige & Sibiya, 2024). | These filters move across the 1D data (time/sequence) instead of the regular 2D images.
+| 2D CNN | 2D input features (e.g. 2D images such as: Grayscale/RGB images, medical X-rays). | 2D regions (slides over height dimension, then width dimension). |
+| 3D CNN | Videos, MRI/CT scans, 3D point clouds [@guida2021knee]. | The network slides along three dimensions (height, width, and depth). |
+: Single and Multi-Path Architectures in CNNs - Table 1
 
 ---
 
 ### 3D Convolutional Neural Networks:
 
-A 3D Convolutional Neural Network (3D CNN) is an extension of the conventional 2D CNN architecture designed to process volumetric data by applying three-dimensional convolutional kernels across height, width, and depth. Unlike 2D CNNs, which analyze individual image slices independently, 3D CNNs preserve inter-slice spatial continuity, enabling the model to learn contextual anatomical relationships throughout the entire volume. This characteristic makes them particularly suitable for medical imaging modalities such as MRI, where structural information spans multiple slices.
+A 3D Convolutional Neural Network (3D CNN) is a natural extension to the standard 2D Convolutional Neural Network (2D CNN) architecture for handling volumetric data by employing three-dimensional convolutional kernels that slide over all three spatial dimensions (i.e., height, width, and depth). Unlike 2D CNNs, which treat each 2D image slice independently, 3D CNNs maintain the spatial relationships between slices and leverage these relationships to learn more effective anatomical features from the entire volume. This architecture is especially beneficial for many medical imaging modalities, such as MRI, where relevant information extends several slices in depth.
 
-In medical image analysis, 3D CNNs typically consist of stacked 3D convolutional layers, nonlinear activation functions, 3D pooling layers, and fully connected layers. The initial layers are responsible for learning low-level volumetric features, including edges and texture patterns, while deeper layers are geared toward learning high-level representations of anatomical structures and abnormalities. Although 3D CNNs are computationally expensive compared to 2D CNNs, 3D CNNs are capable of achieving state-of-the-art results in volumetric classification, detection, and segmentation tasks.
+Current approaches for 3D medical image analysis using deep learning methods are mostly based on 3D CNNs. Typically, a 3D CNN consists of repeated 3D convolutional layers (convolutions) followed by nonlinear activation functions, 3D pooling layers (down-sampling) and fully connected layers (classification). The early layers learn low-level volumetric features (edges, textures etc.) and the deeper layers learn high-level features representing organs or diseases. In terms of computational costs 3D CNNs are significantly more expensive than 2D CNNs but yield state of the art results in volumetric classification, detection and segmentation tasks.
 
-In the analysis of knee MRI scans, 3D CNNs have proven to perform well in different diagnostic tasks. The work by Nicholas Bien on the development of MRNet [@bien2018deep] proved the potential of deep learning networks in diagnosing anterior cruciate ligament tears and meniscal abnormalities with high accuracy. Following the success of MRNet,[@pedoia20193d]  adopted the application of 3D CNNs in the detection and staging of meniscal and patellofemoral cartilage degeneration.[@guida2021knee] adopted the 3D CNN framework in the classification of knee osteoarthritis based on MRI scans.
+Three-dimensional convolutional neural networks (3D CNNs) have been successfully employed in multiple tasks in knee MRI analysis. Building on these results, in this work, we develop a deep learning network, MRNet, capable of accurately diagnosing anterior cruciate ligament tears and abnormalities of the meniscal structures. In another work,[@pedoia20193d]  3D CNNs were employed for the detection. In osteoarthritis, knee MRI scans can classify the severity of knee osteoarthritis. In this work,[@guida2021knee]  a 3D CNN was trained to classify knee MRI scans according to the degree of knee osteoarthritis.
 
-Apart from classification, 3D CNNs have also been used for anatomical segmentation.[@zhou2018deep; @liu2018deep] showed that deep convolutional networks can be used along with deformable modeling techniques to segment the tissues of the knee joint accurately, which is very important for quantitative musculoskeletal assessment.
+Besides classification, 3D CNNs have also been explored for various anatomical segmentation tasks. For example, [@zhou2018deep], [@liu2018deep] developed deep convolutional networks that, combined with deformable modeling, enable accurate tissue segmentation of the knee joint, an essential component for quantitative musculoskeletal assessment.
 
-Recent trends in research are further enhancing the capabilities of CNN-based systems. Self-supervised learning strategies such as BYOL have been explored for ACL tear detection to reduce reliance on large labeled datasets [@aidarkhan2025self]. Federated learning techniques have been proposed for developing systems that can perform knee injuries across multiple institutions without compromising patient data [@goel2025federated]. Most recently, emerging frameworks for multimodal and continuous monitoring are establishing AI systems as an integral part of future orthopedic care systems [@oettl2025beyond]. While alternative models such as Vision Transformers are being explored for developing systems that can grade the severity of osteoarthritis [@panwar2025early], 3D CNNs remain an established solution for volumetric knee MRI analysis.
+Researches have made further progress in enhancing capabilities of CNN-based systems for improving knee injuries, especially ACL tear detection and knee osteoarthritis grading. Self-supervised learning with methods like BYOL can be used to reduce the need of large datasets with corresponding labels. Instead, federated learning approach can be used to develop and share a system for knee injuries across institutions without even sharing patient data. Emerging frameworks for multimodal and continuous monitoring suggest that developed AI systems will be integrated into future orthopedic care systems. Additionally, alternative models like Vision Transformers are being explored for osteoarthritis grading. 3D CNNs are still one of the preferred solutions for volumetric knee MRI analysis.
 
-Overall, 3D CNNs have an essential role to play in musculoskeletal imaging, as they can be utilized for the detection, classification, grading, and segmentation of knee pathologies in an automated manner. The 3D spatial relationships can be preserved with 3D CNNs, thus offering an anatomical understanding.
+3D CNNs have significant potential in musculoskeletal imaging for the detection, classification, grading and segmentation of knee pathologies in an automated fashion. This architecture preserves the 3D spatial relationships within the images enabling an anatomical understanding of the disease.
 
 The 3D convolution is defined as:
   
@@ -154,43 +156,44 @@ This operation extracts volumetric features across depth, height, and width.[@gu
 
 #### Applications in Knee MRI Analysis
 
-3D CNNs have demonstrated strong performance in musculoskeletal imaging, particularly in knee MRI analysis.
+3D Convolutional Neural Networks (3D CNN) have shown great potential in processing musculoskeletal images, especially knee MRI.
 
-- **Tissue Segmentation:**  [@liu2018deep]  and [@zhou2018deep] have used deep CNN-based architectures to achieve the segmentation of knee joint anatomy, which has demonstrated better accuracy in tissue segmentation..
+- **Tissue Segmentation:** The techniques in this subcategory, including several deep CNN-based architectures developed in 2018, such as DDN, DCAN, and AC-Net, have been able to achieve results for knee joint anatomy segmentation and improved tissue segmentation accuracy by [@liu2018deep] and [@zhou2018deep].
 
-- **Meniscus and Cartilage Degeneration Detection:** [@pedoia20193d]  have used 3D CNN architectures to identify and stage the degenerative morphological changes in meniscus and patellofemoral cartilage, which emphasizes the need to extract volumetric features.
+- **Meniscus and Cartilage Degeneration Detection:** In[@pedoia20193d], 3D CNNs were used to identify and staging of degenerative changes of meniscus and patellofemoral cartilage. Special attention was paid to extract volumetric features from knee MRI scans.
 
-- **Osteoarthritis Classification:**  [@guida2021knee] have suggested a model based on the 3D CNN technique for the classification of knee osteoarthritis   using MRI, showing that the performance is enhanced compared to the 2D technique. Similarly, the effectiveness of the  CNN technique has been shown in the classification of osteoarthritis severity assessment by [@rani2024deep].
+- **Osteoarthritis Classification:** Classification of knee osteoarthritis in knee by [@guida2021knee] using MRI scan using deep learning technique 3D CNN. It achieves higher accuracy compared to the 2D technique. Classification and severity assessment of osteoarthritis using CNN technique is also shown by [@rani2024deep].
 
-- **ACL Tear Detection:** [@bien2018deep] suggested the MRNet deep learning technique for the diagnosis of knee MRI. Recently, more efficient learning techniques such as self-supervised learning have been used in the detection of ACL tears using the MRI scan, as suggested in the study by [@aidarkhan2025self].
+- **ACL Tear Detection:** ACL tears can be detected from the knee MRI scan using the deep learning technique MRNet proposed in[@bien2018deep] and then improved using more efficient learning techniques such as self-supervised learning.
 
-- **Multimodal and Federated Learning Approaches:** New frameworks have been developed to combine 3D CNNs with federated and few-shot learning techniques to achieve better generalization across institutions [@goel2025federated]. Moreover, the contribution of AI-based multimodal systems to the development of orthopedic diagnostics has been emphasized in the study done by [@oettl2025beyond].
+- **Multimodal and Federated Learning Approaches** New frameworks have been derived to combine 3D CNNs with federated and few-shot learning techniques to improve generalization across institutions. The potential of AI-based multimodal systems for orthopedic diagnostics has been demonstrated.
 
 #### Performance and Advantages:
 
 3D CNNs provide significant benefits in medical imaging:
 
-- **Volumetric Context:** They extract features from adjacent slices, detecting biomarkers (like cartilage degradation) that may be invisible in   a single 2D image [@guida2021knee].
-	
-- **Higher Accuracy:** Brain and knee imaging studies have established that the 3D model has higher dice scores and accuracy compared to the    2D and 2.5D approaches [@avesta2023comparing;@guida2021knee ].
-	
-- **Efficiency in Convergence:** 3D models can converge 20% to 40% faster during training than their 2D counterparts when dealing with volumetric data [@avesta2023comparing].
+- **Volumetric Context:** Features from adjacent slices are taken into account, bio-markers for certain conditions, such as cartilage degradation, that are not present in single 2D images can be detected.
+
+- **Higher Accuracy:** Evidence from brain and knee imaging studies shows that 3D model has higher accuracy compared to 2D and 2.5D approaches.
+
+- **Efficiency in Convergence:** For volumetric data, 3D models can often converge 20% to 40% faster than their 2D equivalents as the model learns.
 
 #### Limitations and Assumptions
 
 Despite their power, 3D CNNs face specific challenges:
 
-- **Computational Cost:** 3D models require significantly more computational memory (often up to 20 times more) compared to 2D models [@avesta2023comparing].
-	
-- **Large Data Requirements:** 
-For CNNs, a large annotated dataset is required to achieve optimal performance. However, in the context of medical image datasets, the datasets are limited in size and expensive to label, thereby limiting the generalization of the models [@bien2018deep; @yeoh2021emergence]. Recent advances, such as self-supervised learning, aim to address this limitation [@aidarkhan2025self].   
+- **Computational Cost:** 3D models need huge amount of memory to run which is around 20 times bigger than 2D models to view and interact [@avesta2023comparing].
+
+- **Large Data Requirements:**
+Large annotated datasets are the primary requirement to achieve the highest accuracy for CNNs. However, for medical image datasets, these datasets are small and expensive to obtain and manually label, which in turn hampers the generalisation performance of the learnt models. In recent years, self-supervised learning has emerged as a promising technique for expanding the current repertoire of CNNs to tackle these challenges.
 
 - **Risk of Overfitting:**
-Due to the limited nature of the medical image dataset, CNNs tend to overfit, especially when using a deep 3D structure [@awan2021improved; @rani2024deep]. 
+One of the major challenges faced by the researchers during CT image segmentation is the overfitting of the CNN due to limited number of medical images. Usually 3D CNNs are employed to tackle this problem which also increase the overfitting because of depth. 
 
 ## 3 Analysis & Results:
 
-# 3.1 Dataset Description:
+#### 3.1 Dataset Description:
+
 The MRNet dataset, a publicly available set of knee MRI scans gathered by the School of Medicine at Stanford University, is used in this research. The dataset contains images gathered from clinical studies performed at the Stanford University Medical Center over an eleven-year period from 2001 to 2012.
 The structure of the dataset is divided into a training and validation set, with each MRI study labeled for three different diagnoses: 
 
@@ -198,10 +201,11 @@ The structure of the dataset is divided into a training and validation set, with
 - Tears of the anterior cruciate ligament (ACL),
 - Meniscal injuries.
 
-## 3.1.2 Data Organization
+**3.1.2 Data Organization**
 The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.
 
-## 3.1.3 Problem Formulation
+**3.1.3 Problem Formulation**
+
 The task of clinical diagnosis is posed as a binary classification problem, where the goal of the model is to distinguish between ACL-intact and ACL-compromised knee examinations. Mathematically, the binary classification problem can be stated as:
 
 $$
@@ -212,11 +216,13 @@ y=\begin{cases}
 $$
 This problem statement allows the construction of a supervised learning model that can be used to automatically identify ACL tears from multi-planar MRI images.
 
-# 3.2 Dataset Visualization & Exploratory Analysis:
+
+#### 3.2 Dataset Visualization & Exploratory Analysis:
 
 Exploratory Data Analysis (EDA) is a fundamental component of any machine learning model's pipeline. It is critical to understand the structure and composition of the data before moving forward to train any model. This section of the report outlines a detailed exploratory data analysis of the MRNet dataset, proposed by [@bien2018deep]. in 2018, which consists of knee MRI images from three different imaging planes, i.e., sagittal, coronal, and axial. Each of these imaging sessions is associated with a binary variable representing the ACL tear condition of the knee. The class balance, volumetric structure, imaging characteristics, and cross-plane imaging of the MRNet dataset have all been addressed in the following visualizations, which were critical to the decisions made in the subsequent sections of this report.
 
-## 3.2.1 Class Distribution
+**3.2.1 Class Distribution**
+
 
 <details class="collapase">
 <summary><b>Code</b></summary>
@@ -262,7 +268,7 @@ knitr::include_graphics("figures/Class_Distribution.png")
 ```
 </center>
 
-## 3.2.2 Sample Middle Slices from the Sagittal Plane
+**3.2.2 Sample Middle Slices from the Sagittal Plane**
 
 <details class="collapase">
 <summary><b>Code</b></summary>
@@ -314,7 +320,7 @@ knitr::include_graphics("figures/Sample Middle Slices.png")
 ```
 </center>
 
-## 3.2.3 Distribution of Slice Counts per Examination
+**3.2.3 Distribution of Slice Counts per Examination**
 
 <details class="collapase">
 <summary><b>Code</b></summary>
@@ -361,7 +367,7 @@ knitr::include_graphics("figures/Distribution of Slice Counts.png")
 ```
 </center>
 
-## 3.2.4 Pixel Intensity
+**3.2.4 Pixel Intensity**
 
 <details class="collapase">
 <summary><b>Code</b></summary>
@@ -524,6 +530,9 @@ plt.show()
 
 ## 3.4.2 ROC Curves
 
+The Receiver Operating Characteristic (ROC) curves were plotted to evaluate the model’s ability to distinguish between positive and negative cases across the three classification tasks: ACL tear, meniscus tear, and abnormality detection.
+
+
 <details class="collapase">
 <summary><b>Code</b></summary>
 
@@ -550,7 +559,22 @@ plt.show()
 </center>
 
 
+The Area Under the Curve (AUC) values obtained are as follows:
+
+ACL: 0.793
+Meniscus: 0.767
+Abnormal: 0.806
+
+These results indicate that the model achieves good discriminative performance across all classes, with AUC values close to 0.8.
+
+Among the three tasks, abnormality detection shows the highest performance (AUC = 0.806), suggesting that the model is most effective at identifying general abnormalities in knee MRI scans. The ACL classification also performs strongly (AUC = 0.793), while meniscus tear detection shows slightly lower performance (AUC = 0.767), likely due to more subtle structural variations and higher inter-class similarity.
+
+
+
 ## 3.4.3 Confusion Matrix Heatmaps
+
+Confusion matrices were used to evaluate the classification performance of the model for each task: ACL tear, meniscus tear, and abnormality detection. Each matrix presents the number of true negatives (TN), false positives (FP), false negatives (FN), and true positives (TP).
+
 
 <details class="collapase">
 <summary><b>Code</b></summary>
@@ -573,11 +597,32 @@ plt.show()
 
 </center>
 
+- The model demonstrates strong detection capability, particularly for abnormalities and meniscus tears.
+
+- ACL detection is moderate, with room for improvement in reducing both false positives and false negatives.
+
+- The model tends to favor higher sensitivity (detecting positives) at the cost of lower specificity (more false positives), especially for the meniscus class.
+
+This behavior is consistent with the applied class weighting and thresholding strategy, which prioritizes capturing positive cases.
+
 ## 3.4.4 Probability Distribution Plots
+
+- **ACL:**
+
+The model shows good discriminative power, with clear separation between the peaks for positive and negative cases and only a moderate amount of overlap in the middle probability range.
+
+- **Meniscus:**
+
+This is the most challenging category, as seen by the significant overlap between the two distributions; the model is frequently assigning high probabilities to negative cases, which will likely lead to a higher rate of False Positives.
+
+- **Abnormal:** The model is highly confident and accurate here, with the vast majority of positive cases clustered extremely close to a probability of $1.0$, indicating it is very effective at identifying general knee pathologies.
 
 
 <details class="collapase">
 <summary><b>Code</b></summary>
+
+**3.3.4 Summary of the evaluation metrics:**
+
 
 ```python
 
@@ -628,6 +673,12 @@ plt.show()
 <center>
 ![Training Loss Curve](Images/Plane Weights.png)
 </center>
+
+Axial has the Highest Importance (~0.36): The model relies most heavily on the Axial plane. This suggests that, for the specific condition being predicted, the Axial view contains the most distinct features or "evidence" for the model's decision-making process.
+
+Sagittal is a Close Second (~0.35): The importance of the Sagittal plane is nearly equal to the Axial plane. This indicates that the model finds significant diagnostic value in both of these views.
+
+Coronal has the Lowest Importance (~0.29): While still contributing significantly, the Coronal plane is weighted the least. This implies that the features found in the Coronal view are either more redundant or slightly less informative for the final classification than the other two.
 
 ## 3.4.6 Validation Metrics
 
