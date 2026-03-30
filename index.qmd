@@ -202,14 +202,16 @@ The structure of the dataset is divided into a training and validation set, with
 - Tears of the anterior cruciate ligament (ACL),
 - Meniscal injuries.
 
-
 **3.1.2 Data Organization**
 The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.
 
 
 **3.1.3 Problem Formulation:**
 
+The task of clinical diagnosis is posed as a binary classification problem, where the goal of the model is to distinguish between ACL-intact and ACL-compromised knee examinations. Mathematically, the binary classification problem can be stated as:
+
 This study aims to investigate the effectiveness of a 3D Convolutional Neural Network (3D CNN) in automatically detecting knee abnormalities—including ACL tears, meniscus tears, and general abnormalities—from volumetric MRI scans in the MRNet dataset.
+
 
 The central research question is:
 Can a 3D CNN effectively learn spatial and anatomical features from multi-plane MRI volumes to accurately detect multiple types of knee injuries?
@@ -223,14 +225,12 @@ To address this, the proposed model leverages:
 This formulation enables the development of an automated system capable of assisting in clinical diagnosis by providing reliable predictions across multiple knee conditions.
 
 
-
 #### 3.2 Dataset Visualization & Exploratory Analysis:
 
 Exploratory Data Analysis (EDA) is a fundamental component of any machine learning model's pipeline. It is critical to understand the structure and composition of the data before moving forward to train any model. This section of the report outlines a detailed exploratory data analysis of the MRNet dataset, proposed by [@bien2018deep]. in 2018, which consists of knee MRI images from three different imaging planes, i.e., sagittal, coronal, and axial. Each of these imaging sessions is associated with a binary variable representing the ACL tear condition of the knee. The class balance, volumetric structure, imaging characteristics, and cross-plane imaging of the MRNet dataset have all been addressed in the following visualizations, which were critical to the decisions made in the subsequent sections of this report.
 
 
 **3.2.1 Class Distribution:**
-
 
 <details class="collapase">
 <summary><b>Code</b></summary>
@@ -566,8 +566,6 @@ plt.show()
 ![ROC Curves](Images/Results/ROC Curves.png)
 </center>
 
-
-
 The Area Under the Curve (AUC) values obtained are as follows:
 
 ACL: 0.793
@@ -577,7 +575,6 @@ Abnormal: 0.806
 These results indicate that the model achieves good discriminative performance across all classes, with AUC values close to 0.8.
 
 Among the three tasks, abnormality detection shows the highest performance (AUC = 0.806), suggesting that the model is most effective at identifying general abnormalities in knee MRI scans. The ACL classification also performs strongly (AUC = 0.793), while meniscus tear detection shows slightly lower performance (AUC = 0.767), likely due to more subtle structural variations and higher inter-class similarity.
-
 
 
 
@@ -607,7 +604,6 @@ plt.show()
 ![Confusion Matrix](Images/Results/Confusion Matrix.png)
 
 </center>
-
 
 - The model demonstrates strong detection capability, particularly for abnormalities and meniscus tears.
 
@@ -694,6 +690,7 @@ Axial has the Highest Importance (~0.36): The model relies most heavily on the A
 Sagittal is a Close Second (~0.35): The importance of the Sagittal plane is nearly equal to the Axial plane. This indicates that the model finds significant diagnostic value in both of these views.
 
 Coronal has the Lowest Importance (~0.29): While still contributing significantly, the Coronal plane is weighted the least. This implies that the features found in the Coronal view are either more redundant or slightly less informative for the final classification than the other two.
+
 
 **3.4.6 Validation Metrics**
 
