@@ -268,7 +268,7 @@ plt.savefig("figures/class_distribution.png", dpi=300)
 <center>
 ```{r}
 #| echo: false
-#| fig-cap: "Figure 3.1: Class distribution of ACL tear labels"
+#| fig-cap: "Figure 1: Class distribution of ACL tear labels"
 #| out-width: "70%"
 #| fig-align: "center"
 #| fig-cap-location: margin
@@ -321,7 +321,7 @@ plt.show()
 <center>
 ```{r}
 #| echo: false
-#| fig-cap: "Figure 3.2: Sample Middle Slices"
+#| fig-cap: "Figure 2: Sample Middle Slices"
 #| out-width: "70%"
 #| fig-align: "center"
 knitr::include_graphics("figures/Sample Middle Slices.png")
@@ -368,7 +368,7 @@ print(f"Mean slices: {labels_df['num_slices'].mean():.1f}")
 
 ```{r}
 #| echo: false
-#| fig-cap: "Figure 3.3: Distribution of Slice Counts"
+#| fig-cap: "Figure 3: Distribution of Slice Counts"
 #| out-width: "70%"
 #| fig-align: "center"
 knitr::include_graphics("figures/Distribution of Slice Counts.png")
@@ -422,7 +422,7 @@ print(f"Mean intensity : {all_pixels.mean():.1f}")
 <center>
 ```{r}
 #| echo: false
-#| fig-cap: "Figure 3.4: Pixel Intensity"
+#| fig-cap: "Figure 4: Pixel Intensity"
 #| out-width: "70%"
 #| fig-align: "center"
 knitr::include_graphics("figures/Pixel Intensity.png")
@@ -532,7 +532,7 @@ plt.show()
 </details> 
 
 <center>
-![Training Loss Curve](Images/Results/Training Loss Curve.png)
+![Figure 5: Training Loss Curve](Images/Results/Training Loss Curve.png)
 
 
 </center>
@@ -564,7 +564,7 @@ plt.show()
 
 
 <center>
-![ROC Curves](Images/Results/ROC Curves.png)
+![Figure 6: ROC Curves](Images/Results/ROC Curves.png)
 </center>
 
 The Area Under the Curve (AUC) values obtained are as follows:
@@ -602,7 +602,7 @@ plt.show()
 </details>
 
 <center>
-![Confusion Matrix](Images/Results/Confusion Matrix.png)
+![Figure 7: Confusion Matrix](Images/Results/Confusion Matrix.png)
 
 </center>
 
@@ -649,15 +649,15 @@ for i, name in enumerate(labels_names):
 </details>
 
 <center>
-![ACL Probability Distribution](Images/Results/ACL Probability Dist.png)
+![Figure 8: ACL Probability Distribution](Images/Results/ACL Probability Dist.png)
 </center>
 
 <center>
-![Meniscus Probability Distribution](Images/Results/Meniscus Probability Dist.png)
+![Figure 9: Meniscus Probability Distribution](Images/Results/Meniscus Probability Dist.png)
 </center>
 
 <center>
-![Abnormal Probability Distribution](Images/Results/Probability Distribution.png)
+![Figure 10: Abnormal Probability Distribution](Images/Results/Probability Distribution.png)
 </center>
 
 
@@ -682,7 +682,7 @@ plt.show()
 </details> 
 
 <center>
-![Plane Attention Weights](Images/Results/Plane Attention.png)
+![Figure 11: Plane Attention Weights](Images/Results/Plane Attention.png)
 </center>
 
 
@@ -724,9 +724,9 @@ labels_names = ["ACL","Meniscus","Abnormal"]
 
 </details> 
 
-
-![Training Loss Curve](Images/Metrics.png)
-
+<center>
+![Figure 12: Validation Metrics](Images/Metrics.png)
+</center>
 
 **3.4.7 Summary of the evaluation metrics:**
 
