@@ -123,7 +123,7 @@ Deep Neural Networks known as CNNs are categorized based on the dimensionality o
 | 1D CNN | Time-series, audio, ECG signals (Ige & Sibiya, 2024). | These filters move across the 1D data (time/sequence) instead of the regular 2D images.
 | 2D CNN | 2D input features (e.g. 2D images such as: Grayscale/RGB images, medical X-rays). | 2D regions (slides over height dimension, then width dimension). |
 | 3D CNN | Videos, MRI/CT scans, 3D point clouds [@guida2021knee]. | The network slides along three dimensions (height, width, and depth). |
-: Single and Multi-Path Architectures in CNNs - Table 1
+: Single and Multi-Path Architectures in CNNs - Table 1 {.striped .hover}
 
 ---
 
@@ -206,6 +206,8 @@ The structure of the dataset is divided into a training and validation set, with
 - Tears of the anterior cruciate ligament (ACL),
 - Meniscal injuries.
 
+
+
 **3.1.2 Data Organization**
 The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.
 
@@ -271,7 +273,7 @@ plt.savefig("figures/class_distribution.png", dpi=300)
 ```{r}
 #| echo: false
 #| fig-cap: "Figure 1: Class distribution of ACL tear labels"
-#| out-width: "70%"
+#| out-width: "100%"
 #| fig-align: "center"
 #| fig-cap-location: margin
 knitr::include_graphics("figures/Class_Distribution.png")
@@ -371,7 +373,7 @@ print(f"Mean slices: {labels_df['num_slices'].mean():.1f}")
 ```{r}
 #| echo: false
 #| fig-cap: "Figure 3: Distribution of Slice Counts"
-#| out-width: "70%"
+#| out-width: "100%"
 #| fig-align: "center"
 knitr::include_graphics("figures/Distribution of Slice Counts.png")
 ```
@@ -425,7 +427,7 @@ print(f"Mean intensity : {all_pixels.mean():.1f}")
 ```{r}
 #| echo: false
 #| fig-cap: "Figure 4: Pixel Intensity"
-#| out-width: "70%"
+#| out-width: "100%"
 #| fig-align: "center"
 knitr::include_graphics("figures/Pixel Intensity.png")
 ```
