@@ -206,8 +206,19 @@ The structure of the dataset is divided into a training and validation set, with
 - Tears of the anterior cruciate ligament (ACL),
 - Meniscal injuries.
 
+---
 
+: Table 2:Knee MRI Dataset Sample (first 5 rows) {.striped .hover}
 
+| exam_id | acl_label | meniscus_label | abnormal_label | acl_diagnosis | meniscus_diagnosis | abnormal_diagnosis |
+|--------|-----------|----------------|----------------|---------------|-------------------|------------------|
+| 0      | 0         | 0              | 1              | No ACL Tear   | No Meniscus Tear  | Abnormal         |
+| 1      | 1         | 1              | 1              | ACL Tear      | Meniscus Tear     | Abnormal         |
+| 2      | 0         | 0              | 1              | No ACL Tear   | No Meniscus Tear  | Abnormal         |
+| 3      | 0         | 1              | 1              | No ACL Tear   | Meniscus Tear     | Abnormal         |
+| 4      | 0         | 0              | 1              | No ACL Tear   | No Meniscus Tear  | Abnormal         |
+
+---
 **3.1.2 Data Organization**
 The dataset has a standardized partition structure, with a train/ directory for model development and a valid/ directory for model evaluation. The diagnostic ground truth is provided in the form of two CSV files, namely train-acl.csv and valid-acl.csv, each containing the examination identifier and a binary diagnostic label, where 0 represents the absence of an ACL tear and 1 represents a confirmed ACL tear.
 
