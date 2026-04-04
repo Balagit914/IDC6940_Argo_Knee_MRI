@@ -251,39 +251,76 @@ Exploratory Data Analysis (EDA) is a fundamental component of any machine learni
 <summary><b>Code</b></summary>
 
 ```python
-class_counts = labels_df["diagnosis"].value_counts()
+# Data for each task
+tasks = [
+    {
+        "col":    "acl_diagnosis",
+        "title":  "ACL Tear",
+        "cats":   ["No ACL Tear", "ACL Tear"],
+        "colors": ["#4C9BE8", "#E8654C"],
+    },
+    {
+        "col":    "meniscus_diagnosis",
+        "title":  "Meniscus Tear",
+        "cats":   ["No Meniscus Tear", "Meniscus Tear"],
+        "colors": ["#4C9BE8", "#E8654C"],
+    },
+    {
+        "col":    "abnormal_diagnosis",
+        "title":  "Abnormal Knee",
+        "cats":   ["Normal", "Abnormal"],
+        "colors": ["#4C9BE8", "#E8654C"],
+    },
+]
 
-plt.figure(figsize=(6, 4))
-ax = class_counts.plot(kind="bar",
-                       color=["#4C9BE8", "#E8654C"],
-                       edgecolor="white",
-                       width=0.5)
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+fig.suptitle("Class Distribution - All Three Diagnostic Tasks",
+             fontsize=15, fontweight="bold", y=1.02)
 
-# Add count labels on top of each bar
-for bar in ax.patches:
-    ax.text(
-        bar.get_x() + bar.get_width() / 2,
-        bar.get_height() + 1,
-        str(int(bar.get_height())),
-        ha="center", va="bottom", fontweight="bold"
+for ax, task in zip(axes, tasks):
+    counts = labels_df[task["col"]].value_counts().reindex(task["cats"])
+
+    bars = ax.bar(
+        task["cats"],
+        counts.values,
+        color=task["colors"],
+        edgecolor="white",
+        width=0.5,
+        linewidth=1.5
     )
 
-plt.title("Class Distribution – ACL Tear Labels", fontsize=13, fontweight="bold")
-plt.xlabel("")
-plt.ylabel("Number of Exams")
-plt.xticks(rotation=0)
+    # Count label on top of every bar
+    for bar in bars:
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height() + 8,
+            str(int(bar.get_height())),
+            ha="center", va="bottom",
+            fontsize=12, fontweight="bold"
+        )
+
+    ax.set_title(task["title"], fontsize=13, fontweight="bold", pad=10)
+    ax.set_ylabel("Number of Exams", fontsize=11)
+    ax.set_ylim(0, counts.max() * 1.18)
+    ax.set_xticks(range(len(task["cats"])))
+    ax.set_xticklabels(task["cats"], fontsize=10, rotation=0)
+    ax.tick_params(axis="y", labelsize=10)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+
 plt.tight_layout()
+plt.savefig("plot1_class_distribution.png", dpi=150, bbox_inches="tight")
 plt.show()
-plt.savefig("figures/class_distribution.png", dpi=300)
+print("Saved: plot1_class_distribution.png")
 ```
 </details>
 
-<p>The bar chart describes the class distribution of the ACL tear labels in the data set. The horizontal axis indicates the two classes in the diagnostic results, namely "No ACL Tear" and "ACL Tear," while the vertical axis indicates the number of examinations in the data set. The data set contains a total of 1,130 examinations, with 922 (81.6%) labeled as "No ACL Tear" and 208 (18.4%) labeled as "ACL Tear." This is a significant imbalance between the two classes, with an approximate ratio of 4.4:1 in favor of the negative class. This imbalance is clinically realistic, since ACL tears are not as common in the general population as the converse; nonetheless, it is a significant methodological limitation in the application of supervised machine learning, since a model trained on such an unbalanced data set will likely develop a bias toward the majority class, thereby achieving high accuracy but at the expense of poor sensitivity for the clinically important minority class. This figure is important because it establishes the underlying data set characteristics that directly influence the model design, loss function, and evaluation metric used in the study.</p>
+<p>This figure shows class distribution for the three binary diagnostic tasks on the MRNet dataset. For the ACL tear classification task, there are 922 negative (no tear) and 208 positive (tear present) instances for a roughly 4.4:1 class imbalance. The meniscus tear task has an even less severe imbalance of 733 negative to 397 positive instances for a 1.85:1 class split. In contrast, the abnormal knee detection task is actually imbalanced in the opposite direction: 913 abnormal instances versus 217 normal instances. This inverse class imbalance is due to the referral-based clinical population on which this dataset was created (patients undergoing MRI for medical indication). To tackle the strong class imbalance seen in these tasks, we use class-weighted loss, targeted data sampling, and multiple evaluation metrics including AUC and F1-score to ensure that the models are performing well on both classes.</p>
 
 <center>
 ```{r}
 #| echo: false
-#| fig-cap: "Figure 1: Class distribution of ACL tear labels"
+#| fig-cap: "Figure 1: Class Distribution Across All Three Diagnostic Tasks in the MRNet Dataset"
 #| out-width: "100%"
 #| fig-align: "center"
 #| fig-cap-location: margin
@@ -291,53 +328,117 @@ knitr::include_graphics("figures/Class_Distribution.png")
 ```
 </center>
 
-**3.2.2 Sample Middle Slices from the Sagittal Plane**
+**3.2.2 Sample Middle Slices In All Three Image Planes**
 
 <details class="collapase">
 <summary><b>Code</b></summary>
 
 ```python
-# Visualise Sample MRI Slices (Sagittal Plane)
+# Visualise Sample MRI Slices (All Three Planes)
 # Grab exam IDs for each class
-positive_ids = labels_df[labels_df["label"] == 1]["exam_id"].values[:2]
-negative_ids = labels_df[labels_df["label"] == 0]["exam_id"].values[:2]
+planes = ["sagittal", "coronal", "axial"]
 
-# Combine them with their labels for the plot title
-sample_exams = [(eid, "ACL Tear")    for eid in positive_ids] + \
-               [(eid, "No ACL Tear") for eid in negative_ids]
+plane_titles = {
+    "sagittal": "Sagittal\n(ACL & ligaments)",
+    "coronal":  "Coronal\n(Meniscus & cartilage)",
+    "axial":    "Axial\n(Joint cross-section)",
+}
 
-fig, axes = plt.subplots(1, 4, figsize=(14, 4))
+# ── Define the 6 rows: one positive + one negative per task ─
+rows = [
+    # ( label_column,      target_value,  row_label,           border_color )
+    ("acl_label",      1, "ACL Tear",         "#E8654C"),   # red
+    ("acl_label",      0, "No ACL Tear",      "#4C9BE8"),   # blue
+    ("meniscus_label", 1, "Meniscus Tear",    "#E8A22A"),   # orange
+    ("meniscus_label", 0, "No Meniscus Tear", "#4C9BE8"),   # blue
+    ("abnormal_label", 1, "Abnormal",         "#9B4CE8"),   # purple
+    ("abnormal_label", 0, "Normal",           "#4C9BE8"),   # blue
+]
 
-for ax, (exam_id, diagnosis) in zip(axes, sample_exams):
+# Pick one exam ID per row
+selected = []
+for col, val, label, color in rows:
+    eid = labels_df[labels_df[col] == val]["exam_id"].values[0]
+    selected.append((eid, label, color))
 
-   
-    npy_path = os.path.join(DATA_DIR, "train", "sagittal", f"{exam_id:0>4}.npy")
-    volume = np.load(npy_path)           # shape: (S, H, W)
+# ── Build figure: 6 rows × 3 columns ────────────────────────
+fig, axes = plt.subplots(6, 3, figsize=(13, 20))
 
-    # Pick the middle slice as the most representative view
-    middle_idx = volume.shape[0] // 2
-    slice_img  = volume[middle_idx]      # shape: (H, W)
+fig.suptitle(
+    "Sample Middle Slices\nAll Three Pathologies × All Three Imaging Planes",
+    fontsize=15, fontweight="bold", y=1.01
+)
 
-    ax.imshow(slice_img, cmap="gray")
-    ax.set_title(f"ID: {exam_id}\n{diagnosis}", fontsize=10, fontweight="bold",
-                 color="#E8654C" if diagnosis == "ACL Tear" else "#4C9BE8")
-    ax.axis("off")
+for row_idx, (exam_id, row_label, border_color) in enumerate(selected):
+    for col_idx, plane in enumerate(planes):
 
-fig.suptitle("Sample Middle Slices – Sagittal Plane", fontsize=13, fontweight="bold")
+        ax = axes[row_idx, col_idx]
+
+        # ── Load and display the middle slice ────────────────
+        npy_path = os.path.join(
+            DATA_DIR, "train", plane, f"{exam_id:0>4}.npy"
+        )
+        volume    = np.load(npy_path)
+        mid_slice = volume[volume.shape[0] // 2]
+        ax.imshow(mid_slice, cmap="gray")
+        ax.axis("off")
+
+        # ── Column header — top row only ─────────────────────
+        if row_idx == 0:
+            ax.set_title(plane_titles[plane],
+                         fontsize=11, fontweight="bold", pad=8)
+
+        # ── Row label — left column only ─────────────────────
+        if col_idx == 0:
+            ax.set_ylabel(
+                f"{row_label}\n(ID {exam_id:04d})",
+                fontsize=10, fontweight="bold",
+                color=border_color, labelpad=10
+            )
+
+        # ── Coloured border matching the diagnosis ────────────
+        for spine in ax.spines.values():
+            spine.set_visible(True)
+            spine.set_edgecolor(border_color)
+            spine.set_linewidth(3)
+
+# ── Divider lines between the three condition blocks ─────────
+# Thin horizontal lines after row 2 and row 4 to group pairs
+for row_idx in [1, 3]:
+    for col_idx in range(3):
+        axes[row_idx, col_idx].spines["bottom"].set_linewidth(5)
+
+# ── Legend ────────────────────────────────────────────────────
+legend_items = [
+    mpatches.Patch(color="#E8654C", label="ACL Tear"),
+    mpatches.Patch(color="#E8A22A", label="Meniscus Tear"),
+    mpatches.Patch(color="#9B4CE8", label="Abnormal"),
+    mpatches.Patch(color="#4C9BE8", label="Negative / Normal"),
+]
+fig.legend(
+    handles=legend_items,
+    loc="lower center", ncol=4,
+    fontsize=11, frameon=False,
+    bbox_to_anchor=(0.5, -0.01)
+)
+
 plt.tight_layout()
+plt.savefig("plot_all_pathologies_all_planes.png", dpi=150, bbox_inches="tight")
 plt.show()
+print("Saved: plot_all_pathologies_all_planes.png")
+
 ```
 
 </details>
 
 
-<p>The following figure depicts four sample middle sagittal plane MRI slice images from the dataset, showing instances of both positive and negative ACL tear classes. As shown, each image has been labeled with the patient ID and the associated label, with "ACL Tear" instances depicted in red and "No ACL Tear" instances depicted in blue, based on their associated IDs 1 and 18, and 0 and 2, respectively. As depicted, the images have been shown in grayscale, consistent with standard MRI acquisition procedures. As shown, there are discernible structural differences in the ACL-tear and no ACL-tear classes, with the ACL-tear classes showing a lack of the characteristic linear hypointense feature representing the ligament, while the no ACL-tear classes show a well-defined ligamentous feature. However, discernible variability in knee orientation, contrast, and soft tissue intensity may be observed among the four sample images, showing the inherent variability in clinical data. As shown, the variability among the samples demonstrates the complexity of the classification task, warranting the use of deep learning architectures that are capable of learning complex hierarchical representations without relying on feature engineering.</p>
+<p>Representative middle-slice images from the MRNet dataset are shown in Figure 2, organized by category and viewed in the three imaging planes. The sagittal images show the ACL and posterior cruciate ligament in profile, and are the primary images used for diagnosis of ACL injuries. The coronal images show the medial and lateral compartments in a frontal view, and provide the best views of the menisci and cartilage. The axial images show the joint structures in a transverse view. The visual examination of sample rows from each category reveals that most of the disease-related information is subtle and often spreads out over several slices instead of being localized to a single image frame. Therefore, instead of relying on single-slice 2D classification, we employ volumetric 3D convolutional neural networks which are able to effectively use spatial relationships across the entire depth of a stack of 2D images to detect features which are spatially distributed across several slices.</p>
 
 <center>
 ```{r}
 #| echo: false
-#| fig-cap: "Figure 2: Sample Middle Slices"
-#| out-width: "70%"
+#| fig-cap: "Figure 2: Representative Middle Slices of MRI Examinations - All Three Pathologies Across All Three Imaging Planes"
+#| out-width: "50%"
 #| fig-align: "center"
 knitr::include_graphics("figures/Sample Middle Slices.png")
 ```
@@ -349,41 +450,94 @@ knitr::include_graphics("figures/Sample Middle Slices.png")
 <summary><b>Code</b></summary>
 
 ```python
-# Slice Count Histogram
+# Slice Count Distribution — All Three Planes
 
-slice_counts = []
+planes       = ["sagittal", "coronal", "axial"]
+plane_colors = {"sagittal": "#4C9BE8",   # blue
+                "coronal":  "#E8A22A",   # orange
+                "axial":    "#9B4CE8"}   # purple
 
-for exam_id in labels_df["exam_id"]:
-    npy_path = os.path.join(DATA_DIR, "train", "sagittal", f"{exam_id:0>4}.npy")
-    volume = np.load(npy_path)
-    slice_counts.append(volume.shape[0])   # number of slices
+FIXED_DEPTH = 32   # the depth we pad/crop all volumes to
 
-labels_df["num_slices"] = slice_counts
+# ── Collect slice counts for every exam, every plane ────────
+slice_data = {}
 
-plt.figure(figsize=(7, 4))
-plt.hist(labels_df["num_slices"], bins=20, color="#4C9BE8", edgecolor="white")
-plt.title("Distribution of Slice Counts (Sagittal Plane)", fontsize=13, fontweight="bold")
-plt.xlabel("Number of Slices per Exam")
-plt.ylabel("Number of Exams")
+for plane in planes:
+    counts = []
+    for exam_id in labels_df["exam_id"]:
+        npy_path = os.path.join(
+            DATA_DIR, "train", plane, f"{exam_id:0>4}.npy"
+        )
+        volume = np.load(npy_path)
+        counts.append(volume.shape[0])          # number of slices
+    slice_data[plane] = counts
+    labels_df[f"num_slices_{plane}"] = counts   # store in DataFrame too
+
+
+
+# ── Plot: one subplot per plane ──────────────────────────────
+fig, axes = plt.subplots(1, 3, figsize=(16, 5), sharey=True)
+
+fig.suptitle(
+    "Distribution of Slice Counts per Exam — All Three Planes",
+    fontsize=14, fontweight="bold", y=1.02
+)
+
+for ax, plane in zip(axes, planes):
+    counts = slice_data[plane]
+    color  = plane_colors[plane]
+
+    # Main histogram
+    ax.hist(counts, bins=20, color=color, edgecolor="white", linewidth=0.7)
+
+    # Red dashed line at our chosen fixed depth
+    ax.axvline(FIXED_DEPTH, color="#E8654C", linestyle="--",
+               linewidth=2, label=f"Fixed depth = {FIXED_DEPTH}")
+
+    # Mean line
+    mean_val = np.mean(counts)
+    ax.axvline(mean_val, color="black", linestyle=":",
+               linewidth=1.8, label=f"Mean = {mean_val:.1f}")
+
+    # Stats box in the top-right corner
+    stats_text = (
+        f"Min  : {min(counts)}\n"
+        f"Max  : {max(counts)}\n"
+        f"Mean : {mean_val:.1f}\n"
+        f"Median: {np.median(counts):.1f}"
+    )
+    ax.text(0.97, 0.97, stats_text,
+            transform=ax.transAxes,
+            fontsize=9, verticalalignment="top",
+            horizontalalignment="right",
+            bbox=dict(boxstyle="round,pad=0.4",
+                      facecolor="white", edgecolor=color, linewidth=1.5))
+
+    ax.set_title(plane.capitalize(), fontsize=12, fontweight="bold")
+    ax.set_xlabel("Number of Slices per Exam", fontsize=10)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.legend(fontsize=9, frameon=False)
+
+# Only the leftmost subplot needs a y-axis label (sharey=True)
+axes[0].set_ylabel("Number of Exams", fontsize=10)
+
 plt.tight_layout()
+plt.savefig("plot_slice_count_all_planes.png", dpi=150, bbox_inches="tight")
 plt.show()
-
-# Quick stats
-print(f"Min slices : {labels_df['num_slices'].min()}")
-print(f"Max slices : {labels_df['num_slices'].max()}")
-print(f"Mean slices: {labels_df['num_slices'].mean():.1f}")
+print("Saved: plot_slice_count_all_planes.png")
 ```
 
 </details>
 
 
-<p>The below histogram shows the distribution of the number of slices in the sagittal plane for each MRI exam. The horizontal axis shows the number of slices in each exam. This varies from around 15 slices to around 50 slices. The vertical axis shows the number of exams. The distribution of slices in the sagittal plane appears to be approximately unimodal. The main peak occurs at around 25 slices per exam, with approximately 150 exams. There is a smaller peak around 30-35 slices per exam, with around 100-110 exams. The distribution of slices in the sagittal plane appears skewed to the right. This means that a long tail of the distribution goes towards a maximum of 50 slices per exam. Here, the number of exams is less than 5. This variation in the number of slices in the sagittal plane arises due to the inherent variation in clinical images. This variation arises because different imaging protocols are followed in different hospitals and institutions. This figure is of great importance as it guides the way in which the volumetric inputs are standardized during the pre-processing stage.</p>
+<p>Here we show the distribution of slice counts per study for the three imaging planes in the MRNet dataset. The mean number of slices is 30.4 for the sagittal plane (range: 17-51), 29.8 for the coronal plane (range: 17-58), and 34.3 for the axial plane (range: 19-61). As can be observed, there is a considerable variability across examinations, meaning the dataset does not consist of a fixed volumetric depth. Therefore, during preprocessing, all images are cropped or padded/interpolated to a fixed depth of 32 slices for the network input. This depth is approximately equal to the mean slice count for the two latter planes, and centered in the distribution for the axial images. Therefore, the 3D CNN always receives a volume of the same shape, but with the most informative central portion for each given image.</p>
 
 <center>
 
 ```{r}
 #| echo: false
-#| fig-cap: "Figure 3: Distribution of Slice Counts"
+#| fig-cap: "Figure 3: Distribution of Slice Counts per Examination Across All Three Imaging Planes"
 #| out-width: "100%"
 #| fig-align: "center"
 knitr::include_graphics("figures/Distribution of Slice Counts.png")
@@ -399,45 +553,95 @@ knitr::include_graphics("figures/Distribution of Slice Counts.png")
 
 # Pixel Intensity Histogram
 
-# Only load a small sample to avoid slow runtimes
-n_sample  = 10
+planes       = ["sagittal", "coronal", "axial"]
+plane_colors = {"sagittal": "#4C9BE8",   # blue
+                "coronal":  "#E8A22A",   # orange
+                "axial":    "#9B4CE8"}   # purple
+
+# ── Sample a fixed set of exam IDs (same across all planes) ─
+n_sample   = 10
 sample_ids = labels_df["exam_id"].sample(n=n_sample, random_state=42).values
 
-all_pixels = []
+# ── Collect pixel samples for every plane ───────────────────
+pixel_data = {}
 
-for exam_id in sample_ids:
-    npy_path = os.path.join(DATA_DIR, "train", "sagittal", f"{exam_id:0>4}.npy")
-    volume = np.load(npy_path).astype(np.float32)
+for plane in planes:
+    all_pixels = []
+    for exam_id in sample_ids:
+        npy_path = os.path.join(
+            DATA_DIR, "train", plane, f"{exam_id:0>4}.npy"
+        )
+        volume = np.load(npy_path).astype(np.float32)
+        flat   = volume.ravel()
+        # Take a random subset of pixels for speed
+        sample_px = flat[np.random.choice(len(flat), size=3000, replace=False)]
+        all_pixels.append(sample_px)
+    pixel_data[plane] = np.concatenate(all_pixels)
 
-    # Flatten volume and take a random subset of pixels (for speed)
-    flat = volume.ravel()
-    sample_px = flat[np.random.choice(len(flat), size=3000, replace=False)]
-    all_pixels.append(sample_px)
 
-all_pixels = np.concatenate(all_pixels)
 
-plt.figure(figsize=(7, 4))
-plt.hist(all_pixels, bins=60, color="#E8A84C", edgecolor="white")
-plt.title(f"Pixel Intensity Distribution (sample of {n_sample} exams)",
-          fontsize=13, fontweight="bold")
-plt.xlabel("Pixel Intensity Value")
-plt.ylabel("Frequency")
+# ── Plot: one subplot per plane ──────────────────────────────
+fig, axes = plt.subplots(1, 3, figsize=(16, 5), sharey=True)
+
+fig.suptitle(
+    f"Pixel Intensity Distribution (sample of {n_sample} exams) — All Three Planes",
+    fontsize=14, fontweight="bold", y=1.02
+)
+
+for ax, plane in zip(axes, planes):
+    px    = pixel_data[plane]
+    color = plane_colors[plane]
+
+    # Main histogram
+    ax.hist(px, bins=60, color=color, edgecolor="white", linewidth=0.5)
+
+    # Mean line
+    mean_val   = px.mean()
+    median_val = np.median(px)
+
+    ax.axvline(mean_val, color="black", linestyle="--",
+               linewidth=2, label=f"Mean = {mean_val:.1f}")
+    ax.axvline(median_val, color="#E8654C", linestyle=":",
+               linewidth=2, label=f"Median = {median_val:.1f}")
+
+    # Stats box in the top-right corner
+    stats_text = (
+        f"Min    : {px.min():.1f}\n"
+        f"Max    : {px.max():.1f}\n"
+        f"Mean   : {mean_val:.1f}\n"
+        f"Median : {median_val:.1f}"
+    )
+    ax.text(0.97, 0.97, stats_text,
+            transform=ax.transAxes,
+            fontsize=9, verticalalignment="top",
+            horizontalalignment="right",
+            bbox=dict(boxstyle="round,pad=0.4",
+                      facecolor="white", edgecolor=color, linewidth=1.5))
+
+    ax.set_title(plane.capitalize(), fontsize=12, fontweight="bold")
+    ax.set_xlabel("Pixel Intensity Value", fontsize=10)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.legend(fontsize=9, frameon=False)
+
+# Only the leftmost subplot needs a y-axis label (sharey=True)
+axes[0].set_ylabel("Frequency", fontsize=10)
+
 plt.tight_layout()
+plt.savefig("plot_pixel_intensity_all_planes.png", dpi=150, bbox_inches="tight")
 plt.show()
-
-print(f"Intensity range: {all_pixels.min():.1f} – {all_pixels.max():.1f}")
-print(f"Mean intensity : {all_pixels.mean():.1f}")
+print("Saved: plot_pixel_intensity_all_planes.png")
 ```
 
 </details>
 
 
-<p>The histogram in the below image demonstrates the pixel intensity values for a random selection of ten images. The horizontal axis of the histogram ranges from values lower than 0 up to 255. The vertical axis of the histogram corresponds to the values’ frequencies. The values are highly skewed towards the right. The highest frequency values are concentrated in the lower intensity values and reach a peak of around 20-25. The frequency value in this region approaches 2000. After this peak, the values decrease gradually as the intensity increases. This demonstrates that the pixels in an MRI image are not uniformly distributed. The presence of a secondary peak of around 300 occurs when the intensity reaches its maximum value of 255. This could be due to the presence of pixels in images of joint effusion. This figure is useful as it justifies the normalization of all the images before they are fed into the model for training.</p>
+<p>This figure shows the pixel intensity distributions from 10 training images of the MRNet dataset, split by axis of view (sagittal, coronal, axial). The distributions are strongly right skewed, with the majority of pixels having intensity values in the range 0-80, followed by a long tail of higher intensity values up to the 8-bit maximum value of 255. The sagittal and axial views have similar distributions, with means of 62.0 and 66.8, and medians of 51.0. The coronal view has a more extreme distribution, with a large peak of low intensity values and a lower median of 38.0, due to the front-facing perspective of the knee, which includes both the dark background and densely packed tissue structures. These distributions are typical of T2-weighted knee MRI, with tissue structures appearing at moderate grayscale intensities and high intensity regions appearing rarely. The distributions are used to inform the preprocessing step, where per-channel standardization is applied to normalize the input to zero mean and unit variance, facilitating stabilization of the 3D CNN learning procedure.</p>
 
 <center>
 ```{r}
 #| echo: false
-#| fig-cap: "Figure 4: Pixel Intensity"
+#| fig-cap: "Figure 4: Pixel Intensity Distribution Across All Three Imaging Planes"
 #| out-width: "100%"
 #| fig-align: "center"
 knitr::include_graphics("figures/Pixel Intensity.png")
