@@ -871,7 +871,7 @@ plt.show()
 
 
 <center>
-![Figure 6: ROC Curves](Images/ROC Curve.png)
+![Figure 6: ROC Curves](Images/Results/ROC curve.png)
 </center>
 
 
@@ -904,7 +904,7 @@ plt.show()
 </details>
 
 <center>
-![Figure 7: Confusion Matrix](Images/Confusion new.png)
+![Figure 7: Confusion Matrix](Images/Results/Confusion new.png)
 
 </center>
 
@@ -943,15 +943,16 @@ for i, name in enumerate(label_names):
 </details>
 
 <center>
-![Figure 8: ACL Probability Distribution](Images/ACL Probability new.png)
+![Figure 8: ACL Probability Distribution](Images/Results/ACL Probability new.png)
+
 </center>
 
 <center>
-![Figure 9: Meniscus Probability Distribution](Images/Meniscus new.png)
+![Figure 9: Meniscus Probability Distribution](Images/Results/Meniscus new.png)
 </center>
 
 <center>
-![Figure 10: Abnormal Probability Distribution](Images/Abnormal new.png)
+![Figure 10: Abnormal Probability Distribution](Images/Results/Abnormal new.png)
 </center>
 
 
@@ -989,7 +990,7 @@ plt.show()
 </details> 
 
 <center>
-![Figure 11: Plane Attention Weights](Images/Plane new.png)
+![Figure 11: Plane Attention Weights](Images/Results/Plane new.png)
 </center>
 
 
