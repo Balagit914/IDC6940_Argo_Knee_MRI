@@ -651,114 +651,200 @@ knitr::include_graphics("figures/Pixel Intensity.png")
 
 ### 3.3 Modeling and Results
 
-**3.3.1 Data Preprocessing:**
+**3.3.1 Modeling:**
 
 
-Our data preprocessing focused on preparing 3D MRI volumes for input into a deep learning model. The dataset consisted of knee MRI scans stored as NumPy arrays, along with three associated labels for each exam: ACL tear, meniscus tear, and abnormality.
+The class distribution analysis of the dataset has already been presented in the analysis section, where the imbalance across ACL, meniscus, and abnormal classes was quantitatively illustrated for both training and validation sets.
 
-Each MRI scan is a 3D volume composed of multiple 2D slices. Since the number of slices varies across exams, we standardized all inputs to a fixed depth of 32 slices. Volumes with more than 32 slices were truncated, while those with fewer slices were padded with zeros. This ensured consistent input dimensions for the model.
+**3.3.1.1  Impact of Class Imbalance:**
 
-We implemented a 3D convolutional neural network using a pretrained 3D ResNet-18 architecture. The pretrained model was loaded and the final fully connected layer of the network was modified to output three values corresponding to the three prediction tasks: ACL tear, meniscus tear, and abnormality. Since each condition is independent, the model performs multi-label classification.
+The dataset shows:
+
+ - Severe imbalance in ACL class (few positive cases)
+ 
+ - 	Moderate imbalance in meniscus class 
+ 
+ - Highly skewed abnormal class(mostly positive cases)
+ 
+**3.3.1.2 Mitigation Strategy:**
+
+To address this issue:
+
+These below techniques are used to significantly improve the model performance and reduced bias toward dominant classes.
+
+ Focal Loss was employed to focus learning on hard examples
 
 <details class="collapase">
 <summary><b>Code</b></summary>
 
 ```python
 
-# Code used for modeling
+# Code used for Focal Loss(handles imbalance)
 
-train_dataset = MRNetMultiPlaneDataset(DATA_DIR, "train", augment=True)
-valid_dataset = MRNetMultiPlaneDataset(DATA_DIR, "valid", augment=False)
+class FocalLoss(nn.Module):
+    def __init__(self, gamma=2, alpha=0.75):
+        super().__init__()
+        self.gamma = gamma
+        self.alpha = alpha
 
-train_loader = DataLoader(train_dataset, batch_size=2, shuffle=True)
-valid_loader = DataLoader(valid_dataset, batch_size=2, shuffle=False)
+    def forward(self, inputs, targets):
+        bce = nn.functional.binary_cross_entropy_with_logits(inputs, targets, reduction='none')
+        pt = torch.exp(-bce)
+        return (self.alpha * (1 - pt) ** self.gamma * bce).mean()
+
         
 ```
 
 </details>
 
-**3.3.2 3D CNN Model Architecture:**
-
-We implemented a custom 3D convolutional neural network with residual connections, inspired by 3D ResNet architectures. The model consists of four residual blocks with increasing channels, followed by global average pooling. A learnable plane-attention mechanism was applied to fuse features from sagittal, coronal, and axial planes. The final fully connected layer outputs three values corresponding to the three prediction tasks: ACL tear, meniscus tear, and abnormality.
-
-
+Data augmentation was applied to improve generalization
+ 
+ 
 <details class="collapase">
 <summary><b>Code</b></summary>
 
 ```python
 
-model = Improved3DCNN().to(device)
+# Code used Data Augmentation (improves generalization)
 
-criterion = nn.BCEWithLogitsLoss(pos_weight=torch.tensor([3,2,1]).to(device))
-optimizer = torch.optim.Adam(model.parameters(), lr=2e-4)
+if self.augment:
+    if random.random() < 0.5:
+        vol = np.flip(vol, axis=1)
+    if random.random() < 0.5:
+        vol = np.flip(vol, axis=2)
+
+    vol += np.random.normal(0, 0.01, vol.shape)
+    vol *= random.uniform(0.9, 1.1)
+
+    k = random.randint(0,3)
+    vol = np.rot90(vol, k=k, axes=(1,2))
+
+
         
 ```
 
 </details>
 
-**3.3.3 Model Training**
-
-The model was trained using batches of multi-plane MRI volumes. Binary Cross-Entropy loss with logits was used to accommodate multi-label classification, and class weights were applied to mitigate label imbalance. The Adam optimizer updated the network weights. Mixed-precision training was optionally used to reduce memory consumption.
+Adaptive thresholding (Youden’s Index) was used to balance sensitivity and specificity 
 
 <details class="collapase">
 <summary><b>Code</b></summary>
 
 ```python
 
-epochs = 20
+# Code used for Adaptive Thresholding (Youden’s Index)
+
+best_thresholds = []
+
+for i in range(3):
+    fpr, tpr, thresholds = roc_curve(all_labels[:, i], all_probs[:, i])
+    j_scores = tpr - fpr
+    best_idx = np.argmax(j_scores)
+    best_t = thresholds[best_idx]
+
+    best_thresholds.append(best_t)
+    print(f"Best threshold for {label_names[i]}: {best_t:.3f}")
+
+preds = (all_probs > best_thresholds).astype(int)
+
+
+        
+```
+
+</details>
+
+
+
+**3.3.2 Model Training:**
+
+The model is trained using mini-batches of MRI volumes. To address class imbalance, Focal Loss is used instead of standard binary cross-entropy, focusing learning on harder examples.
+The Adam optimizer is used with weight decay regularization, and a learning rate scheduler adjusts the learning rate dynamically.
+Training is performed over 15 epochs, and the loss is tracked to monitor convergence.
+
+
+
+<details class="collapase">
+<summary><b>Code</b></summary>
+
+```python
+
+#Code: Training Loop
+
+epochs = 15
 train_losses = []
 
 for epoch in range(epochs):
     model.train()
     total_loss = 0
+
     for sag, cor, axi, labels in train_loader:
         sag, cor, axi, labels = sag.to(device), cor.to(device), axi.to(device), labels.to(device)
+
         optimizer.zero_grad()
         outputs = model(sag, cor, axi)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
+
         total_loss += loss.item()
-    epoch_loss = total_loss / len(train_loader)
-    train_losses.append(epoch_loss)
-    print(f"Epoch {epoch+1}: {epoch_loss:.4f}")
-    
+
+    loss_avg = total_loss / len(train_loader)
+    train_losses.append(loss_avg)
+
+    scheduler.step(loss_avg)
+
+    print(f"Epoch {epoch+1}: {loss_avg:.4f}")
+
+        
 ```
 
-</details>    
+</details>
 
-### 3.4 Results
-    
-**3.4.1 Training Performance**
+**3.4 Results**
 
-The training loss consistently decreased over 20 epochs, indicating the model successfully learned meaningful patterns from the MRI data. Early epochs showed rapid improvement, followed by slower convergence in later epochs. Minor fluctuations may indicate slight overfitting, but overall convergence was stable.
+**3.4.1 Training Performance: **
+
+The training loss steadily decreased over 15 epochs, indicating effective learning. Early epochs showed rapid improvement, followed by gradual convergence.
+
+Minor fluctuations suggest slight regularization effects from dropout and focal loss, but overall training remained stable without severe overfitting.
+
 
 <details class="collapase">
 <summary><b>Code</b></summary>
 
 ```python
 
-plt.figure()
-plt.plot(train_losses, marker='o')
+#Code: Training Loss Plot
+
+plt.plot(train_losses)
 plt.title("Training Loss Curve")
 plt.xlabel("Epoch")
 plt.ylabel("Loss")
 plt.grid()
 plt.show()
 
+    
 ```
 
-</details> 
+</details>
+
 
 <center>
-![Figure 5: Training Loss Curve](Images/Results/Training Loss Curve.png)
+![Figure 5: Training Loss Curve](Images/Results/Training Loss.png)
 
 
 </center>
 
 **3.4.2 ROC Curves**
 
-The Receiver Operating Characteristic (ROC) curves were plotted to evaluate the model’s ability to distinguish between positive and negative cases across the three classification tasks: ACL tear, meniscus tear, and abnormality detection.
+ROC curves were plotted to evaluate classification performance across all tasks. The model achieved strong discriminative ability:
+
+ - ACL: 0.827 
+ - Meniscus: 0.746 
+ - Abnormal: 0.833
+ 
+These values indicate good performance, especially for ACL and abnormal detection.
+
 
 
 <details class="collapase">
@@ -767,34 +853,26 @@ The Receiver Operating Characteristic (ROC) curves were plotted to evaluate the 
 ```python
 
 plt.figure()
-for i, name in enumerate(labels_names):
+for i, name in enumerate(label_names):
     fpr, tpr, _ = roc_curve(all_labels[:, i], all_probs[:, i])
     plt.plot(fpr, tpr, label=f"{name} (AUC={auc(fpr,tpr):.3f})")
+
 plt.plot([0,1],[0,1],'k--')
+plt.legend()
 plt.title("ROC Curves")
 plt.xlabel("FPR")
 plt.ylabel("TPR")
-plt.legend()
 plt.grid()
 plt.show()
+
 ```
 
 </details> 
 
 
 <center>
-![Figure 6: ROC Curves](Images/Results/ROC Curves.png)
+![Figure 6: ROC Curves](Images/ROC Curve.png)
 </center>
-
-The Area Under the Curve (AUC) values obtained are as follows:
-
-ACL: 0.793
-Meniscus: 0.767
-Abnormal: 0.806
-
-These results indicate that the model achieves good discriminative performance across all classes, with AUC values close to 0.8.
-
-Among the three tasks, abnormality detection shows the highest performance (AUC = 0.806), suggesting that the model is most effective at identifying general abnormalities in knee MRI scans. The ACL classification also performs strongly (AUC = 0.793), while meniscus tear detection shows slightly lower performance (AUC = 0.767), likely due to more subtle structural variations and higher inter-class similarity.
 
 
 
@@ -809,75 +887,85 @@ Confusion matrices were used to evaluate the classification performance of the m
 
 ```python
 
-fig, axes = plt.subplots(1,3,figsize=(15,4))
-for i, name in enumerate(labels_names):
-    cm = confusion_matrix(all_labels[:,i], all_preds[:,i])
+#Code: Confusion Matrices
+
+fig, axes = plt.subplots(1,3, figsize=(15,4))
+
+for i, name in enumerate(label_names):
+    cm = confusion_matrix(all_labels[:,i], preds[:,i])
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=axes[i])
     axes[i].set_title(name)
+
 plt.tight_layout()
 plt.show()
+
 ```
 
 </details>
 
 <center>
-![Figure 7: Confusion Matrix](Images/Results/Confusion Matrix.png)
+![Figure 7: Confusion Matrix](Images/Confusion new.png)
 
 </center>
 
-- The model demonstrates strong detection capability, particularly for abnormalities and meniscus tears.
+Confusion matrices show improved balance between sensitivity and specificity compared to earlier models.
 
-- ACL detection is moderate, with room for improvement in reducing both false positives and false negatives.
+ -	The ACL classifier demonstrates balanced performance, with a good number of true positives (41) and true negatives (51), though some false positives (15) and false negatives (13) remain.
+ 
+ - The meniscus classifier shows moderate performance, with an increased number of false positives (19), indicating a tendency to overpredict meniscus tears.
+ 
+ - The abnormality classifier achieves high true positive detection (85), demonstrating strong sensitivity, but relatively fewer true negatives (17), indicating reduced specificity.
 
-- The model tends to favor higher sensitivity (detecting positives) at the cost of lower specificity (more false positives), especially for the meniscus class.
-
-This behavior is consistent with the applied class weighting and thresholding strategy, which prioritizes capturing positive cases.
 
 
 **3.4.4 Probability Distribution Plots**
 
-
-- **ACL:**
-
-The model shows good discriminative power, with clear separation between the peaks for positive and negative cases and only a moderate amount of overlap in the middle probability range.
-
-- **Meniscus:**
-
-This is the most challenging category, as seen by the significant overlap between the two distributions; the model is frequently assigning high probabilities to negative cases, which will likely lead to a higher rate of False Positives.
-
-- **Abnormal:** The model is highly confident and accurate here, with the vast majority of positive cases clustered extremely close to a probability of $1.0$, indicating it is very effective at identifying general knee pathologies.
+Probability distribution plots were used to visualize the model’s confidence in predicting positive and negative cases. Ideally, positive samples should have probabilities close to 1, while negative samples should be near 0.
 
 
 <details class="collapase">
 <summary><b>Code</b></summary>
 
-**3.3.4 Summary of the evaluation metrics:**
-
 
 ```python
 
-for i, name in enumerate(labels_names):
+for i, name in enumerate(label_names):
     plt.figure()
     plt.hist(all_probs[:,i][all_labels[:,i]==1], bins=20, alpha=0.6, label="Positive")
     plt.hist(all_probs[:,i][all_labels[:,i]==0], bins=20, alpha=0.6, label="Negative")
     plt.title(f"{name} Probability Distribution")
     plt.legend()
     plt.show()
+
+
 ```
 
 </details>
 
 <center>
-![Figure 8: ACL Probability Distribution](Images/Results/ACL Probability Dist.png)
+![Figure 8: ACL Probability Distribution](Images/ACL Probability new.png)
 </center>
 
 <center>
-![Figure 9: Meniscus Probability Distribution](Images/Results/Meniscus Probability Dist.png)
+![Figure 9: Meniscus Probability Distribution](Images/Meniscus new.png)
 </center>
 
 <center>
-![Figure 10: Abnormal Probability Distribution](Images/Results/Probability Distribution.png)
+![Figure 10: Abnormal Probability Distribution](Images/Abnormal new.png)
 </center>
+
+
+- **ACL:**
+
+The ACL probability distribution shows a reasonable separation between positive and negative cases, with moderate overlap indicating some classification uncertainty.
+
+- **Meniscus:**
+
+The meniscus probability distribution exhibits significant overlap between positive and negative classes, indicating difficulty in distinguishing subtle structural variations.
+
+- **Abnormal:** 
+
+The model is Strong confidence in predictions and separation 
 
 
 **3.4.5 Plane Attention Weights**
@@ -901,69 +989,84 @@ plt.show()
 </details> 
 
 <center>
-![Figure 11: Plane Attention Weights](Images/Results/Plane Attention.png)
+![Figure 11: Plane Attention Weights](Images/Plane new.png)
 </center>
 
 
-Axial has the Highest Importance (~0.36): The model relies most heavily on the Axial plane. This suggests that, for the specific condition being predicted, the Axial view contains the most distinct features or "evidence" for the model's decision-making process.
+Sagittal has the Highest Importance (~0.36): The model relies most heavily on the Axial plane. This suggests that, for the specific condition being predicted, the Axial view contains the most distinct features or "evidence" for the model's decision-making process.
 
-Sagittal is a Close Second (~0.35): The importance of the Sagittal plane is nearly equal to the Axial plane. This indicates that the model finds significant diagnostic value in both of these views.
+Axial is a Close Second (~0.34): The importance of the Sagittal plane is nearly equal to the Axial plane. This indicates that the model finds significant diagnostic value in both of these views.
 
-Coronal has the Lowest Importance (~0.29): While still contributing significantly, the Coronal plane is weighted the least. This implies that the features found in the Coronal view are either more redundant or slightly less informative for the final classification than the other two.
+Coronal has the Lowest Importance (~0.30): While still contributing significantly, the Coronal plane is weighted the least. This implies that the features found in the Coronal view are either more redundant or slightly less informative for the final classification than the other two.
 
 
 **3.4.6 Validation Metrics**
 
 
-After training, the model was evaluated on the validation dataset. Predictions were converted into probabilities using a sigmoid function and then thresholded to produce binary outputs. Sensitivity, specificity, accuracy, and AUC-ROC were calculated for each condition.
+After training, the model was evaluated on the validation dataset. Predictions were converted into probabilities using a sigmoid function and then thresholded to produce binary outputs. Sensitivity, specificity, accuracy, AUC-ROC and F1 were calculated for each condition.
 
 <details class="collapase">
 <summary><b>Code</b></summary>
 
 ```python
 
-model.eval()
-all_labels, all_probs, all_preds = [], [], []
+# code for Metrics calculation
 
-with torch.no_grad():
-    for sag, cor, axi, labels in valid_loader:
-        sag, cor, axi = sag.to(device), cor.to(device), axi.to(device)
-        probs = torch.sigmoid(model(sag, cor, axi)).cpu().numpy()
-        preds = (probs > [0.5,0.5,0.7]).astype(int)  # adjustable thresholds
-        all_labels.extend(labels.numpy())
-        all_probs.extend(probs)
-        all_preds.extend(preds)
+print("\n=== FINAL METRICS ===\n")
 
-all_labels = np.array(all_labels)
-all_probs = np.array(all_probs)
-all_preds = np.array(all_preds)
-labels_names = ["ACL","Meniscus","Abnormal"]
+for i, name in enumerate(label_names):
+    cm = confusion_matrix(all_labels[:, i], preds[:, i])
+    tn, fp, fn, tp = cm.ravel()
+
+    sensitivity = tp / (tp + fn + 1e-8)
+    specificity = tn / (tn + fp + 1e-8)
+    accuracy = (tp + tn) / (tp + tn + fp + fn + 1e-8)
+
+    fpr, tpr, _ = roc_curve(all_labels[:, i], all_probs[:, i])
+    auc_score = auc(fpr, tpr)
+
+    print(f"{name}:")
+    print(f"  Sensitivity: {sensitivity:.3f}")
+    print(f"  Specificity: {specificity:.3f}")
+    print(f"  Accuracy:    {accuracy:.3f}")
+    print(f"  AUC:         {auc_score:.3f}\n")
+
 
 ```
 
 </details> 
 
+Table 3:Validation Metrics Output
+
 <center>
-![Figure 12: Validation Metrics](Images/Metrics.png)
+
+| Class   | Sensitivity| Specificity    | Accuracy       | AUC           | F1 Score | 
+|---------|------------|----------------|----------------|---------------|----------|
+| ACL     | 0.759      | 0.773          | 0.767          | 0.827         | 0.745    | 
+| Meniscus| 0.731      | 0.721          | 0.725          | 0.746         | 0.697    | 
+| Abnormal| 0.895      | 0.680          | 0.850          | 0.833         | 0.904    | 
+
 </center>
 
-**3.4.7 Summary of the evaluation metrics:**
+
+**3.4.7 Summary of the validation metrics:**
+
+The proposed 3D CNN model was evaluated on the validation dataset using sensitivity, specificity, accuracy, AUC, and F1-score across the three classification tasks: ACL tear, meniscus tear, and abnormality detection.
 
 - **ACL:** 
 
-Moderate performance with balanced sensitivity (0.630) and specificity (0.697), and good discriminative ability (AUC 0.793).
+The model achieves a balanced performance for ACL classification, with a sensitivity of 0.759 and specificity of 0.773, indicating a good trade-off between detecting positive cases and minimizing false positives. The accuracy of 0.767 and AUC of 0.827 further confirm strong discriminative capability. The F1-score of 0.745 reflects a well-balanced precision–recall performance.
 
 - **Meniscus:** 
 
-Very high sensitivity (0.923) but low specificity (0.382), indicating overprediction of meniscus tears. AUC is 0.767
+For meniscus classification, the model shows moderate performance, with sensitivity (0.731) and specificity (0.721) relatively well balanced. The accuracy of 0.725 and AUC of 0.746 indicate acceptable but comparatively lower performance than the other tasks. The F1-score of 0.697 suggests that meniscus tear detection remains more challenging, likely due to subtle structural variations in MRI scans.
 
 - **Abnormal:** 
 
-Very high sensitivity (0.926) but low specificity (0.400), suggesting the model frequently flags normal cases as abnormal. AUC is 0.806.
+The model performs best in abnormality detection, achieving a high sensitivity of 0.895, indicating strong capability in identifying abnormal cases. While specificity (0.680) is slightly lower, the overall accuracy of 0.850 and AUC of 0.833 demonstrate robust performance. The highest F1-score of 0.904 among all classes highlights excellent balance between precision and recall..
 
 
-These results suggest that the model detects positive cases effectively but tends to overpredict meniscus tears and abnormalities. Threshold tuning, class balancing, or loss function adjustments may improve specificity and overall reliability for clinical application.
-
+Overall, the model demonstrates strong performance across all tasks, with particularly high effectiveness in detecting abnormalities
 
 ## Conclusion
 
