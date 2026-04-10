@@ -1,5 +1,5 @@
 ---
-title: " Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs) - Spring 2026 "
+title: " Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs)"
 authors: "Bala Raju Pidatala, Sabna Balasubramoniapillai (Advisor: Dr. Archaf Cohen)"
 date: today
 format:
