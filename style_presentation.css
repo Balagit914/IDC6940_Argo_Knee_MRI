@@ -167,24 +167,34 @@
 }
 
 /* ── Title slide ── */
-#title-slide {
-  color: #ffffff;
-  background-color: #1a3a5c !important;
-  text-align: center;
+/* TITLE SLIDE ONLY — scoped by data-background-color attribute */
+.reveal .slides section[data-background-color="#1a3a5c"] {
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-#title-slide .title {
+.reveal .slides section[data-background-color="#1a3a5c"] h2 {
   color: #ffffff !important;
-  font-size: 1.55em;
-  border: none;
-  margin-bottom: 0.3em;
-  text-shadow: none;
+  border-bottom: none !important;
+  font-size: 1.6em !important;
+  text-align: center !important;
 }
 
-#title-slide .author,
-#title-slide .date {
-  color: rgba(222, 255, 255, 0.88) !important;
-  font-size: 0.88em;
+.reveal .slides section[data-background-color="#1a3a5c"] p {
+  color: #ffffff !important;
+  text-align: center !important;
+}
+
+.reveal .slides section[data-background-color="#1a3a5c"] strong {
+  color: #ffffff !important;
+}
+
+.reveal .slides section[data-background-color="#1a3a5c"] em {
+  color: rgba(255, 255, 255, 0.88) !important;
+  font-style: normal;
 }
 
 /* ── Bold ── */

@@ -1,6 +1,6 @@
 ---
 title: "Detection of Knee Pathologies from MRI Using CNN"
-authors: "Bala Raju Pidatala, Sabna Balasubramoniapillai (Advisor: Dr. Archaf Cohen)"
+authors: "Bala Raju Pidatala & Sabna Balasubramoniapillai (Advisor: Dr. Archaf Cohen)"
 date: today
 bibliography: references.bib
 format:
@@ -28,14 +28,6 @@ execute:
   message: false
 ---
 
-
-## Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs)
-
-*Bala Raju Pidatala &nbsp;|&nbsp; Sabna Balasubramoniapillai*
-
-*Advisor: Dr. Archaf Cohen*
-
-IDC 6940 — Capstone Projects in Data Science &nbsp;|&nbsp; Spring 2026
 
 ---
 

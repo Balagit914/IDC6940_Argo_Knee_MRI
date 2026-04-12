@@ -499,7 +499,7 @@ background-color: #ffffff;
 }
 .reveal .slides section {
 text-align: left;
-padding:0; !important
+padding: 10px 48px 10px 48px;
 }
 
 .reveal h1,
@@ -633,22 +633,30 @@ padding: 2px 7px;
 border-radius: 3px;
 }
 
-#title-slide {
-color: #ffffff;
-background-color: #1a3a5c !important;
-text-align: center;
+
+.reveal .slides section[data-background-color="#1a3a5c"] {
+text-align: center !important;
+display: flex !important;
+flex-direction: column !important;
+align-items: center !important;
+justify-content: center !important;
 }
-#title-slide .title {
+.reveal .slides section[data-background-color="#1a3a5c"] h2 {
 color: #ffffff !important;
-font-size: 1.55em;
-border: none;
-margin-bottom: 0.3em;
-text-shadow: none;
+border-bottom: none !important;
+font-size: 1.6em !important;
+text-align: center !important;
 }
-#title-slide .author,
-#title-slide .date {
-color: rgba(222, 255, 255, 0.88) !important;
-font-size: 0.88em;
+.reveal .slides section[data-background-color="#1a3a5c"] p {
+color: #ffffff !important;
+text-align: center !important;
+}
+.reveal .slides section[data-background-color="#1a3a5c"] strong {
+color: #ffffff !important;
+}
+.reveal .slides section[data-background-color="#1a3a5c"] em {
+color: rgba(255, 255, 255, 0.88) !important;
+font-style: normal;
 }
 
 .reveal strong {
@@ -1309,50 +1317,6 @@ display: block;
 margin-left: auto;
 margin-right: 0; }
 </style>
-  <!-- custom_templates.html — include-in-header -->
-  <script>
-  (function () {
-    "use strict";
-
-    /* ── Accordion handler only — tabs now use native Quarto tabsets ── */
-    function initAccordions() {
-      document.querySelectorAll(".accordion-header").forEach(function (btn) {
-        if (btn.dataset.accordionBound) return;
-        btn.dataset.accordionBound = "1";
-        btn.addEventListener("click", function () {
-          var body   = this.nextElementSibling;
-          var isOpen = body && body.classList.contains("open");
-          var parent = this.closest(".accordion");
-          if (parent) {
-            parent.querySelectorAll(".accordion-body").forEach(function (b) { b.classList.remove("open"); });
-            parent.querySelectorAll(".accordion-header").forEach(function (h) { h.classList.remove("open"); });
-          }
-          if (!isOpen && body) {
-            body.classList.add("open");
-            this.classList.add("open");
-          }
-        });
-      });
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initAccordions);
-    } else {
-      initAccordions();
-    }
-
-    window.addEventListener("load", initAccordions);
-
-    var revealCheck = setInterval(function () {
-      if (typeof Reveal !== "undefined") {
-        clearInterval(revealCheck);
-        Reveal.on("ready", initAccordions);
-        Reveal.on("slidechanged", initAccordions);
-        initAccordions();
-      }
-    }, 100);
-  })();
-  </script>
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -1364,18 +1328,12 @@ margin-right: 0; }
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Bala Raju Pidatala, Sabna Balasubramoniapillai (Advisor: Dr. Archaf Cohen) 
+Bala Raju Pidatala &amp; Sabna Balasubramoniapillai (Advisor: Dr. Archaf Cohen) 
 </div>
 </div>
 </div>
 
   <p class="date">2026-04-11</p>
-</section>
-<section id="detection-of-knee-pathologies-from-mri-using-deep-learning-models-cnns" class="slide level2">
-<h2>Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs)</h2>
-<p><em>Bala Raju Pidatala  |  Sabna Balasubramoniapillai</em></p>
-<p><em>Advisor: Dr. Archaf Cohen</em></p>
-<p>IDC 6940 — Capstone Projects in Data Science  |  Spring 2026</p>
 </section>
 <section id="introduction" class="slide level2">
 <h2>Introduction</h2>
