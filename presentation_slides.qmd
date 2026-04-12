@@ -1,0 +1,349 @@
+---
+title: "Detection of Knee Pathologies from MRI Using CNN"
+authors: "Bala Raju Pidatala, Sabna Balasubramoniapillai (Advisor: Dr. Archaf Cohen)"
+date: today
+bibliography: references.bib
+format:
+  revealjs:
+    theme: default
+    transition: slide
+    slide-number: true
+    footer: "IDC 6940 | Spring 2026 | Knee MRI Pathology Detection"
+    css: style_presentation.css
+    include-in-header: custom_templates.html
+    width: 1280
+    height: 720
+    margin: 0.05
+    highlight-style: github
+    self-contained: true
+    scrollable: true          # makes all slides scrollable globally
+    controls: true
+    progress: true
+    history: true
+    chalkboard: false
+    logo: ""
+course: Capstone Projects in Data Science
+execute:
+  warning: false
+  message: false
+---
+
+
+## Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs)
+
+*Bala Raju Pidatala &nbsp;|&nbsp; Sabna Balasubramoniapillai*
+
+*Advisor: Dr. Archaf Cohen*
+
+IDC 6940 — Capstone Projects in Data Science &nbsp;|&nbsp; Spring 2026
+
+---
+
+## Introduction
+
+**Background**
+
+- Knee disorders — ACL tears, meniscal injuries, osteoarthritis — affect millions globally each year
+- X-ray cannot detect soft-tissue damage; early changes are frequently missed
+- MRI is the gold standard: high contrast, multi-plane imaging, detailed soft-tissue differentiation
+
+**Problem with Manual MRI Analysis**
+
+- Time-consuming — each exam can require 30–60 minutes of radiologist review
+- High inter-observer variability — readers often disagree on borderline findings
+- Cognitively demanding — hundreds of slices per study, subtle pathology changes
+
+**Proposed Solution**
+
+- Automate detection using a **3D Convolutional Neural Network (3D CNN)**
+- Trained on multi-plane MRI volumes to detect three knee pathologies simultaneously
+
+---
+
+## Research Objective
+
+**Core Research Question**
+
+> Can a 3D CNN learn spatial and anatomical information from multi-plane knee MRI volumes to accurately detect multiple knee pathologies simultaneously?
+
+**Three Binary Classification Tasks**
+
+| Task | What is Detected | Clinical Use |
+|---|---|---|
+| ACL Tear | Ligament rupture present (1) vs. absent (0) | Surgical planning |
+| Meniscus Tear | Meniscal damage present (1) vs. absent (0) | Surgical vs. conservative care |
+| Abnormality | Any knee pathology present (1) vs. absent (0) | Screening and triage |
+
+**Approach**
+
+- Each task is treated as an independent binary classification problem
+- Three parallel 3D CNN models — one per pathology
+- Performance evaluated using AUC-ROC, Accuracy, Sensitivity, Specificity, F1-Score
+
+---
+
+## Dataset: Stanford MRNet
+
+**Dataset Source**
+
+- MRNet — collected at Stanford University Medical Center (2001–2012)
+- Publicly available for research use
+
+**Dataset Statistics**
+
+| Attribute | Value |
+|---|---|
+| Total MRI exams | 1,130 |
+| Training set | 1,010 exams |
+| Validation set | 120 exams |
+| MRI imaging planes | Sagittal, Coronal, Axial |
+| Labels per exam | ACL tear, Meniscus tear, Abnormality |
+| Label type | Binary: 0 = absent, 1 = present |
+
+**Class Distribution**
+
+| Label | Negative | Positive | Imbalance Ratio |
+|---|---|---|---|
+| ACL Tear | 922 | 208 | 4.4 : 1 |
+| Meniscus Tear | 733 | 397 | 1.85 : 1 |
+| Abnormality | 217 | 913 | Inverse (mostly abnormal) |
+
+---
+
+## Exploratory Data Analysis
+
+**Class Imbalance Across All Three Tasks**
+
+- ACL: only 18% positive — severe imbalance, dominant source of false negatives
+- Meniscus: 35% positive — moderate imbalance
+- Abnormality: 81% abnormal — inverse imbalance due to referral-based population
+
+**Volumetric Structure**
+
+- Slice counts range from **17 to 61** per exam — variable depth across studies
+- All volumes standardised to **32 slices** using central crop or zero-padding
+- Pixel intensities are right-skewed — most values fall in the 0–80 range
+
+**Why 3D Modeling Is Necessary**
+
+- Pathological features such as ACL fibre disruption span multiple MRI slices
+- 2D single-slice models lose inter-slice spatial context
+- 3D CNNs naturally model the volumetric structure of knee anatomy
+
+**Preprocessing Summary**
+
+| Step | Method Applied |
+|---|---|
+| Depth standardisation | Crop or pad to 32 slices |
+| Intensity normalisation | Per-channel zero mean, unit variance |
+| Data augmentation | Random flips, 90° rotations, intensity jitter |
+| Class imbalance | Focal Loss + Youden's Index thresholding |
+
+---
+
+## Methodology: 3D CNN Architecture
+
+**Why 3D CNN Instead of 2D CNN?**
+
+- 2D CNNs process each slice independently — no spatial context across depth
+- 3D CNNs apply kernels across height, width, and depth simultaneously
+- This preserves inter-slice relationships essential for volumetric knee anatomy
+
+**Architecture Pipeline**
+
+Input MRI Volume → 3D Convolutional Layers → ReLU + Max Pooling → Multi-Plane Fusion → Sigmoid Output
+
+| Stage | Description |
+|---|---|
+| Input | Sagittal, coronal, axial volumes — each padded to 32 slices |
+| 3D Conv Layers | Extract volumetric features: edges, textures, anatomical contours |
+| ReLU Activation | Introduces non-linearity; overcomes vanishing gradients |
+| Max Pooling | Reduces spatial dimensions; retains dominant activations |
+| Multi-Plane Fusion | Learnable attention weights combine outputs from all three planes |
+| Sigmoid Output | Produces an independent binary probability per pathology |
+
+**Key Design Decisions**
+
+- Three separate binary classifiers — one per pathology, trained independently
+- Focal Loss replaces standard binary cross-entropy to handle class imbalance
+- Attention weights allow the model to learn which plane matters most per task
+
+---
+
+## Training Setup
+
+**Hyperparameters**
+
+| Parameter | Value |
+|---|---|
+| Optimizer | Adam with weight decay |
+| Learning rate scheduler | ReduceLROnPlateau |
+| Epochs | 15 |
+| Loss function | Focal Loss (γ = 2, α = 0.75) |
+| Batch | Mini-batch of MRI volumes |
+| Decision threshold | Youden's Index (per task) |
+
+**Addressing Class Imbalance**
+
+- **Focal Loss** — downweights easy negatives; focuses training on hard minority-class examples
+  - Formula: FL(p) = −α(1−p)^γ · log(p)
+- **Data Augmentation** — random flips, rotations, and intensity jitter applied during training
+- **Youden's Index** — selects threshold that maximises (Sensitivity + Specificity − 1) per task
+  - Avoids the bias of the standard 0.5 cutoff toward the majority class
+
+**Training Behaviour**
+
+- Loss decreased steadily from 0.110 to 0.094 over 15 epochs
+- No severe overfitting observed — dropout and focal loss provided regularisation
+- Model converged before epoch 14
+
+---
+
+## Results: ACL Tear Detection
+
+**Performance Metrics**
+
+| Metric | Value |
+|---|---|
+| AUC-ROC | **0.827** |
+| Accuracy | 0.767 |
+| Sensitivity | 0.759 |
+| Specificity | 0.773 |
+| F1-Score | 0.745 |
+
+**Confusion Matrix — Validation Set (120 exams)**
+
+| | Predicted Negative | Predicted Positive |
+|---|---|---|
+| Actual Negative | 51 (TN) | 15 (FP) |
+| Actual Positive | 13 (FN) | 41 (TP) |
+
+**Key Observations**
+
+- AUC of 0.827 confirms strong discriminative capability across all decision thresholds
+- Sensitivity and specificity are well-balanced — no major bias toward either class
+- 15 FP: largely bone marrow oedema near the ACL footprint misclassified as tears
+- 13 FN: mostly partial-thickness tears with subtle signal changes
+- Sagittal plane received the highest attention weight (35.5%) — consistent with clinical practice
+
+---
+
+## Results: Meniscus Tear Detection
+
+**Performance Metrics**
+
+| Metric | Value |
+|---|---|
+| AUC-ROC | **0.746** |
+| Accuracy | 0.725 |
+| Sensitivity | 0.731 |
+| Specificity | 0.721 |
+| F1-Score | 0.697 |
+
+**Confusion Matrix — Validation Set (120 exams)**
+
+| | Predicted Negative | Predicted Positive |
+|---|---|---|
+| Actual Negative | 49 (TN) | 19 (FP) |
+| Actual Positive | 14 (FN) | 38 (TP) |
+
+**Key Observations**
+
+- Most challenging task — lowest AUC (0.746) and F1-score (0.697) across all three tasks
+- Meniscal tears show subtle structural changes that are difficult to distinguish from normal anatomy
+- Probability distributions overlap significantly in the 0.30–0.55 range
+- 19 FP: model tends to over-predict tears in borderline cases
+- Coronal plane is most relevant clinically for menisci, but carries the lowest attention weight (30.1%)
+
+---
+
+## Results: Abnormality Detection
+
+**Performance Metrics**
+
+| Metric | Value |
+|---|---|
+| AUC-ROC | **0.833** |
+| Accuracy | 0.850 |
+| Sensitivity | **0.895** |
+| Specificity | 0.680 |
+| F1-Score | **0.904** |
+
+**Confusion Matrix — Validation Set (120 exams)**
+
+| | Predicted Negative | Predicted Positive |
+|---|---|---|
+| Actual Negative | 17 (TN) | 8 (FP) |
+| Actual Positive | 10 (FN) | 85 (TP) |
+
+**Key Observations**
+
+- Best-performing task — highest AUC, accuracy, and F1-score
+- Sensitivity of 89.5% — model reliably identifies abnormal exams; suitable for clinical screening
+- Lower specificity (0.680) is expected given 81% of cases in this set are abnormal
+- Positive cases cluster above probability 0.60; negatives below 0.50 — clear separation
+- Well-suited for deployment as a triage filter to prioritise abnormal scans for specialist review
+
+---
+
+## Summary of Results
+
+**Validation Metrics — All Three Tasks**
+
+| Pathology | AUC-ROC | Accuracy | Sensitivity | Specificity | F1-Score |
+|---|---|---|---|---|---|
+| ACL Tear | 0.827 | 0.767 | 0.759 | 0.773 | 0.745 |
+| Meniscus Tear | 0.746 | 0.725 | 0.731 | 0.721 | 0.697 |
+| **Abnormality** | **0.833** | **0.850** | **0.895** | 0.680 | **0.904** |
+
+**Learned Plane Attention Weights**
+
+| Plane | Weight | Clinical Relevance |
+|---|---|---|
+| Sagittal | 35.5% | Primary view for ligament evaluation |
+| Axial | 34.4% | Cross-sectional joint anatomy |
+| Coronal | 30.1% | Menisci and cartilage |
+
+> The model independently learned to prioritise the sagittal plane — consistent with established radiological practice — without any explicit supervision.
+
+---
+
+## Conclusion and Future Work
+
+**Key Findings**
+
+- The 3D CNN successfully detected all three pathologies from volumetric MRI
+  - ACL Tear: AUC = 0.827, F1 = 0.745
+  - Meniscus Tear: AUC = 0.746, F1 = 0.697
+  - Abnormality: AUC = 0.833, F1 = 0.904
+- Multi-plane attention weights aligned with clinical imaging priorities (Sagittal > Axial > Coronal)
+- Focal Loss and Youden's Index effectively managed class imbalance across all tasks
+- Abnormality detection is the strongest task and most suitable for clinical triage deployment
+
+**Limitations**
+
+- Single-institution dataset — limited scanner and protocol diversity
+- Severe ACL class imbalance (4.4:1) still produces some false negatives
+- 3D CNN memory requirements are approximately 20× higher than 2D equivalents
+- Labels derived from radiology reports, not surgical confirmation — potential label noise
+
+**Future Work**
+
+| Direction | Goal |
+|---|---|
+| Multi-centre datasets | Improve generalisation across different scanners and hospitals |
+| Self-supervised learning | Reduce reliance on expensive manual annotations |
+| Federated learning | Enable multi-site training without sharing patient data |
+| Vision Transformers | Capture long-range spatial dependencies beyond CNN receptive fields |
+
+---
+
+## Thank You
+
+**Bala Raju Pidatala &nbsp;|&nbsp; Sabna Balasubramoniapillai**
+
+*Advisor: Dr. Archaf Cohen*
+
+IDC 6940 — Capstone Projects in Data Science &nbsp;|&nbsp; Spring 2026
+
+---

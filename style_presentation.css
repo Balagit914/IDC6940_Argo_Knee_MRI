@@ -1,0 +1,200 @@
+/* 
+   presentation_style.css
+*/
+
+/* ── Base ── */
+.reveal {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 22px;
+  color: #222222;
+  background-color: #ffffff;
+}
+
+.reveal .slides section {
+  text-align: left;
+  padding: 10px 48px 10px 48px;
+}
+
+/* ── Headings ── */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #1a3a5c;
+  font-weight: bold;
+  margin-bottom: 0.4em;
+  letter-spacing: 0;
+}
+
+.reveal h1 { font-size: 1.9em; }
+
+.reveal h2 {
+  font-size: 1.4em;
+  border-bottom: 2px solid #1a3a5c;
+  padding-bottom: 6px;
+  margin-bottom: 18px;
+}
+
+.reveal h3 {
+  font-size: 1.05em;
+  color: #1a3a5c;
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+
+.reveal h4 {
+  font-size: 0.95em;
+  color: #444444;
+  margin-top: 10px;
+  margin-bottom: 4px;
+}
+
+/* ── Body text ── */
+.reveal p {
+  font-size: 0.88em;
+  line-height: 1.6;
+  margin: 0.3em 0;
+  color: #222222;
+}
+
+/* ── Lists ── */
+.reveal ul,
+.reveal ol {
+  margin-left: 1.3em;
+  margin-top: 0.2em;
+  margin-bottom: 0.3em;
+}
+
+.reveal li {
+  font-size: 0.86em;
+  line-height: 1.55;
+  margin-bottom: 0.28em;
+  color: #222222;
+}
+
+.reveal ul ul li,
+.reveal ol ul li {
+  font-size: 0.93em;
+  color: #444444;
+}
+
+/* ── Blockquote ── */
+.reveal blockquote {
+  border-left: 4px solid #1a3a5c;
+  background: #f4f6f9;
+  margin: 12px 0;
+  padding: 10px 16px;
+  font-style: normal;
+  font-size: 0.85em;
+  color: #333333;
+  border-radius: 0 3px 3px 0;
+  box-shadow: none;
+}
+
+/* ── Tables ── */
+.reveal table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.80em;
+  margin: 10px 0;
+}
+
+.reveal table thead th {
+  background-color: #1a3a5c;
+  color: #ffffff;
+  padding: 7px 12px;
+  text-align: left;
+  font-weight: bold;
+  border: 1px solid #1a3a5c;
+}
+
+.reveal table tbody td {
+  padding: 6px 12px;
+  border: 1px solid #cccccc;
+  color: #222222;
+  vertical-align: top;
+}
+
+.reveal table tbody tr:nth-child(even) {
+  background-color: #f4f6f9;
+}
+
+.reveal table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+/* ── Code ── */
+.reveal code {
+  font-family: "Courier New", Courier, monospace;
+  background: #f0f0f0;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 0.85em;
+  color: #222222;
+}
+
+.reveal pre {
+  background: #f8f8f8;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 0.78em;
+  overflow-x: auto;
+}
+
+/* ── Links ── */
+.reveal a {
+  color: #1a3a5c;
+  text-decoration: underline;
+}
+
+/* ── Footer ── */
+.reveal .footer {
+  font-size: 0.60em;
+  color: #888888;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ── Slide number ── */
+.reveal .slide-number {
+  font-size: 0.60em;
+  background: #1a3a5c;
+  color: #ffffff;
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+/* ── Title slide ── */
+#title-slide {
+  color: #ffffff;
+  background-color: #1a3a5c !important;
+  text-align: center;
+}
+
+#title-slide .title {
+  color: #ffffff !important;
+  font-size: 1.55em;
+  border: none;
+  margin-bottom: 0.3em;
+  text-shadow: none;
+}
+
+#title-slide .author,
+#title-slide .date {
+  color: rgba(222, 255, 255, 0.88) !important;
+  font-size: 0.88em;
+}
+
+/* ── Bold ── */
+.reveal strong {
+  color: #1a3a5c;
+  font-weight: bold;
+}
+
+/* ── Scrollable helper ── */
+.reveal .slides section.scrollable {
+  overflow-y: auto;
+  max-height: 88vh;
+}
