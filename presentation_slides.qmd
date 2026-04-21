@@ -1,6 +1,8 @@
 ---
-title: "Detection of Knee Pathologies from MRI Using CNN"
-authors: "Bala Raju Pidatala & Sabna Balasubramoniapillai (Advisor: Dr. Archaf Cohen)"
+title: "Detection of Knee Pathologies from MRI"
+subtitle: "Using Deep Learning Models (CNNs)"
+authors: "Bala Raju Pidatala & Sabna Balasubramoniapillai"
+institute: "Advisor: Dr. Archaf Cohen"
 date: today
 bibliography: references.bib
 format:
@@ -10,13 +12,12 @@ format:
     slide-number: true
     footer: "IDC 6940 | Spring 2026 | Knee MRI Pathology Detection"
     css: style_presentation.css
-    include-in-header: custom_templates.html
-    width: 1280
-    height: 720
+    width: 1200
+    height: 700
     margin: 0.05
     highlight-style: github
     self-contained: true
-    scrollable: true          # makes all slides scrollable globally
+    scrollable: true        
     controls: true
     progress: true
     history: true
@@ -339,3 +340,5 @@ Input MRI Volume → 3D Convolutional Layers → ReLU + Max Pooling → Multi-Pl
 IDC 6940 — Capstone Projects in Data Science &nbsp;|&nbsp; Spring 2026
 
 ---
+
+## Open for questions
