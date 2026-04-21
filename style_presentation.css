@@ -56,12 +56,12 @@
 .reveal .slides section.title-slide .subtitle,
 .reveal .slides > section:first-child .subtitle,
 .reveal .slides section.title-slide p.subtitle {
-  font-size: clamp(1.2em, 2.9vw, 1.55em);        /* match h1 exactly */
-  font-weight: 590;        /* match h1 exactly */
-  color: var(--white);     /* white, not teal */
+  font-size: clamp(1.2em, 2.9vw, 1.55em);        
+  font-weight: 590;        
+  color: var(--white);     
   margin-top: 0;
   margin-bottom: 0.6em;
-  border-bottom: none;     /* remove teal underline */
+  border-bottom: none;     
   padding-bottom: 0;
   width: 100%;
   line-height: 1.25;
