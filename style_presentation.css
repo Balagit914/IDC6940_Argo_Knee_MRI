@@ -119,7 +119,7 @@
 
 /* ---------- Section / content slide headings ---------- */
 .reveal .slides section h2 {
-  font-size: 1.55em;
+  font-size: 1.15em;
   font-weight: 700;
   color: var(--white);
   border-bottom: var(--accent-line);
@@ -139,7 +139,7 @@
 /* ---------- Body text ---------- */
 .reveal .slides section p,
 .reveal .slides section li {
-  font-size: 0.88em;
+  font-size: 0.72em;
   color: var(--off-white);
   line-height: 1.65;
 }
@@ -304,7 +304,7 @@
 }
  
 .reveal .slides section .column ul li {
-  font-size: 0.62em;
+  font-size: 0.59em;
   line-height: 1.45;
   color: var(--off-white);
   margin-bottom: 0.2em;
@@ -312,7 +312,7 @@
  
 /* Also shrink the h3 subheadings to match reduced scale */
 .reveal .slides section .column h3 {
-  font-size: 0.78em;
+  font-size: 0.75em;
   margin-top: 0.5em;
   margin-bottom: 0.15em;
 }

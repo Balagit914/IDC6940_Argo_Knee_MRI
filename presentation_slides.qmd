@@ -51,7 +51,7 @@ execute:
 
 ::: {.column width="42%"}
 
-![Sample knee MRI slices]("Sample Middle Slices.png"){.intro-img}
+![Sample knee MRI slices]("figures/Sample_Middle_Slices.png"){.intro-img}
 
 :::
 

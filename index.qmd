@@ -439,7 +439,7 @@ print("Saved: plot_all_pathologies_all_planes.png")
 #| fig-cap: "Figure 2: Representative Middle Slices of MRI Examinations - All Three Pathologies Across All Three Imaging Planes"
 #| out-width: "50%"
 #| fig-align: "center"
-knitr::include_graphics("figures/Sample Middle Slices.png")
+knitr::include_graphics("figures/Sample_Middle_Slices.png")
 ```
 </center>
 
