@@ -34,22 +34,28 @@ execute:
 
 ## Introduction
 
-**Background**
+:::: {.columns}
 
-- Knee disorders — ACL tears, meniscal injuries, osteoarthritis — affect millions globally each year
-- X-ray cannot detect soft-tissue damage; early changes are frequently missed
-- MRI is the gold standard: high contrast, multi-plane imaging, detailed soft-tissue differentiation
+::: {.column width="58%"}
 
-**Problem with Manual MRI Analysis**
+### The Clinical Problem
+- Knee disorders including osteoarthritis and ACL and meniscal tears are some of the most common musculoskeletal disorders worldwide.
+- X-ray does not show soft tissue very well. Early changes are easily overlooked.
+- MRI is considered the "gold standard" due to high contrast, multiplanar imaging and excellent soft-tissue detail.
 
-- Time-consuming — each exam can require 30–60 minutes of radiologist review
-- High inter-observer variability — readers often disagree on borderline findings
-- Cognitively demanding — hundreds of slices per study, subtle pathology changes
+### Why MRI Needs AI?
+- Machine assisted MRI reading is fast, reliable and removes variability between readers.
+- Analysis of medical images and clinical documents can aid diagnosis, but requires automation to increase effectiveness.
 
-**Proposed Solution**
+:::
 
-- Automate detection using a **3D Convolutional Neural Network (3D CNN)**
-- Trained on multi-plane MRI volumes to detect three knee pathologies simultaneously
+::: {.column width="42%"}
+
+![Sample knee MRI slices]("Sample Middle Slices.png"){.intro-img}
+
+:::
+
+::::
 
 ---
 

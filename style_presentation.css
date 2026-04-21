@@ -269,3 +269,69 @@
   overflow-y: auto;
   max-height: 680px;
 }
+
+/* 
+   INTRODUCTION SLIDE 
+*/
+ 
+/* Two-column container */
+.reveal .slides section .columns {
+  display: flex !important;
+  gap: 2em;
+  align-items: flex-start;
+  width: 100%;
+}
+ 
+/* Left text column */
+.reveal .slides section .column {
+  box-sizing: border-box;
+}
+ 
+/* h3 subheadings inside content slides — teal, no underline */
+.reveal .slides section h3 {
+  font-size: 1.0em;
+  font-weight: 700;
+  color: var(--teal);
+  margin-top: 0.7em;
+  margin-bottom: 0.25em;
+  letter-spacing: 0.01em;
+  border-bottom: none;
+}
+ 
+/* Tighter bullet spacing for intro */
+.reveal .slides section .column ul {
+  margin: 0.1em 0 0.3em 1.2em;
+}
+ 
+.reveal .slides section .column ul li {
+  font-size: 0.62em;
+  line-height: 1.45;
+  color: var(--off-white);
+  margin-bottom: 0.2em;
+}
+ 
+/* Also shrink the h3 subheadings to match reduced scale */
+.reveal .slides section .column h3 {
+  font-size: 0.78em;
+  margin-top: 0.5em;
+  margin-bottom: 0.15em;
+}
+ 
+/* MRI image on the right */
+.reveal .slides section .intro-img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--teal-dim);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  margin-top: 0.5em;
+}
+ 
+/* Caption under the image */
+.reveal .slides section figure figcaption,
+.reveal .slides section .intro-img + p {
+  font-size: 0.65em;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 0.4em;
+  font-style: italic;
+}
