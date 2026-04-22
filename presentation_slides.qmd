@@ -51,7 +51,7 @@ execute:
 
 ::: {.column width="42%"}
 
-![Sample knee MRI slices]("figures/Sample_Middle_Slices.png"){.intro-img}
+![Sample knee MRI slices]("figures/Knee_mri.jpg"){.intro-img}
 
 :::
 
@@ -65,6 +65,15 @@ execute:
 
 > Can a 3D CNN learn spatial and anatomical information from multi-plane knee MRI volumes to accurately detect multiple knee pathologies simultaneously?
 
+- Develop and train a 3D Convolutional Neural Network that can simultaneously detect ACL, Meniscus, and general knee abnormalities.
+
+- Use the Stanford MRNet dataset which is a publicly available collection of clinical knee MRI scans from multiple centers collected between 2001 and 2012.
+
+- This task requires developing three separate dual-classification problems and assessing them individually as well as jointly.
+Deep Fusion (multi-plane fusion: sagittal + coronal + axial) with learnable plane-attention weights.
+
+- Evaluate AUC-ROC, accuracy, sensitivity, specificity, F1-score - for all three classification tasks.
+
 **Three Binary Classification Tasks**
 
 | Task | What is Detected | Clinical Use |
@@ -73,40 +82,43 @@ execute:
 | Meniscus Tear | Meniscal damage present (1) vs. absent (0) | Surgical vs. conservative care |
 | Abnormality | Any knee pathology present (1) vs. absent (0) | Screening and triage |
 
-**Approach**
-
-- Each task is treated as an independent binary classification problem
-- Three parallel 3D CNN models — one per pathology
-- Performance evaluated using AUC-ROC, Accuracy, Sensitivity, Specificity, F1-Score
-
 ---
 
 ## Dataset: Stanford MRNet
 
-**Dataset Source**
+:::: {.columns}
 
-- MRNet — collected at Stanford University Medical Center (2001–2012)
-- Publicly available for research use
+::: {.column width="50%"}
 
-**Dataset Statistics**
+- Open knee MRI data set - Stanford University School of Medicine
+- Clinical scans collected from 2001–2012 (11-year period)
+- Each study is provided in 3 imaging planes, (Sagittal, Coronal, Axial)
+- Capable of being used for 3 binary diagnostic projects: ACL tear, Meniscus tear, Any Abnormality.
+- Binary classification label format: binary CSV (0s and 1s where 1s indicate presence).
 
-| Attribute | Value |
-|---|---|
-| Total MRI exams | 1,130 |
-| Training set | 1,010 exams |
-| Validation set | 120 exams |
-| MRI imaging planes | Sagittal, Coronal, Axial |
-| Labels per exam | ACL tear, Meniscus tear, Abnormality |
-| Label type | Binary: 0 = absent, 1 = present |
+:::
 
-**Class Distribution**
+::: {.column width="50%"}
 
-| Label | Negative | Positive | Imbalance Ratio |
-|---|---|---|---|
-| ACL Tear | 922 | 208 | 4.4 : 1 |
-| Meniscus Tear | 733 | 397 | 1.85 : 1 |
-| Abnormality | 217 | 913 | Inverse (mostly abnormal) |
+![Class distribution across all three diagnostic tasks](figures/Class_Distribution.png){.dataset-img}
 
+::: {.warning-box}
+⚠ ACL imbalance: 4.4:1 | Abnormal imbalance: 4.2:1 (reversed)  
+Mitigated by Focal Loss + data augmentation + Youden's Index thresholding
+:::
+
+:::
+
+::::
+
+```{=html}
+<div class="stat-row">
+  <div class="stat-box"><strong>1,130</strong>Total MRI Studies</div>
+  <div class="stat-box"><strong>3</strong>Imaging Planes</div>
+  <div class="stat-box"><strong>3</strong>Diagnostic Tasks</div>
+  <div class="stat-box"><strong>11 yrs</strong>Data Collection</div>
+</div>
+```
 ---
 
 ## Exploratory Data Analysis
