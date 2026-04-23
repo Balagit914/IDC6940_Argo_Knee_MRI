@@ -304,7 +304,7 @@
 }
  
 .reveal .slides section .column ul li {
-  font-size: 0.62em;
+  font-size: 0.59em;
   line-height: 1.45;
   color: var(--off-white);
   margin-bottom: 0.2em;
@@ -312,7 +312,7 @@
  
 /* Also shrink the h3 subheadings to match reduced scale */
 .reveal .slides section .column h3 {
-  font-size: 0.78em;
+  font-size: 0.75em;
   margin-top: 0.5em;
   margin-bottom: 0.15em;
 }
@@ -450,7 +450,7 @@
 }
  
 .reveal .slides section .plane-stat {
-  font-size: 0.56em;
+  font-size: 0.62em;
   font-weight: 700;
   color: var(--teal-light);
   margin: 0.15em 0 0.1em;
