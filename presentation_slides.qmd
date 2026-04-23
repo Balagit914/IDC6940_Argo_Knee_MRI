@@ -335,44 +335,100 @@ Input MRI Volume → 3D Convolutional Layers → ReLU + Max Pooling → Multi-Pl
 
 ---
 
-## Conclusion and Future Work
+## Conclusion 
 
-**Key Findings**
+- We present a custom 3D CNN that simultaneously identifies three knee pathologies from volumetric MRI scans on the publicly available Stanford MRNet dataset.
 
-- The 3D CNN successfully detected all three pathologies from volumetric MRI
-  - ACL Tear: AUC = 0.827, F1 = 0.745
-  - Meniscus Tear: AUC = 0.746, F1 = 0.697
-  - Abnormality: AUC = 0.833, F1 = 0.904
-- Multi-plane attention weights aligned with clinical imaging priorities (Sagittal > Axial > Coronal)
-- Focal Loss and Youden's Index effectively managed class imbalance across all tasks
-- Abnormality detection is the strongest task and most suitable for clinical triage deployment
+- For the diagnosis of ACL tears, the model obtained an AUC of 0.827 along with sensitivity and specificity of 0.759 and 0.773, respectively, and an F1-score of 0.745.
 
-**Limitations**
+- We particularly note that meniscus tear detection was most challenging; however, the model performed with AUC of 0.746, a sensitivity of 0.731 and an F1-score of 0.697. Performance is strong enough for clinical use.
 
-- Single-institution dataset — limited scanner and protocol diversity
-- Severe ACL class imbalance (4.4:1) still produces some false negatives
-- 3D CNN memory requirements are approximately 20× higher than 2D equivalents
-- Labels derived from radiology reports, not surgical confirmation — potential label noise
+- Abnormality detection was found to have the best results in the experiments, which achieved AUC of 0.833, accuracy of 0.895, and F1-score of 0.904.
 
-**Future Work**
+- The weights of the learned plane-attention weights (0.355 sagittal, 0.344 axial, 0.305 coronal) reflect how radiologists generally prioritize the different views and correspond to how a model decides where to look next, showing how the model’s behavior mirrors the way radiologists think.
 
-| Direction | Goal |
-|---|---|
-| Multi-centre datasets | Improve generalisation across different scanners and hospitals |
-| Self-supervised learning | Reduce reliance on expensive manual annotations |
-| Federated learning | Enable multi-site training without sharing patient data |
-| Vision Transformers | Capture long-range spatial dependencies beyond CNN receptive fields |
+- Our results demonstrate the potential of our deep learning approach to assist in MRI triage and alleviate some of the workload on radiologists.
 
 ---
 
-## Thank You
+## Future Work
 
-**Bala Raju Pidatala &nbsp;|&nbsp; Sabna Balasubramoniapillai**
+```{=html}
+<div class="fw-grid">
 
-*Advisor: Dr. Archaf Cohen*
+  <div class="fw-card">
+    <div class="fw-header">
+      <div class="fw-num">01</div>
+      <div class="fw-title">Larger & Multi-Centre Datasets</div>
+    </div>
+    <div class="fw-body">Access diverse, multi-institution datasets to improve model generalization across MRI platforms and patient populations</div>
+  </div>
 
-IDC 6940 — Capstone Projects in Data Science &nbsp;|&nbsp; Spring 2026
+  <div class="fw-card">
+    <div class="fw-header">
+      <div class="fw-num">02</div>
+      <div class="fw-title">Semi-Supervised & Self-Supervised Learning</div>
+    </div>
+    <div class="fw-body">Leverage unlabeled MRI data using methods like BYOL to reduce dependence on expensive manual annotation</div>
+  </div>
+
+  <div class="fw-card">
+    <div class="fw-header">
+      <div class="fw-num">03</div>
+      <div class="fw-title">Federated Learning</div>
+    </div>
+    <div class="fw-body">Train across institutions without sharing patient data — preserving privacy while benefiting from larger effective datasets</div>
+  </div>
+
+  <div class="fw-card">
+    <div class="fw-header">
+      <div class="fw-num">04</div>
+      <div class="fw-title">Vision Transformer Architectures</div>
+    </div>
+    <div class="fw-body">Explore transformer-based volumetric models that capture long-range spatial relationships beyond the local scope of convolutional kernels</div>
+  </div>
+
+  <div class="fw-card">
+    <div class="fw-header">
+      <div class="fw-num">05</div>
+      <div class="fw-title">Prospective Clinical Validation</div>
+    </div>
+    <div class="fw-body">Validate the model on independently collected, expert-annotated datasets with prospective radiologist ground truth</div>
+  </div>
+
+  <div class="fw-card">
+    <div class="fw-header">
+      <div class="fw-num">06</div>
+      <div class="fw-title">Multimodal Integration</div>
+    </div>
+    <div class="fw-body">Combine MRI data with clinical metadata (age, BMI, patient history) for richer diagnostic predictions</div>
+  </div>
+
+</div>
+```
 
 ---
 
-## Open for questions
+## References
+
+- Avesta, Arman, Sajid Hossain, MingDe Lin, Mariam Aboian, Harlan M Krumholz, and Sanjay Aneja. 2023. “Comparing 3D, 2.5 d, and 2D Approaches to Brain Image Auto-Segmentation.” Bioengineering 10 (2): 181.
+
+- Awan, Mazhar Javed, Mohd Shafry Mohd Rahim, Naomie Salim, Amjad Rehman, Haitham Nobanee, and Hassan Shabir. 2021. “Improved Deep Convolutional Neural Network to Classify Osteoarthritis from Anterior Cruciate Ligament Tear Using Magnetic Resonance Imaging.” Journal of Personalized Medicine 11 (11): 1163. https://doi.org/10.3390/jpm11111163.
+
+- Bien, Nicholas, Pranav Rajpurkar, Robyn L Ball, Jeremy Irvin, Allison Park, Erik Jones, Michael Bereket, et al. 2018. “Deep-Learning-Assisted Diagnosis for Knee Magnetic Resonance Imaging: Development and Retrospective Validation of MRNet.” PLoS Medicine 15 (11): e1002699. https://doi.org/10.1371/journal.pmed.1002699.
+
+---
+
+## {.thank-you-slide}
+
+```{=html}
+<div class="ty-container">
+  <div class="ty-title">Thank You</div>
+  <div class="ty-line"></div>
+  <div class="ty-names">Bala Raju Pidatala &nbsp;|&nbsp; Sabna Balasubramoniapillai</div>
+  <div class="ty-advisor">Advisor: Dr. Archaf Cohen</div>
+  <div class="ty-course">IDC 6940 — Capstone Projects in Data Science &nbsp;|&nbsp; Spring 2026</div>
+  <div class="ty-footer">Detection of Knee Pathologies from MRI Using Deep Learning Models (CNNs)</div>
+</div>
+```
+
