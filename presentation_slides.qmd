@@ -36,7 +36,7 @@ execute:
 
 :::: {.columns}
 
-::: {.column width="58%"}
+::: {.column width="52%"}
 
 ### The Clinical Problem
 - Knee disorders including osteoarthritis and ACL and meniscal tears are some of the most common musculoskeletal disorders worldwide.
@@ -49,9 +49,9 @@ execute:
 
 :::
 
-::: {.column width="42%"}
+::: {.column width="48%"}
 
-![Sample knee MRI slices]("figures/Knee_mri.jpg"){.intro-img}
+![Sample knee MRI slices](figures/Knee_mri.png){.intro-img}
 
 :::
 
@@ -123,32 +123,48 @@ Mitigated by Focal Loss + data augmentation + Youden's Index thresholding
 
 ## Exploratory Data Analysis
 
-**Class Imbalance Across All Three Tasks**
+:::: {.columns}
 
-- ACL: only 18% positive — severe imbalance, dominant source of false negatives
-- Meniscus: 35% positive — moderate imbalance
-- Abnormality: 81% abnormal — inverse imbalance due to referral-based population
+::: {.column width="52%"}
 
-**Volumetric Structure**
+```{=html}
+<div class="plane-cards">
+  <div class="plane-card">
+    <div class="plane-title">Sagittal</div>
+    <div class="plane-stat">μ = 30.4 slices</div>
+    <div class="plane-range">Range: 17–51</div>
+    
+  </div>
+  <div class="plane-card">
+    <div class="plane-title">Coronal</div>
+    <div class="plane-stat">μ = 29.8 slices</div>
+    <div class="plane-range">Range: 17–58</div>
 
-- Slice counts range from **17 to 61** per exam — variable depth across studies
-- All volumes standardised to **32 slices** using central crop or zero-padding
-- Pixel intensities are right-skewed — most values fall in the 0–80 range
+  </div>
+  <div class="plane-card">
+    <div class="plane-title">Axial</div>
+    <div class="plane-stat">μ = 34.3 slices</div>
+    <div class="plane-range">Range: 19–61</div>
+  </div>
+</div>
+```
 
-**Why 3D Modeling Is Necessary**
+- **Preprocessing Decision**
 
-- Pathological features such as ACL fibre disruption span multiple MRI slices
-- 2D single-slice models lose inter-slice spatial context
-- 3D CNNs naturally model the volumetric structure of knee anatomy
+- Variable slice depth normalised to standardise all to 32 slices (cropped or zero-padded)
+- Pixel intensity: right-skewed with major contributions from the 0–80 intensity range consistent with expected T2-weighted knee MRI signal.
+- Per-channel zero-mean unit variance normalization (standardization) improves training stability for 3D CNN.
+- Visual examination revealed widespread disease throughout the specimen, affecting multiple 10 mm sections, therefore a three-dimensional analysis was warranted.
 
-**Preprocessing Summary**
+:::
 
-| Step | Method Applied |
-|---|---|
-| Depth standardisation | Crop or pad to 32 slices |
-| Intensity normalisation | Per-channel zero mean, unit variance |
-| Data augmentation | Random flips, 90° rotations, intensity jitter |
-| Class imbalance | Focal Loss + Youden's Index thresholding |
+::: {.column width="52%"}
+
+![Slice count distribution per exam across all planes](figures/Distribution of Slice Counts.png){.eda-img}
+
+:::
+
+::::
 
 ---
 
