@@ -47,6 +47,7 @@ execute:
 - Machine assisted MRI reading is fast, reliable and removes variability between readers.
 - Analysis of medical images and clinical documents can aid diagnosis, but requires automation to increase effectiveness.
 
+
 :::
 
 ::: {.column width="48%"}
@@ -56,6 +57,7 @@ execute:
 :::
 
 ::::
+
 
 ---
 
@@ -170,30 +172,28 @@ Mitigated by Focal Loss + data augmentation + Youden's Index thresholding
 
 ## Methodology: 3D CNN Architecture
 
-**Why 3D CNN Instead of 2D CNN?**
 
-- 2D CNNs process each slice independently — no spatial context across depth
-- 3D CNNs apply kernels across height, width, and depth simultaneously
-- This preserves inter-slice relationships essential for volumetric knee anatomy
+:::: {.columns}
 
-**Architecture Pipeline**
+::: {.column width="50%"}
 
-Input MRI Volume → 3D Convolutional Layers → ReLU + Max Pooling → Multi-Plane Fusion → Sigmoid Output
+**Key Observations**
+Why 3D CNN Instead of 2D CNN?
+- 2D CNNs process each slice independently — no spatial context across depth  
+- 3D CNNs apply kernels across height, width, and depth simultaneously  
+- This preserves inter-slice relationships essential for volumetric knee anatomy  
 
-| Stage | Description |
-|---|---|
-| Input | Sagittal, coronal, axial volumes — each padded to 32 slices |
-| 3D Conv Layers | Extract volumetric features: edges, textures, anatomical contours |
-| ReLU Activation | Introduces non-linearity; overcomes vanishing gradients |
-| Max Pooling | Reduces spatial dimensions; retains dominant activations |
-| Multi-Plane Fusion | Learnable attention weights combine outputs from all three planes |
-| Sigmoid Output | Produces an independent binary probability per pathology |
+:::
 
-**Key Design Decisions**
+::: {.column width="50%"}
 
-- Three separate binary classifiers — one per pathology, trained independently
-- Focal Loss replaces standard binary cross-entropy to handle class imbalance
-- Attention weights allow the model to learn which plane matters most per task
+![CNN Architecture](Images/Cnn_Architecture.jpg){width="100%"}
+
+:::
+
+::::
+
+
 
 ---
 
@@ -207,109 +207,128 @@ Input MRI Volume → 3D Convolutional Layers → ReLU + Max Pooling → Multi-Pl
 | Learning rate scheduler | ReduceLROnPlateau |
 | Epochs | 15 |
 | Loss function | Focal Loss (γ = 2, α = 0.75) |
-| Batch | Mini-batch of MRI volumes |
+| Batch | 2 (due to 3D CNN memory cost) |
 | Decision threshold | Youden's Index (per task) |
 
 **Addressing Class Imbalance**
 
-- **Focal Loss** — downweights easy negatives; focuses training on hard minority-class examples
+- **Focal Loss** — Focuses on hard, misclassified examples
   - Formula: FL(p) = −α(1−p)^γ · log(p)
-- **Data Augmentation** — random flips, rotations, and intensity jitter applied during training
-- **Youden's Index** — selects threshold that maximises (Sensitivity + Specificity − 1) per task
-  - Avoids the bias of the standard 0.5 cutoff toward the majority class
+- **Data Augmentation** — random flips, rotations, and intensity scaling during training
+- **Youden's Index** — Maximises (Sensitivity + Specificity − 1)
+  - Avoids bias from default 0.5 threshold.
+  
+---
 
 **Training Behaviour**
 
-- Loss decreased steadily from 0.110 to 0.094 over 15 epochs
-- No severe overfitting observed — dropout and focal loss provided regularisation
-- Model converged before epoch 14
+:::: {.columns}
+
+::: {.column width="58%"}
+
+- Loss decreased steadily from 0.110 to 0.094 over 15 epochs  
+- Stable convergence observed after ~epoch 10  
+- No strong signs of overfitting  
+- Regularisation via: Dropout, Focal Loss  
+
+:::
+
+::: {.column width="42%"}
+
+![Figure 5: Training Loss Curve](Images/Results/Training Loss.png)
+
+:::
+
+::::
 
 ---
 
 ## Results: ACL Tear Detection
 
-**Performance Metrics**
+:::: {.columns}
 
-| Metric | Value |
-|---|---|
-| AUC-ROC | **0.827** |
-| Accuracy | 0.767 |
-| Sensitivity | 0.759 |
-| Specificity | 0.773 |
-| F1-Score | 0.745 |
+::: {.column width="50%"}
 
-**Confusion Matrix — Validation Set (120 exams)**
+![Probability Distribution - ACL](Images/Results/ACL Probability new.png){width="100%"}
 
-| | Predicted Negative | Predicted Positive |
-|---|---|---|
-| Actual Negative | 51 (TN) | 15 (FP) |
-| Actual Positive | 13 (FN) | 41 (TP) |
+:::
+
+::: {.column width="50%"}
+
+![Confusion Matrix - ACL](Images/Results/ACL-CM.png){width="100%"}
+
+:::
+
+::::
+
 
 **Key Observations**
 
-- AUC of 0.827 confirms strong discriminative capability across all decision thresholds
-- Sensitivity and specificity are well-balanced — no major bias toward either class
-- 15 FP: largely bone marrow oedema near the ACL footprint misclassified as tears
-- 13 FN: mostly partial-thickness tears with subtle signal changes
-- Sagittal plane received the highest attention weight (35.5%) — consistent with clinical practice
+- The model shows reasonable separation between ACL and non-ACL cases, with some overlap in the            mid-probability range indicating uncertain predictions.  
+- The confusion matrix shows a balanced trade-off between sensitivity and specificity.  
+- Moderate false positives and false negatives are present, indicating room for improvement.  
+
+
 
 ---
 
 ## Results: Meniscus Tear Detection
 
-**Performance Metrics**
+:::: {.columns}
 
-| Metric | Value |
-|---|---|
-| AUC-ROC | **0.746** |
-| Accuracy | 0.725 |
-| Sensitivity | 0.731 |
-| Specificity | 0.721 |
-| F1-Score | 0.697 |
+::: {.column width="50%"}
 
-**Confusion Matrix — Validation Set (120 exams)**
+![Probability Distribution -Meniscus](Images/Results/Meniscus new.png){width="100%"}
 
-| | Predicted Negative | Predicted Positive |
-|---|---|---|
-| Actual Negative | 49 (TN) | 19 (FP) |
-| Actual Positive | 14 (FN) | 38 (TP) |
+:::
+
+::: {.column width="50%"}
+
+![Confusion Matrix-Meniscus](Images/Results/Meniscus-CM.png){width="100%"}
+
+:::
+
+::::
+
 
 **Key Observations**
 
-- Most challenging task — lowest AUC (0.746) and F1-score (0.697) across all three tasks
-- Meniscal tears show subtle structural changes that are difficult to distinguish from normal anatomy
-- Probability distributions overlap significantly in the 0.30–0.55 range
-- 19 FP: model tends to over-predict tears in borderline cases
-- Coronal plane is most relevant clinically for menisci, but carries the lowest attention weight (30.1%)
+- The probability density function shows that the Model exhibits weaker class separation compared to ACL.   Overlap region leads to higher false positives.
+
+- The confusion matrix shows higher false positives indicate over-prediction of tears.
+  More challenging classification compared to ACL  
+
 
 ---
 
 ## Results: Abnormality Detection
 
-**Performance Metrics**
 
-| Metric | Value |
-|---|---|
-| AUC-ROC | **0.833** |
-| Accuracy | 0.850 |
-| Sensitivity | **0.895** |
-| Specificity | 0.680 |
-| F1-Score | **0.904** |
+:::: {.columns}
 
-**Confusion Matrix — Validation Set (120 exams)**
+::: {.column width="50%"}
 
-| | Predicted Negative | Predicted Positive |
-|---|---|---|
-| Actual Negative | 17 (TN) | 8 (FP) |
-| Actual Positive | 10 (FN) | 85 (TP) |
+![Probability Distribution -Abnormal](Images/Results/Abnormal new.png){width="100%"}
+
+:::
+
+::: {.column width="50%"}
+
+![Confusion Matrix-Abnormal](Images/Results/Abnormal - CM.png){width="100%"}
+
+
+:::
+
+::::
+
 
 **Key Observations**
 
-- Best-performing task — highest AUC, accuracy, and F1-score
-- Sensitivity of 89.5% — model reliably identifies abnormal exams; suitable for clinical screening
-- Lower specificity (0.680) is expected given 81% of cases in this set are abnormal
-- Positive cases cluster above probability 0.60; negatives below 0.50 — clear separation
-- Well-suited for deployment as a triage filter to prioritise abnormal scans for specialist review
+
+- The probability density function shows that model is very high sensitivity (strong detection of          abnormal cases) and the model  is biased toward predicting “abnormal” class more often
+
+- The confusion matrix shows higher false positives indicate over-prediction of tears.
+  More challenging classification compared to ACL. 
 
 ---
 
@@ -325,11 +344,8 @@ Input MRI Volume → 3D Convolutional Layers → ReLU + Max Pooling → Multi-Pl
 
 **Learned Plane Attention Weights**
 
-| Plane | Weight | Clinical Relevance |
-|---|---|---|
-| Sagittal | 35.5% | Primary view for ligament evaluation |
-| Axial | 34.4% | Cross-sectional joint anatomy |
-| Coronal | 30.1% | Menisci and cartilage |
+![Plane Attention Weights](Images/Results/Plane new.png)
+
 
 > The model independently learned to prioritise the sagittal plane — consistent with established radiological practice — without any explicit supervision.
 
