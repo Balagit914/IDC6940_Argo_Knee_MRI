@@ -1233,10 +1233,10 @@ Mitigated by Focal Loss + data augmentation + Youden’s Index thresholding</p>
 <li><strong>Focal Loss</strong> — Focuses on hard, misclassified examples
 <ul>
 <li>Formula: FL(p) = −α(1−p)^γ · log(p)</li>
-<li>Focal Loss reduces the impact of easy examples and focuses more on hard, misclassified cases.</li>
+<li>Focal Loss helps the model learn better from minority classes</li>
 </ul></li>
 <li><strong>Data Augmentation</strong> — Random flips, rotations, intensity scaling</li>
-<li><strong>Youden’s Index</strong> — Maximises (Sensitivity + Specificity − 1)
+<li><strong>Youden’s Index</strong> — Maximizes (Sensitivity + Specificity − 1)
 <ul>
 <li>Best threshold for ACL: 0.356</li>
 <li>Best threshold for Meniscus: 0.400</li>
