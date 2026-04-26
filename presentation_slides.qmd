@@ -228,7 +228,7 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
   - Formula: FL(p) = −α(1−p)^γ · log(p)
   - Focal Loss reduces the impact of easy examples and focuses more on hard, misclassified cases.
 - **Data Augmentation** — Random flips, rotations, intensity scaling
-- **Youden's Index** — Maximises (Sensitivity + Specificity − 1)
+- **Youden's Index** — Maximizes (Sensitivity + Specificity − 1)
   - Best threshold for ACL: 0.356
   - Best threshold for Meniscus: 0.400
   - Best threshold for Abnormal: 0.497
