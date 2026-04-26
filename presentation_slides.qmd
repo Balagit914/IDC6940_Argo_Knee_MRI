@@ -220,29 +220,6 @@ Why 3D CNN Instead of 2D CNN?
   
 ---
 
-**Training Behaviour**
-
-:::: {.columns}
-
-::: {.column width="58%"}
-
-- Loss decreased steadily from 0.110 to 0.094 over 15 epochs  
-- Stable convergence observed after ~epoch 10  
-- No strong signs of overfitting  
-- Regularisation via: Dropout, Focal Loss  
-
-:::
-
-::: {.column width="42%"}
-
-![Figure 5: Training Loss Curve](Images/Results/Training Loss.png)
-
-:::
-
-::::
-
----
-
 ## Results: ACL Tear Detection
 
 :::: {.columns}
