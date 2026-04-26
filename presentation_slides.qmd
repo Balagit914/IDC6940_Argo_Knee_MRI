@@ -199,7 +199,11 @@ Why 3D CNN Instead of 2D CNN?
 
 ## Training Setup
 
-**Hyperparameters**
+:::: {.columns}
+
+::: {.column width="60%"}
+
+### Hyperparameters
 
 | Parameter | Value |
 |---|---|
@@ -210,14 +214,21 @@ Why 3D CNN Instead of 2D CNN?
 | Batch | 2 (due to 3D CNN memory cost) |
 | Decision threshold | Youden's Index (per task) |
 
-**Addressing Class Imbalance**
+:::
+
+::: {.column width="50%"}
+
+### Addressing Class Imbalance
 
 - **Focal Loss** — Focuses on hard, misclassified examples
   - Formula: FL(p) = −α(1−p)^γ · log(p)
-- **Data Augmentation** — random flips, rotations, and intensity scaling during training
+- **Data Augmentation** — Random flips, rotations, intensity scaling
 - **Youden's Index** — Maximises (Sensitivity + Specificity − 1)
-  - Avoids bias from default 0.5 threshold.
-  
+  - Avoids bias from default 0.5 threshold
+
+:::
+
+::::
 ---
 
 ## Results: ACL Tear Detection
