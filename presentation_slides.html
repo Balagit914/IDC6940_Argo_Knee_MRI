@@ -1227,15 +1227,20 @@ Mitigated by Focal Loss + data augmentation + Youden’s Index thresholding</p>
 </table>
 </div><div class="column" style="width:50%;">
 <h3 id="addressing-class-imbalance">Addressing Class Imbalance</h3>
+<p>Class Weights: [4.43, 1.85, 0.24]</p>
+<p>It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)</p>
 <ul>
 <li><strong>Focal Loss</strong> — Focuses on hard, misclassified examples
 <ul>
 <li>Formula: FL(p) = −α(1−p)^γ · log(p)</li>
+<li>Focal Loss reduces the impact of easy examples and focuses more on hard, misclassified cases.</li>
 </ul></li>
 <li><strong>Data Augmentation</strong> — Random flips, rotations, intensity scaling</li>
 <li><strong>Youden’s Index</strong> — Maximises (Sensitivity + Specificity − 1)
 <ul>
-<li>Avoids bias from default 0.5 threshold</li>
+<li>Best threshold for ACL: 0.356</li>
+<li>Best threshold for Meniscus: 0.400</li>
+<li>Best threshold for Abnormal: 0.497</li>
 </ul></li>
 </ul>
 </div></div>

@@ -220,11 +220,18 @@ Why 3D CNN Instead of 2D CNN?
 
 ### Addressing Class Imbalance
 
+Class Weights: [4.43, 1.85, 0.24]
+
+It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
+
 - **Focal Loss** — Focuses on hard, misclassified examples
   - Formula: FL(p) = −α(1−p)^γ · log(p)
+  - Focal Loss reduces the impact of easy examples and focuses more on hard, misclassified cases.
 - **Data Augmentation** — Random flips, rotations, intensity scaling
 - **Youden's Index** — Maximises (Sensitivity + Specificity − 1)
-  - Avoids bias from default 0.5 threshold
+  - Best threshold for ACL: 0.356
+  - Best threshold for Meniscus: 0.400
+  - Best threshold for Abnormal: 0.497
 
 :::
 
