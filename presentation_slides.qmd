@@ -233,7 +233,7 @@ Why 3D CNN Instead of 2D CNN?
 
 ## Training Loss Curve
 
-:::
+
 
 ::: {.column width="50%"}
 
@@ -361,7 +361,6 @@ Why 3D CNN Instead of 2D CNN?
 
 ## Learned Plane Attention Weights
 
-:::
 
 ::: {.column width="50%"}
 
