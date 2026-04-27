@@ -193,6 +193,8 @@ Large annotated datasets are the primary requirement to achieve the highest accu
 - **Risk of Overfitting:**
 One of the major challenges faced by the researchers during CT image segmentation is the overfitting of the CNN due to limited number of medical images. Usually 3D CNNs are employed to tackle this problem which also increase the overfitting because of depth. 
 
+Sentence rephrasing and words replacement and overall text clarity enhancement has been implemented using an AI-based engine[@AI_tool].
+
 ## 3 Analysis & Results:
 
 
@@ -1078,4 +1080,3 @@ Despite the progress made, there are still several limitations and challenges fa
 
 ## References
 
-- Sentence rephrasing and words replacement and overall text clarity enhancement has been implemented using an AI-based engine. Statistical analyses have been performed using the R environment.
