@@ -210,7 +210,7 @@ Why 3D CNN Instead of 2D CNN?
 | Optimizer | Adam with weight decay |
 | Learning rate scheduler | ReduceLROnPlateau |
 | Epochs | 15 |
-| Loss function | Focal Loss (γ = 2, α = 0.75) |
+| Loss function | Focal Loss |
 | Batch | 2 (due to 3D CNN memory cost) |
 | Decision threshold | Youden's Index (per task) |
 
@@ -225,7 +225,6 @@ Class Weights: [4.43, 1.85, 0.24]
 It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
 
 - **Focal Loss** — Focuses on hard, misclassified examples
-  - Formula: FL(p) = −α(1−p)^γ · log(p)
   - Focal Loss helps the model learn better from minority classes
 - **Data Augmentation** — Random flips, rotations, intensity scaling
 - **Youden's Index** — Maximizes (Sensitivity + Specificity − 1)
