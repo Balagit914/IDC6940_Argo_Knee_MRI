@@ -4297,20 +4297,11 @@ This figure shows the pixel intensity distributions from 10 training images of t
 </table>
 </center>
 <p><strong>3.4.7 Summary of the validation metrics:</strong></p>
-<p>The proposed 3D CNN model was evaluated on the validation dataset using sensitivity, specificity, accuracy, AUC, and F1-score across the three classification tasks: ACL tear, meniscus tear, and abnormality detection.</p>
-<ul>
-<li><strong>ACL:</strong></li>
-</ul>
-<p>The model achieves a balanced performance for ACL classification, with a sensitivity of 0.759 and specificity of 0.773, indicating a good trade-off between detecting positive cases and minimizing false positives. The accuracy of 0.767 and AUC of 0.827 further confirm strong discriminative capability. The F1-score of 0.745 reflects a well-balanced precision–recall performance.</p>
-<ul>
-<li><strong>Meniscus:</strong></li>
-</ul>
-<p>For meniscus classification, the model shows moderate performance, with sensitivity (0.731) and specificity (0.721) relatively well balanced. The accuracy of 0.725 and AUC of 0.746 indicate acceptable but comparatively lower performance than the other tasks. The F1-score of 0.697 suggests that meniscus tear detection remains more challenging, likely due to subtle structural variations in MRI scans.</p>
-<ul>
-<li><strong>Abnormal:</strong></li>
-</ul>
-<p>The model performs best in abnormality detection, achieving a high sensitivity of 0.895, indicating strong capability in identifying abnormal cases. While specificity (0.680) is slightly lower, the overall accuracy of 0.850 and AUC of 0.833 demonstrate robust performance. The highest F1-score of 0.904 among all classes highlights excellent balance between precision and recall..</p>
-<p>Overall, the model demonstrates strong performance across all tasks, with particularly high effectiveness in detecting abnormalities</p>
+<p>The 3D CNN-based model was validated using a validation dataset to determine its sensitivity, specificity, accuracy, AUC and F1-score scores for the three different classification tasks of differentiating ACL tears from non-ACL tears, meniscus tears from non-meniscus tears, and abnormal knee structures from normal knee structures.</p>
+<p>-<strong>ACL:</strong> For the task of ACL classification, a balanced performance was achieved with a sensitivity of 0.759 and a specificity of 0.773. This is accompanied by high accuracy of 0.767 and AUC value of 0.827 reflecting good discriminative capability. Additionally, the F1-score of 0.745 denotes well-balanced precision and recall.</p>
+<p>-<strong>Meniscus:</strong> The model shows moderate performance on meniscus classification with sensitivity 0.731 and specificity 0.721, and accuracy 0.725. The corresponding AUC is 0.746. While it performs better than the other two tasks, it still shows relatively lower performance compared to them. The F1-score of 0.697 for meniscus tear detection indicates it to be a more challenging task due to some of the very small variations in appearance, which the model has difficulty in detecting and accordingly classifying.</p>
+<p>-<strong>Abnormal:</strong> For identifying abnormal cases, the model reaches a high sensitivity of 0.895. However, the achieved specificity of 0.680 is somewhat below what would be desirable. On the other hand, both accuracy of 0.850 and AUC of 0.833 indicate good results. The highest F1-score of 0.904 for an individual class underscores the good balance between precision and recall.</p>
+<p>The model performs well on all tasks and was particularly effective for identifying abnormalities.</p>
 </section>
 </section>
 <section id="conclusion" class="level2">
