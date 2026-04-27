@@ -220,15 +220,48 @@ Why 3D CNN Instead of 2D CNN?
 
 ### Addressing Class Imbalance
 
+Class Weights: [4.43, 1.85, 0.24]
+
+It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
+
 - **Focal Loss** — Focuses on hard, misclassified examples
   - Formula: FL(p) = −α(1−p)^γ · log(p)
+  - Focal Loss helps the model learn better from minority classes
 - **Data Augmentation** — Random flips, rotations, intensity scaling
-- **Youden's Index** — Maximises (Sensitivity + Specificity − 1)
-  - Avoids bias from default 0.5 threshold
+- **Youden's Index** — Maximizes (Sensitivity + Specificity − 1)
+  - Best threshold for ACL: 0.356
+  - Best threshold for Meniscus: 0.400
+  - Best threshold for Abnormal: 0.497
 
 :::
 
 ::::
+---
+
+## Training Loss Curve
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![Training Loss Curve](Images/Results/Training Loss.png){width="100%"}
+
+:::
+
+::: {.column width="50%"}
+
+**Key Observations:**
+
+- Training loss decreases steadily over epochs, indicating effective learning.
+- The curve shows smooth convergence without major oscillations.
+- No clear over-fitting trend observed (no divergence between training stability and expected validation behavior).
+
+:::
+
+::::
+
+
 ---
 
 ## Results: ACL Tear Detection
@@ -320,6 +353,62 @@ Why 3D CNN Instead of 2D CNN?
 
 ---
 
+## ROC Curves and AUC Scores
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![ROC_Curve](Images/Results/ROC curve.png){width="100%"}
+
+:::
+
+::: {.column width="50%"}
+
+**Key Observations:**
+
+  - ROC curves show strong performance across all tasks.
+  - Abnormal (AUC = 0.833) performs best.
+  - ACL (AUC = 0.827) is close second.
+  - Meniscus (AUC = 0.746) is comparatively weaker.
+
+:::
+
+::::
+
+
+---
+
+## Learned Plane Attention Weights
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![Plane Attention Weights](Images/Results/Plane new.png){width="100%"}
+
+
+:::
+
+::: {.column width="50%"}
+
+**Key Observations:**
+
+- Model assigns different importance to each MRI plane  
+- Higher weight = more influence on final prediction  
+- Shows model is learning **which view is more informative**  
+- Not treating sagittal, coronal, and axial equally  
+- Provides interpretability into model decision-making  
+
+:::
+
+::::
+
+
+
+---
+
 ## Summary of Results
 
 **Validation Metrics — All Three Tasks**
@@ -329,13 +418,6 @@ Why 3D CNN Instead of 2D CNN?
 | ACL Tear | 0.827 | 0.767 | 0.759 | 0.773 | 0.745 |
 | Meniscus Tear | 0.746 | 0.725 | 0.731 | 0.721 | 0.697 |
 | **Abnormality** | **0.833** | **0.850** | **0.895** | 0.680 | **0.904** |
-
-**Learned Plane Attention Weights**
-
-![Plane Attention Weights](Images/Results/Plane new.png)
-
-
-> The model independently learned to prioritise the sagittal plane — consistent with established radiological practice — without any explicit supervision.
 
 ---
 
