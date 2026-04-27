@@ -241,6 +241,7 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
 ## Training Loss Curve
 
 
+:::: {.columns}
 
 ::: {.column width="50%"}
 
@@ -252,15 +253,13 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
 
 **Key Observations:**
 
-- Loss steadily decreases from ~0.110 → ~0.094  
-- Smooth curve indicates stable training (no divergence)  
-- Major learning happens in early epochs (1–7)  
-- Curve plateaus after ~epoch 10 → diminishing improvements  
-- No signs of overfitting from training loss alone  
+- Training loss decreases steadily over epochs, indicating effective learning.
+- The curve shows smooth convergence without major oscillations.
+- No clear over-fitting trend observed (no divergence between training stability and expected validation behavior).
 
 :::
 
-:::
+::::
 
 
 ---
@@ -353,25 +352,39 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
   More challenging classification compared to ACL. 
 
 ---
+## ROC Curves & AUC Scores
 
-## Summary of Results
+:::: {.columns}
 
-**Validation Metrics — All Three Tasks**
+::: {.column width="50%"}
 
-| Pathology | AUC-ROC | Accuracy | Sensitivity | Specificity | F1-Score |
-|---|---|---|---|---|---|
-| ACL Tear | 0.827 | 0.767 | 0.759 | 0.773 | 0.745 |
-| Meniscus Tear | 0.746 | 0.725 | 0.731 | 0.721 | 0.697 |
-| **Abnormality** | **0.833** | **0.850** | **0.895** | 0.680 | **0.904** |
+![ROC Curve](Images/Results/ROC curve.png){width="100%"}
+
+:::
+
+::: {.column width="50%"}
+
+**Key Observations:**
+
+- ROC curves show strong performance across all tasks, with all models performing significantly better     than random classification (diagonal line).
+- Overall, the model performs best for disease screening (abnormality detection) and moderately well for   specific pathology classification (ACL, Meniscus).
+
+
+:::
+
+::::
 
 ---
 
 ## Learned Plane Attention Weights
 
 
+:::: {.columns}
+
 ::: {.column width="50%"}
 
 ![Plane Attention Weights](Images/Results/Plane new.png){width="100%"}
+
 
 :::
 
@@ -387,7 +400,21 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
 
 :::
 
-:::
+::::
+
+
+
+---
+
+## Summary of Results
+
+**Validation Metrics — All Three Tasks**
+
+| Pathology | AUC-ROC | Accuracy | Sensitivity | Specificity | F1-Score |
+|---|---|---|---|---|---|
+| ACL Tear | 0.827 | 0.767 | 0.759 | 0.773 | 0.745 |
+| Meniscus Tear | 0.746 | 0.725 | 0.731 | 0.721 | 0.697 |
+| **Abnormality** | **0.833** | **0.850** | **0.895** | 0.680 | **0.904** |
 
 ---
 
