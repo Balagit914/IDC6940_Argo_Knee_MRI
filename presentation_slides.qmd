@@ -358,8 +358,7 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
 
 ::: {.column width="50%"}
 
-![ROC_Curve](Images/Results/ROC_curves.png){width="100%"}
-
+![ROC Curve](Images/Results/ROC_curves.png){width="100%"}
 
 :::
 
@@ -375,8 +374,6 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
 :::
 
 ::::
-
-
 
 ---
 
