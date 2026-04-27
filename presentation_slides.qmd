@@ -354,7 +354,7 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
 ---
 ## ROC Curves and AUC Scores
 <div class="columns">
-  <div class="column" style="width: 50%;">
+  <div class="column" style="width: 50%">
   
   ![](Images/Results/ROC_Curves.png){width=100%}
   
