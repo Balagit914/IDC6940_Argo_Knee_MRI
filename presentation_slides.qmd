@@ -358,7 +358,7 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
 
 ::: {.column width="50%"}
 
-![ROC_Curves](Images/Results/ROC_curves.png){width="100%"}
+![ROC_Curve](Images/Results/ROC_curves.png){width="100%"}
 
 :::
 
@@ -366,13 +366,16 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
 
 **Key Observations:**
 
-- ROC curves show strong performance across all tasks, with all models performing significantly better     than random classification (diagonal line).
-- Overall, the model performs best for disease screening (abnormality detection) and moderately well for   specific pathology classification (ACL, Meniscus).
-
+- ROC curves show strong performance across all tasks.
+- Abnormal (AUC = 0.833) performs best.
+- ACL (AUC = 0.827) is close second.
+- Meniscus (AUC = 0.746) is comparatively weaker.
 
 :::
 
 ::::
+
+
 
 ---
 
