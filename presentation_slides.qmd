@@ -352,25 +352,30 @@ It indicates strong imbalance (ACL is rare, Abnormal is mostly positive)
   More challenging classification compared to ACL. 
 
 ---
+
 ## ROC Curves and AUC Scores
 
-<div class="columns">
-  <div class="column" style="width: 50%;">
-  
-  ![ROC](Images/Results/ROC curve.png){width=100%}
-  
-  </div>
-  <div class="column" style="width: 50%;">
+:::: {.columns}
 
-  **Key Observations:**
+::: {.column width="50%"}
+
+![ROC_Curve](Images/Results/ROC curve.png){width="100%"}
+
+:::
+
+::: {.column width="50%"}
+
+**Key Observations:**
 
   - ROC curves show strong performance across all tasks.
   - Abnormal (AUC = 0.833) performs best.
   - ACL (AUC = 0.827) is close second.
   - Meniscus (AUC = 0.746) is comparatively weaker.
 
-  </div>
-</div>
+:::
+
+::::
+
 
 ---
 
