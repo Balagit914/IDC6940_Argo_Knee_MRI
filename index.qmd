@@ -758,9 +758,7 @@ preds = (all_probs > best_thresholds).astype(int)
 
 **3.3.2 Model Training:**
 
-The model is trained using mini-batches of MRI volumes. To address class imbalance, Focal Loss is used instead of standard binary cross-entropy, focusing learning on harder examples.
-The Adam optimizer is used with weight decay regularization, and a learning rate scheduler adjusts the learning rate dynamically.
-Training is performed over 15 epochs, and the loss is tracked to monitor convergence.
+We train our network on mini-batch inputs of MRI volumes. We use Focal Loss instead of binary cross entropy loss to handle the class imbalanced problem. We use Adam optimizer with weight decay. We update the learning rate every few epochs with a learning rate scheduler. We train for 15 epochs and record the loss.
 
 
 
@@ -805,9 +803,7 @@ for epoch in range(epochs):
 
 **3.4.1 Training Performance: **
 
-The training loss steadily decreased over 15 epochs, indicating effective learning. Early epochs showed rapid improvement, followed by gradual convergence.
-
-Minor fluctuations suggest slight regularization effects from dropout and focal loss, but overall training remained stable without severe overfitting.
+The training loss decreased over the 15 epochs. The network showed fast initial learning followed by slow convergence towards the end.
 
 
 <details class="collapase">
@@ -838,13 +834,14 @@ plt.show()
 
 **3.4.2 ROC Curves**
 
-ROC curves were plotted to evaluate classification performance across all tasks. The model achieved strong discriminative ability:
+For all 3 tasks, ROC plots have been produced to assess the models accuracy for classification. The discrimination power is very high for all tasks:
 
- - ACL: 0.827 
- - Meniscus: 0.746 
- - Abnormal: 0.833
- 
-These values indicate good performance, especially for ACL and abnormal detection.
+ACL: 0.827
+Meniscus: 0.746
+Abnormal: 0.833
+
+The model seems to achieve consistent accuracy throughout the classification tasks; particularly in its ability to identify ACL tears and other abnormalities.
+
 
 
 
@@ -880,7 +877,7 @@ plt.show()
 **3.4.3 Confusion Matrix Heatmaps**
 
 
-Confusion matrices were used to evaluate the classification performance of the model for each task: ACL tear, meniscus tear, and abnormality detection. Each matrix presents the number of true negatives (TN), false positives (FP), false negatives (FN), and true positives (TP).
+For evaluation of the classification performance of the model on each of the three tasks (i.e., ACL tears, meniscus tears and abnormality detection), confusion matrices have been calculated for each of the individual tasks. Each confusion matrix includes the number of true negatives (TN), false positives (FP), false negatives (FN) and true positives (TP).
 
 
 <details class="collapase">
@@ -909,19 +906,20 @@ plt.show()
 
 </center>
 
-Confusion matrices show improved balance between sensitivity and specificity compared to earlier models.
+The confusion matrices produced strong data that showed better sensitivity and specificity for this model than previously established models.
 
- -	The ACL classifier demonstrates balanced performance, with a good number of true positives (41) and true negatives (51), though some false positives (15) and false negatives (13) remain.
- 
- - The meniscus classifier shows moderate performance, with an increased number of false positives (19), indicating a tendency to overpredict meniscus tears.
- 
- - The abnormality classifier achieves high true positive detection (85), demonstrating strong sensitivity, but relatively fewer true negatives (17), indicating reduced specificity.
+The TP and TN in ACL classification showed almost equal results with 41 and 51 respectively, although there were 15 FP and 13 FN.
+
+The meniscus classifier is somewhat accurate but tends to fall in the range of overestimating cases of meniscus tear with 19 FP.
+
+The abnormality classifier shows much greater TP number (85) than TN (17) and seems more sensitive.
+
 
 
 
 **3.4.4 Probability Distribution Plots**
 
-Probability distribution plots were used to visualize the model’s confidence in predicting positive and negative cases. Ideally, positive samples should have probabilities close to 1, while negative samples should be near 0.
+To evaluate the confidence of the model in positive and negative predictions, probability distribution charts were generated. From the figures, it is hoped that the positive predictions would center around values close to 1 and the negative ones around 0.
 
 
 <details class="collapase">
@@ -959,20 +957,20 @@ for i, name in enumerate(label_names):
 
 - **ACL:**
 
-The ACL probability distribution shows a reasonable separation between positive and negative cases, with moderate overlap indicating some classification uncertainty.
+From the ACL probability distribution chart we can see that there is a fairly good separation between positive and negative cases, but there is still some overlap.
 
 - **Meniscus:**
 
-The meniscus probability distribution exhibits significant overlap between positive and negative classes, indicating difficulty in distinguishing subtle structural variations.
+The big challenge there is that there is a huge overlap between the two classes (positive and negative samples) and it is really hard to distinguish between them due to the limited structural differences.
 
 - **Abnormal:** 
 
-The model is Strong confidence in predictions and separation 
+The model has Strong Confidence in its Predictions and Separation. 
 
 
 **3.4.5 Plane Attention Weights**
 
-The learned plane-attention weights indicate the relative importance of sagittal, coronal, and axial planes for the predictions.
+These are plane-attention weights for the predictions
 
 <details class="collapase">
 <summary><b>Code</b></summary>
@@ -995,17 +993,18 @@ plt.show()
 </center>
 
 
-Sagittal has the Highest Importance (~0.36): The model relies most heavily on the Axial plane. This suggests that, for the specific condition being predicted, the Axial view contains the most distinct features or "evidence" for the model's decision-making process.
+Sagittal Has the Greatest Importance (~0.36): The model weight shows that the data from the Axial plane is most important for the model to be able to diagnose the given disease, likely because the Axial image plane contains the most relevant evidence or distinctive features for that disease.
 
-Axial is a Close Second (~0.34): The importance of the Sagittal plane is nearly equal to the Axial plane. This indicates that the model finds significant diagnostic value in both of these views.
+Axial Plane Is the Second Most Important (~0.34): The importance measure for the Sagittal plane is actually very close to that of the Axial plane. This means that both body planes contain important diagnostic information.
 
-Coronal has the Lowest Importance (~0.30): While still contributing significantly, the Coronal plane is weighted the least. This implies that the features found in the Coronal view are either more redundant or slightly less informative for the final classification than the other two.
+Coronal Has the Least Importance (~0.30): The lowest importance measure was the Coronal plane, indicating that the features in this image plane are likely to be redundant or less important than the other two image planes.
+
 
 
 **3.4.6 Validation Metrics**
 
 
-After training, the model was evaluated on the validation dataset. Predictions were converted into probabilities using a sigmoid function and then thresholded to produce binary outputs. Sensitivity, specificity, accuracy, AUC-ROC and F1 were calculated for each condition.
+Performance metrics of the trained network on the validation dataset were calculated after training of the network. Binary output values were created by first obtaining the output probabilities using the sigmoid activation function from the trained network.
 
 <details class="collapase">
 <summary><b>Code</b></summary>
