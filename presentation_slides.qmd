@@ -2,7 +2,7 @@
 title: "Detection of Knee Pathologies from MRI"
 subtitle: "Using Deep Learning Models (CNNs)"
 authors: "Bala Raju Pidatala & Sabna Balasubramoniapillai"
-institute: "Advisor: Dr. Archaf Cohen"
+institute: "Advisor: Dr. Achraf Cohen"
 date: today
 bibliography: references.bib
 format:
